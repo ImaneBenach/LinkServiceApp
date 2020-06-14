@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ProfilActivity">
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintGuide_percent="0.052083333"
+        android:orientation="vertical"/>
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/second_gl"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintGuide_percent="0.9557293"
+        android:orientation="vertical" />
+
+    <View
+        android:id="@+id/view"
+        android:layout_width="0dp"
+        android:layout_height="260dp"
+        android:background="@color/colorWhite"
+        app:layout_constraintStart_toStartOf="@+id/guideline"
+        app:layout_constraintEnd_toStartOf="@+id/second_gl"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="116dp"/>
+
+    <ImageView
+        android:id="@+id/imageProfil"
+        android:layout_width="0dp"
+        android:layout_height="108dp"
+        app:srcCompat="@drawable/logoprofil"
+        app:layout_constraintDimensionRatio="w,1:1"
+        app:layout_constraintStart_toStartOf="@+id/guideline"
+        app:layout_constraintEnd_toStartOf="@+id/second_gl"
+        app:layout_constraintTop_toTopOf="@+id/view"
+        app:layout_constraintBottom_toTopOf="@+id/view"/>
+
+    <TextView
+        android:id="@+id/tv_nom"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Imane"
+        android:textAlignment="center"
+        android:textColor="@color/colorTab"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="@+id/imageProfil"
+        app:layout_constraintEnd_toEndOf="@+id/imageProfil"
+        app:layout_constraintTop_toBottomOf="@+id/imageProfil"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginTop="26dp" />
+
+    <ImageButton
+        android:id="@+id/imageButton"
+        android:layout_width="20dp"
+        android:layout_height="30dp"
+        android:background="@drawable/modifprofil_logo"
+        app:layout_constraintEnd_toStartOf="@+id/imageProfil"
+        app:layout_constraintTop_toTopOf="@+id/imageProfil"
+        android:layout_marginEnd="16dp"
+        android:layout_marginTop="210dp"
+        android:layout_marginRight="16dp"/>
+
+    <ImageButton
+        android:id="@+id/imageButton3"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:background="@drawable/justificatif_logo"
+        android:layout_marginLeft="200dp"
+        android:layout_marginTop="272dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.542"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_profil"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Modifier mon profil"
+        android:textStyle="bold"
+        android:textColor="@color/colorTab"
+        android:textSize="13sp"
+        app:layout_constraintEnd_toEndOf="@+id/imageButton"
+        app:layout_constraintStart_toStartOf="@+id/imageButton"
+        app:layout_constraintTop_toBottomOf="@+id/imageButton3"
+        android:layout_marginTop="30dp"
+        android:layout_marginEnd="8dp"
+        android:clickable="true"/>
+
+    <TextView
+        android:id="@+id/tv_justif"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Ajouter justificatifs"
+        android:textStyle="bold"
+        android:textColor="@color/colorTab"
+        android:textSize="13sp"
+        app:layout_constraintEnd_toEndOf="@+id/imageButton3"
+        app:layout_constraintStart_toStartOf="@+id/imageButton3"
+        app:layout_constraintTop_toBottomOf="@+id/imageButton3"
+        android:layout_marginTop="30dp"
+        android:layout_marginEnd="8dp"/>
+
+
+    <Button
+        android:id="@+id/btn_points"
+        android:layout_width="376dp"
+        android:layout_height="58dp"
+        android:text="Mon nombre de points"
+        android:textColor="@color/colorTab"
+        android:textAllCaps="false"
+        android:background="@color/colorWhite"
+        app:layout_constraintStart_toStartOf="@+id/view"
+        app:layout_constraintEnd_toEndOf="@+id/view"
+        app:layout_constraintTop_toBottomOf="@+id/view"
+        android:layout_marginTop="15dp"/>
+
+    <Button
+        android:id="@+id/btn_newsletter"
+        android:layout_width="376dp"
+        android:layout_height="58dp"
+        android:text="Newsletter"
+        android:textColor="@color/colorTab"
+        android:textAllCaps="false"
+        android:background="@color/colorWhite"
+        app:layout_constraintStart_toStartOf="@+id/btn_points"
+        app:layout_constraintEnd_toEndOf="@+id/btn_points"
+        app:layout_constraintTop_toBottomOf="@+id/btn_points" />
+
+    <Button
+        android:id="@+id/btn_notif"
+        android:layout_width="376dp"
+        android:layout_height="58dp"
+        android:text="Notifications"
+        android:background="@color/colorWhite"
+        android:textColor="@color/colorTab"
+        android:textAllCaps="false"
+        android:clickable="false"
+        app:layout_constraintStart_toStartOf="@+id/btn_newsletter"
+        app:layout_constraintEnd_toEndOf="@+id/btn_newsletter"
+        app:layout_constraintTop_toBottomOf="@+id/btn_newsletter" />
+
+
+    <Button
+        android:id="@+id/btn_deco"
+        android:layout_width="376dp"
+        android:layout_height="58dp"
+        android:text="Déconnexion"
+        android:background="@color/colorWhite"
+        android:textColor="@color/colorTab"
+        android:textAllCaps="false"
+        app:layout_constraintStart_toStartOf="@+id/btn_notif"
+        app:layout_constraintEnd_toEndOf="@+id/btn_notif"
+        app:layout_constraintTop_toBottomOf="@+id/btn_notif"
+        android:layout_marginTop="15dp"/>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

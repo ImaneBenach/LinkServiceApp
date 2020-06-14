@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.imane.linkserviceapp">
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+
+        <activity
+            android:name=".MesServicesActivity"
+            android:label="@string/title_activity_mes_services"></activity>
+        <activity
+            android:name=".JustificatifsActivity" />
+
+        <activity android:name=".ServicesActivity" />
+        <activity
+            android:name=".MessagesActivity" />
+        <activity
+            android:name=".ProfilActivity" />
+        <activity
+            android:name=".HomeActivity"
+            android:theme="@style/FullScreen" />
+        <activity
+            android:name=".RegisterActivity"
+            android:theme="@style/FullScreen" />
+        <activity
+            android:name=".LoginActivity"
+            android:theme="@style/FullScreen" />
+        <activity
+            android:name=".MainActivity"
+            android:theme="@style/FullScreen" />
+        <activity
+            android:name=".SlideActivity"
+            android:theme="@style/FullScreen">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+    </application>
+
+</manifest>

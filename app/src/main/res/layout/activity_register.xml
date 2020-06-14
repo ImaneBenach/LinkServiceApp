@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/fond_accueil"
+    tools:context=".RegisterActivity">
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorWhiteAttenue">
+    </View>
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="40dp"
+        android:layout_marginLeft="40dp"
+        android:layout_centerInParent="true">
+
+
+        <RelativeLayout
+            android:id="@+id/relativeLayout_1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/tv_login"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="Créer votre compte"
+                android:textSize="30sp"
+                android:textColor="@color/colorWhite"
+                android:fontFamily="sans-serif-condensed-medium">
+            </TextView>
+
+            <LinearLayout
+                android:id="@+id/linlay1"
+                android:layout_below="@+id/tv_login"
+                android:orientation="vertical"
+                android:layout_marginTop="20dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Nom d'utilisateur"
+                        android:textAllCaps="true"
+                        android:fontFamily="sans-serif-light"
+                        android:textSize="15sp"
+                        android:textColor="@color/colorWhite">
+                    </TextView>
+
+                    <EditText
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:layout_marginTop="5dp"
+                        android:textSize="15sp"
+                        android:textColor="@color/colorWhite"
+                        android:fontFamily="sans-serif-light"
+                        android:paddingLeft="15dp"
+                        android:paddingRight="15dp"
+                        android:background="@drawable/btn_contour">
+
+                    </EditText>
+
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Email"
+                        android:textAllCaps="true"
+                        android:fontFamily="sans-serif-light"
+                        android:textSize="15sp"
+                        android:textColor="@color/colorWhite">
+                    </TextView>
+
+                    <EditText
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:layout_marginTop="5dp"
+                        android:textSize="15sp"
+                        android:textColor="@color/colorWhite"
+                        android:fontFamily="sans-serif-light"
+                        android:paddingLeft="15dp"
+                        android:paddingRight="15dp"
+                        android:inputType="textEmailAddress"
+                        android:background="@drawable/btn_contour">
+
+                    </EditText>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Mot de passe"
+                        android:textAllCaps="true"
+                        android:fontFamily="sans-serif-light"
+                        android:textSize="15sp"
+                        android:textColor="@color/colorWhite">
+                    </TextView>
+
+                    <EditText
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:layout_marginTop="5dp"
+                        android:textSize="15sp"
+                        android:textColor="@color/colorWhite"
+                        android:fontFamily="sans-serif-light"
+                        android:paddingLeft="15dp"
+                        android:paddingRight="15dp"
+                        android:inputType="textPassword"
+                        android:background="@drawable/btn_contour">
+
+                    </EditText>
+
+                </LinearLayout>
+
+
+            </LinearLayout>
+
+
+            <Button
+                android:id="@+id/btn_seConnecter"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:layout_below="@+id/linlay1"
+                android:layout_marginTop="50dp"
+                android:text="S'inscrire"
+                android:textAllCaps="false"
+                android:textColor="@color/colorWhite"
+                android:fontFamily="sans-serif-medium"
+                android:paddingLeft="70dp"
+                android:paddingRight="70dp"
+                android:textSize="16sp"
+                android:layout_centerHorizontal="true"
+                android:background="@drawable/btn_contour">
+            </Button>
+
+        </RelativeLayout>
+
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/relativeLayout_2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_alignParentBottom="true">
+
+        <Button
+            android:id="@+id/btn_connexion"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/transparent"
+            android:text="Se connecter"
+            android:textAllCaps="true"
+            android:textColor="@color/colorWhite"
+            android:fontFamily="sans-serif">
+        </Button>
+
+    </RelativeLayout>
+
+</RelativeLayout>

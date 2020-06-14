@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name"></string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment"></string>
+    <string name="tab_text_1">Services effectués</string>
+    <string name="tab_text_2">Services proposés</string>
+    <string name="title_activity_mes_services">Vos services</string>
+</resources>

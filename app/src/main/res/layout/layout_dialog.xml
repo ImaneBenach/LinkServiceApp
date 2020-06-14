@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="24dp"
+    >
+
+    <EditText
+        android:id="@+id/edit_nom"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Changer mon nom"></EditText>
+
+
+    <EditText
+        android:id="@+id/edit_prenom"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/edit_nom"
+        android:hint="Changer mon prénom"></EditText>
+
+    <EditText
+        android:id="@+id/edit_email"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/edit_prenom"
+        android:inputType="textEmailAddress"
+        android:hint="Changer mon email"></EditText>
+
+    <EditText
+        android:id="@+id/edit_mdp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/edit_email"
+        android:inputType="textPassword"
+        android:hint="Changer mon mot de passe"></EditText>
+
+</RelativeLayout>
