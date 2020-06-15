@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -14,7 +15,14 @@ import android.view.ViewGroup;
 import android.widget.SearchView;
 import android.widget.TextView;
 
+import com.imane.linkserviceapp.Classes.API;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class ServicesActivity extends AppCompatActivity {
@@ -29,6 +37,20 @@ public class ServicesActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_services);
+
+        JSONObject jsonParam = new JSONObject();
+        String data = null;
+        try {
+            jsonParam.put("table", "type_service");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        try {
+            data = API.sendRequest(jsonParam.toString(),"readAll");
+        } catch (IOException | InterruptedException e) {
+            e.printStackTrace();
+        }
+        Log.i("Returned Data", data);
 
         services.add(new Services("Course", R.drawable.services_logo));
         services.add(new Services("Ménage", R.drawable.services_logo));
