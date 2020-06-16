@@ -1,4 +1,4 @@
-package Classes;
+package com.imane.linkserviceapp.Classes;
 
 
 import java.io.IOException;

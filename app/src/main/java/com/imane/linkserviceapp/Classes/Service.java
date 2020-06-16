@@ -1,4 +1,4 @@
-package Classes;
+package com.imane.linkserviceapp.Classes;
 
 public class Service {
     private int id;

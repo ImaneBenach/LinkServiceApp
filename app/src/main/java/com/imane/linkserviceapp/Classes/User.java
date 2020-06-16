@@ -1,4 +1,4 @@
-package Classes;
+package com.imane.linkserviceapp.Classes;
 
 
 import com.imane.linkserviceapp.Classes.API;

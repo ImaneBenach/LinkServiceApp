@@ -15,7 +15,9 @@ import android.view.ViewGroup;
 import android.widget.SearchView;
 import android.widget.TextView;
 
+import com.google.gson.reflect.TypeToken;
 import com.imane.linkserviceapp.Classes.API;
+import com.imane.linkserviceapp.Classes.TypeService;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -23,7 +25,10 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import com.google.gson.Gson;
+
 
 public class ServicesActivity extends AppCompatActivity {
 
@@ -35,22 +40,48 @@ public class ServicesActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        JSONObject jsonParam = new JSONObject();
+        String typeServicesListAsString = "";
+        int counter;
+
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_services);
 
-        JSONObject jsonParam = new JSONObject();
-        String data = null;
+
         try {
             jsonParam.put("table", "type_service");
         } catch (JSONException e) {
             e.printStackTrace();
         }
         try {
-            data = API.sendRequest(jsonParam.toString(),"readAll");
+            typeServicesListAsString = API.sendRequest(jsonParam.toString(),"readAll");
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }
-        Log.i("Returned Data", data);
+
+
+        if(!typeServicesListAsString.equals("")){
+            try {
+                JSONObject typeServicesJson  = new JSONObject(typeServicesListAsString);
+
+
+                Log.i("Taille json:", Integer.toString(typeServicesJson.length()));
+
+                for (counter = 0; counter < typeServicesJson.length(); counter++){
+                    Log.i("Typeservice Test", typeServicesJson.getString(Integer.toString(counter)));
+                }
+
+                HashMap<String, TypeService> retMap = new Gson().fromJson(
+                        typeServicesListAsString, new TypeToken<HashMap<String, TypeService>>() {}.getType()
+                );
+
+                System.out.println(retMap);
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
 
         services.add(new Services("Course", R.drawable.services_logo));
         services.add(new Services("Ménage", R.drawable.services_logo));
