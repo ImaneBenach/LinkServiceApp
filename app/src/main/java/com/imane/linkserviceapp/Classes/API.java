@@ -2,6 +2,9 @@ package com.imane.linkserviceapp.Classes;
 
 import android.util.Log;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
 import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -15,6 +18,7 @@ import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
+import java.util.HashMap;
 import java.util.concurrent.CountDownLatch;
 
 public class API {
@@ -56,6 +60,13 @@ public class API {
         latch.await();
 
         return data[0];
+    }
+
+    public static HashMap<String, TypeService> decodeResponseMultipleAsTypeService (String typesService){
+        HashMap<String, TypeService> retMap = new Gson().fromJson(
+                typesService, new TypeToken<HashMap<String, TypeService>>() {}.getType()
+        );
+        return retMap;
     }
 
     private static String readFullyAsString(InputStream inputStream, String encoding) throws IOException {

@@ -23,23 +23,28 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+
 import com.google.gson.Gson;
 
 
 public class ServicesActivity extends AppCompatActivity {
 
-    RecyclerView listServices ;
-    List<Services> services = new ArrayList<>();
-    ServicesAdapter adapter ;
-    SearchView searchView ;
+    RecyclerView listServices;
+    List<TypeService> typeServices = new ArrayList<>();
+    ServicesAdapter adapter;
+    SearchView searchView;
+
+    private final Gson gson = new Gson();
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        HashMap<String, TypeService> typeData = new HashMap<>();
         JSONObject jsonParam = new JSONObject();
         String typeServicesListAsString = "";
         int counter;
@@ -55,43 +60,29 @@ public class ServicesActivity extends AppCompatActivity {
             e.printStackTrace();
         }
         try {
-            typeServicesListAsString = API.sendRequest(jsonParam.toString(),"readAll");
+            typeServicesListAsString = API.sendRequest(jsonParam.toString(), "readAll");
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }
 
 
-        if(!typeServicesListAsString.equals("")){
-            try {
-                JSONObject typeServicesJson  = new JSONObject(typeServicesListAsString);
-
-
-                Log.i("Taille json:", Integer.toString(typeServicesJson.length()));
-
-                for (counter = 0; counter < typeServicesJson.length(); counter++){
-                    Log.i("Typeservice Test", typeServicesJson.getString(Integer.toString(counter)));
-                }
-
-                HashMap<String, TypeService> retMap = new Gson().fromJson(
-                        typeServicesListAsString, new TypeToken<HashMap<String, TypeService>>() {}.getType()
-                );
-
-                System.out.println(retMap);
-
-            } catch (JSONException e) {
-                e.printStackTrace();
+        if (!typeServicesListAsString.equals("")) {
+            if (typeServicesListAsString.startsWith("i", 2)) {
+                typeData.put("0", gson.fromJson(typeServicesListAsString, TypeService.class));
+            } else {
+                typeData = API.decodeResponseMultipleAsTypeService(typeServicesListAsString);
             }
-        }
 
-        services.add(new Services("Course", R.drawable.services_logo));
-        services.add(new Services("Ménage", R.drawable.services_logo));
-        services.add(new Services("Aide aux devoirs", R.drawable.services_logo));
-        services.add(new Services("Aide à la personne", R.drawable.services_logo));
-        services.add(new Services("Conseils", R.drawable.services_logo));
-        services.add(new Services("Aidez-moi", R.drawable.services_logo));
-        services.add(new Services("Cueillette de fruits", R.drawable.services_logo));
-        services.add(new Services("Travaux", R.drawable.services_logo));
-        services.add(new Services("Course à réaliser", R.drawable.services_logo));
+            for (counter = 0; counter < typeData.size(); counter++){
+                Log.i("PRINT TYPEDATA",typeData.get(Integer.toString(counter)).getName());
+
+                TypeService type = typeData.get(Integer.toString(counter));
+
+                typeServices.add(type);
+            }
+
+
+        }
 
         assert getSupportActionBar() != null;   //null check
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -100,7 +91,7 @@ public class ServicesActivity extends AppCompatActivity {
         listServices.setHasFixedSize(true);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         listServices.setLayoutManager(linearLayoutManager);
-        adapter = new ServicesAdapter(services,ServicesActivity.this);
+        adapter = new ServicesAdapter(typeServices, ServicesActivity.this);
         listServices.setAdapter(adapter);
     }
 
@@ -111,35 +102,35 @@ public class ServicesActivity extends AppCompatActivity {
         final MenuItem myActionMenuItem = menu.findItem(R.id.search);
         searchView = (SearchView) myActionMenuItem.getActionView();
         changeSearchViewTextColor(searchView);
-        searchView.findViewById(R.id.search_src_text) ;
+        searchView.findViewById(R.id.search_src_text);
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                if(!searchView.isIconified()){
+                if (!searchView.isIconified()) {
                     searchView.setIconified(true);
                 }
                 myActionMenuItem.collapseActionView();
 
-                return false ;
+                return false;
             }
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                final List<Services> filtermodelist = filter(services, newText);
+                final List<TypeService> filtermodelist = filter(typeServices, newText);
                 adapter.setfilter(filtermodelist);
-                return true ;
+                return true;
             }
         });
         return true;
     }
 
-    private List<Services> filter (List<Services> p1, String query){
+    private List<TypeService> filter(List<TypeService> p1, String query) {
         query = query.toLowerCase();
 
-        final List<Services> filteredModeList = new ArrayList<>();
-        for(Services model:p1) {
-            final String text=model.getTitle().toLowerCase();
-            if(text.startsWith(query)) {
+        final List<TypeService> filteredModeList = new ArrayList<>();
+        for (TypeService model : p1) {
+            final String text = model.getName().toLowerCase();
+            if (text.startsWith(query)) {
                 filteredModeList.add(model);
             }
 
@@ -150,12 +141,12 @@ public class ServicesActivity extends AppCompatActivity {
 
     private void changeSearchViewTextColor(View view) {
         if (view != null) {
-            if(view instanceof TextView) {
+            if (view instanceof TextView) {
                 ((TextView) view).setTextColor(Color.WHITE);
                 return;
             } else if (view instanceof ViewGroup) {
-                ViewGroup viewGroup = (ViewGroup) view ;
-                for(int i = 0 ; i < viewGroup.getChildCount();i++){
+                ViewGroup viewGroup = (ViewGroup) view;
+                for (int i = 0; i < viewGroup.getChildCount(); i++) {
                     changeSearchViewTextColor(viewGroup.getChildAt(i));
                 }
             }
