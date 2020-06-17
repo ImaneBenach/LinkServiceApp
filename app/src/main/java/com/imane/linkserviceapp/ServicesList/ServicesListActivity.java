@@ -44,6 +44,8 @@ public class ServicesListActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         HashMap<String, TypeService> typeData = new HashMap<>();
         JSONObject jsonParam = new JSONObject();
+        JSONObject jsonParamValues = new JSONObject();
+
         String typeServicesListAsString = "";
         int counter;
 
@@ -51,14 +53,20 @@ public class ServicesListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_services);
 
-
+        String idTypeService = getIntent().getStringExtra("typeService");
+        System.out.println(idTypeService);
         try {
-            jsonParam.put("table", "type_service");
+            jsonParamValues.put("where"," WHERE id_type="+idTypeService);
+
+            jsonParam.put("table", "service");
+            jsonParam.put("values",jsonParamValues);
+
+
         } catch (JSONException e) {
             e.printStackTrace();
         }
         try {
-            typeServicesListAsString = API.sendRequest(jsonParam.toString(), "readAll");
+            typeServicesListAsString = API.sendRequest(jsonParam.toString(), "readWithFilter");
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }

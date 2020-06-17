@@ -2,6 +2,7 @@ package com.imane.linkserviceapp.TypesService;
 
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -47,8 +48,9 @@ public class ServicesAdapter extends RecyclerView.Adapter<ServicesAdapter.Holder
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Log.i("id type service",Integer.toString(typeServices.get(position).getId()));
                 Intent intent = new Intent(context, ServicesListActivity.class);
+                intent.putExtra("typeService",Integer.toString(typeServices.get(position).getId()));
                 context.startActivity(intent);
 
                 Toast.makeText(context,"click on " + typeServices.get(position).getName(), Toast.LENGTH_LONG).show();
