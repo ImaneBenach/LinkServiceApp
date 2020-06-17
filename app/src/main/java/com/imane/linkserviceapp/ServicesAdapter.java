@@ -18,11 +18,11 @@ import java.util.List;
 
 public class ServicesAdapter extends RecyclerView.Adapter<ServicesAdapter.Holderview> {
 
-    private List<TypeService> services ;
+    private List<TypeService> typeServices;
     private Context context ;
 
-    public ServicesAdapter(List<TypeService> services, Context context) {
-        this.services = services;
+    public ServicesAdapter(List<TypeService> typeServices, Context context) {
+        this.typeServices = typeServices;
         this.context = context;
     }
 
@@ -36,13 +36,13 @@ public class ServicesAdapter extends RecyclerView.Adapter<ServicesAdapter.Holder
 
     @Override
     public void onBindViewHolder(@NonNull Holderview holder, final int position) {
-        holder.v_name.setText(services.get(position).getName());
-        holder.v_image.setImageResource(services.get(position).getImage());
+        holder.v_name.setText(typeServices.get(position).getName());
+        holder.v_image.setImageResource(typeServices.get(position).getImage());
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(context,"click on " + services.get(position).getName(), Toast.LENGTH_LONG).show();
+                Toast.makeText(context,"click on " + typeServices.get(position).getName(), Toast.LENGTH_LONG).show();
             }
         });
 
@@ -50,12 +50,12 @@ public class ServicesAdapter extends RecyclerView.Adapter<ServicesAdapter.Holder
 
     @Override
     public int getItemCount() {
-        return services.size();
+        return typeServices.size();
     }
 
     public void setfilter(List<TypeService> listservices){
-        services = new ArrayList<>();
-        services.addAll(listservices);
+        typeServices = new ArrayList<>();
+        typeServices.addAll(listservices);
         notifyDataSetChanged();
     }
 

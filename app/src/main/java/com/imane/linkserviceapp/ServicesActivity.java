@@ -81,7 +81,6 @@ public class ServicesActivity extends AppCompatActivity {
                 typeServices.add(type);
             }
 
-
         }
 
         assert getSupportActionBar() != null;   //null check

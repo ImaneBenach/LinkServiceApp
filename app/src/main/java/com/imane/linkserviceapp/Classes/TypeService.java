@@ -11,7 +11,6 @@ public class TypeService {
     private String name;
     private String description;
     private String picture;
-    private int image = R.drawable.services_logo;
     private int active;
 
     public TypeService(int idSection, String n, String d, String i, int a) {
@@ -34,7 +33,7 @@ public class TypeService {
         return description;
     }
 
-    public int getImage() { return image; }
+    public int getImage() { return R.drawable.services_logo; }
 
     public int getActive() { return active; }
 
