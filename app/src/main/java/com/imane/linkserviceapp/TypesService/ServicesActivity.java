@@ -1,4 +1,4 @@
-package com.imane.linkserviceapp;
+package com.imane.linkserviceapp.TypesService;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -15,7 +15,6 @@ import android.view.ViewGroup;
 import android.widget.SearchView;
 import android.widget.TextView;
 
-import com.google.gson.reflect.TypeToken;
 import com.imane.linkserviceapp.Classes.API;
 import com.imane.linkserviceapp.Classes.TypeService;
 
@@ -23,13 +22,13 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
 import com.google.gson.Gson;
+import com.imane.linkserviceapp.HomeActivity;
+import com.imane.linkserviceapp.R;
 
 
 public class ServicesActivity extends AppCompatActivity {
@@ -74,10 +73,7 @@ public class ServicesActivity extends AppCompatActivity {
             }
 
             for (counter = 0; counter < typeData.size(); counter++){
-                Log.i("PRINT TYPEDATA",typeData.get(Integer.toString(counter)).getName());
-
                 TypeService type = typeData.get(Integer.toString(counter));
-
                 typeServices.add(type);
             }
 

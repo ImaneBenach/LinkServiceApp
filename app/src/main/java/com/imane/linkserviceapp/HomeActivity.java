@@ -7,6 +7,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
+import com.imane.linkserviceapp.TypesService.ServicesActivity;
+
 public class HomeActivity extends AppCompatActivity {
 
     Button btnServices, btnMesServices, btnMessages, btnProfil ;
@@ -25,7 +27,7 @@ public class HomeActivity extends AppCompatActivity {
         btnServices.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(HomeActivity.this,ServicesActivity.class);
+                Intent intent = new Intent(HomeActivity.this, ServicesActivity.class);
                 startActivity(intent);
                 finish();
             }

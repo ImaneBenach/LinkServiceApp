@@ -20,7 +20,8 @@
         <activity
             android:name=".JustificatifsActivity" />
 
-        <activity android:name=".ServicesActivity" />
+        <activity android:name=".TypesService.ServicesActivity" />
+        <activity android:name=".ServicesList.ServicesListActivity"/>
         <activity
             android:name=".MessagesActivity" />
         <activity

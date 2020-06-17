@@ -1,6 +1,7 @@
-package com.imane.linkserviceapp;
+package com.imane.linkserviceapp.TypesService;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,10 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.imane.linkserviceapp.Classes.TypeService;
+import com.imane.linkserviceapp.HomeActivity;
+import com.imane.linkserviceapp.MesServicesActivity;
+import com.imane.linkserviceapp.R;
+import com.imane.linkserviceapp.ServicesList.ServicesListActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,6 +47,10 @@ public class ServicesAdapter extends RecyclerView.Adapter<ServicesAdapter.Holder
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                Intent intent = new Intent(context, ServicesListActivity.class);
+                context.startActivity(intent);
+
                 Toast.makeText(context,"click on " + typeServices.get(position).getName(), Toast.LENGTH_LONG).show();
             }
         });
