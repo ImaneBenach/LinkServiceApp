@@ -1,6 +1,7 @@
 package com.imane.linkserviceapp.Classes;
 
 
+import com.google.gson.Gson;
 import com.imane.linkserviceapp.Classes.API;
 
 import java.io.IOException;
@@ -20,6 +21,10 @@ public class User {
 
     public User(int idUser){
         id = idUser;
+    }
+
+    public User(){
+
     }
 
     public User(int idUser, String e, String n, String s, String b, int p, String a, String c, String t){
@@ -59,6 +64,19 @@ public class User {
     public String getCity() { return city; }
 
     public int getPoints() { return points; }
+
+
+    public static String signin(String email, String password) throws NoSuchAlgorithmException, IOException, InterruptedException {
+        HashMap<String, String> inputValues = new HashMap<>();
+        inputValues.put("email",email);
+        inputValues.put("password", API.passwordHash(password));
+
+        Gson gson = new Gson();
+        String json = gson.toJson(inputValues);
+        return  json;
+    }
+
+    /*
 
     public void updateUser(String newName, String newSurname, String newBirthdate, String newAdress, String newCity) throws IOException, InterruptedException {
         name = newName;
@@ -110,5 +128,7 @@ public class User {
 
         //TODO: if API is disconnected
     }
+
+     */
 
 }
