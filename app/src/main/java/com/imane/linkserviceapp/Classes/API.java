@@ -69,6 +69,13 @@ public class API {
         return retMap;
     }
 
+    public static HashMap<String, Service> decodeResponseMultipleAsService (String typesService){
+        HashMap<String, Service> retMap = new Gson().fromJson(
+                typesService, new TypeToken<HashMap<String, Service>>() {}.getType()
+        );
+        return retMap;
+    }
+
     private static String readFullyAsString(InputStream inputStream, String encoding) throws IOException {
         return readFully(inputStream).toString(encoding);
     }
