@@ -2,12 +2,12 @@
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_gravity="center_horizontal"
     android:orientation="horizontal"
-    tools:context=".ServiceInfos.ServiceInfosActivity">
+    tools:context=".ServiceInfos.ServiceInfosActivityCreator">
 
     <ImageView
         android:id="@+id/imageService"
@@ -31,7 +31,8 @@
             android:orientation="horizontal"
             android:textAlignment="center"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/imageService">
+            app:layout_constraintTop_toBottomOf="@+id/imageService"
+            >
 
             <TextView
                 android:id="@+id/nameService"
@@ -70,7 +71,6 @@
             android:layout_height="wrap_content"
             android:text="Nombre de points"
             android:textSize="16dp"
-
             >
         </TextView>
         <TextView
@@ -97,11 +97,11 @@
         </TextView>
 
         <Button
-            android:id="@+id/buttonPostuler"
+            android:id="@+id/buttonVolunteers"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             style="@style/ButtonPostuler"
-            android:text="Postuler au service">
+            android:text="Volontaires">
 
         </Button>
     </LinearLayout>

@@ -2,7 +2,9 @@ package com.imane.linkserviceapp.Classes;
 
 import com.imane.linkserviceapp.R;
 
-public class Service {
+import java.io.Serializable;
+
+public class Service implements Serializable {
     private int id;
     private String name;
     private String description;
@@ -42,7 +44,7 @@ public class Service {
 
     public int getId_type() { return id_type; }
 
-    public String getDate() { return date; }
+    public String getDate() { return date.substring(0, 10); }
 
     public String getDescription() { return description; }
 

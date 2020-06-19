@@ -50,7 +50,7 @@ public class ServicesListAdapter extends RecyclerView.Adapter<ServicesListAdapte
             public void onClick(View v) {
 
                 Intent intent = new Intent(context, ServiceInfosActivity.class);
-                intent.putExtra("Service",Services.get(position).toString());
+                intent.putExtra("Service",Services.get(position));
                 context.startActivity(intent);
 
                 Toast.makeText(context,"click on " + Services.get(position).getName(), Toast.LENGTH_LONG).show();

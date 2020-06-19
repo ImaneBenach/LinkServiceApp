@@ -22,6 +22,9 @@
 
         <activity android:name=".TypesService.ServicesActivity" />
         <activity android:name=".ServicesList.ServicesListActivity"/>
+        <activity android:name=".ServiceInfos.ServiceInfosActivity"/>
+        <activity android:name=".ServiceInfos.ServiceInfosActivityCreator"/>
+
         <activity
             android:name=".MessagesActivity" />
         <activity
