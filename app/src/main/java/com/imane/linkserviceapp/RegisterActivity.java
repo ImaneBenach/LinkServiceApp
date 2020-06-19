@@ -51,7 +51,6 @@ public class RegisterActivity extends AppCompatActivity {
         etPrenom = (EditText)findViewById(R.id.et_prenom) ;
         etBirth = findViewById(R.id.et_birth);
 
-        // retirer keyboard du tv birthdate
         etBirth.setShowSoftInputOnFocus(false);
 
         etBirth.setOnClickListener(new View.OnClickListener() {

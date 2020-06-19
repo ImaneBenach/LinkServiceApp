@@ -69,7 +69,7 @@ public class User {
     public static HashMap signin(String email, String password) throws NoSuchAlgorithmException, IOException, InterruptedException {
         HashMap<String, String> inputValues = new HashMap<>();
         inputValues.put("email",email);
-        inputValues.put("password", password);
+        inputValues.put("password", API.passwordHash(password));
 
         return  inputValues;
     }
