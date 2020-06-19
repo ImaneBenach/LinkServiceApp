@@ -66,14 +66,26 @@ public class User {
     public int getPoints() { return points; }
 
 
-    public static String signin(String email, String password) throws NoSuchAlgorithmException, IOException, InterruptedException {
+    public static HashMap signin(String email, String password) throws NoSuchAlgorithmException, IOException, InterruptedException {
+        HashMap<String, String> inputValues = new HashMap<>();
+        inputValues.put("email",email);
+        inputValues.put("password", password);
+
+        return  inputValues;
+    }
+
+    public static HashMap register(String email, String password, String name, String surname, String birthdate,String type) throws NoSuchAlgorithmException, IOException, InterruptedException {
         HashMap<String, String> inputValues = new HashMap<>();
         inputValues.put("email",email);
         inputValues.put("password", API.passwordHash(password));
-
-        Gson gson = new Gson();
-        String json = gson.toJson(inputValues);
-        return  json;
+        inputValues.put("name",name);
+        inputValues.put("surname",surname);
+        inputValues.put("birthdate",birthdate);
+        inputValues.put("points", "10");
+        inputValues.put("category", "course");
+        inputValues.put("type",type);
+       // updateInDatabase(inputValues, "create");
+        return inputValues;
     }
 
     /*

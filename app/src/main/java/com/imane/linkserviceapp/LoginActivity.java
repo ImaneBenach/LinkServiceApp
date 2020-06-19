@@ -12,12 +12,14 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
 import com.imane.linkserviceapp.Classes.User;
 import com.imane.linkserviceapp.Classes.API;
 
 
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
+import java.util.HashMap;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -51,12 +53,20 @@ public class LoginActivity extends AppCompatActivity {
                     final String mdp = etMdp.getText().toString();
 
                     try {
-                        String login = user.signin(email, mdp);
+                        String table =  "user";
+
+                        HashMap<String,String> login = user.signin(email, mdp);
                         // System.out.println(login);
+                        HashMap<String, Object> userValue = new HashMap<>();
+
+                        userValue.put("table", "user");
+                        userValue.put("values", login);
+                        System.out.println(userValue);
+                        Gson gson = new Gson();
+                        String json = gson.toJson(userValue);
 
                         API api = new API();
-                        String id = api.sendRequest(login, "connection");
-                        System.out.println("print = " + id);
+                        String id = api.sendRequest(json, "connection");
                     } catch (NoSuchAlgorithmException e) {
                         e.printStackTrace();
                     } catch (IOException e) {
