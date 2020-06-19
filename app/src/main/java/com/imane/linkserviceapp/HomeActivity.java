@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
+import com.imane.linkserviceapp.MesServices.MesServicesActivity;
 import com.imane.linkserviceapp.TypesService.ServicesActivity;
 
 public class HomeActivity extends AppCompatActivity {
@@ -37,7 +38,7 @@ public class HomeActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                Intent intent = new Intent(HomeActivity.this,MesServicesActivity.class);
+                Intent intent = new Intent(HomeActivity.this, MesServicesActivity.class);
                 startActivity(intent);
                 finish();
 

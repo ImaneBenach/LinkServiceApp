@@ -14,8 +14,6 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.imane.linkserviceapp.Classes.TypeService;
-import com.imane.linkserviceapp.HomeActivity;
-import com.imane.linkserviceapp.MesServicesActivity;
 import com.imane.linkserviceapp.R;
 import com.imane.linkserviceapp.ServicesList.ServicesListActivity;
 
