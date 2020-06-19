@@ -25,7 +25,6 @@ public class LoginActivity extends AppCompatActivity {
 
     Button btnInscription, btnSeConnecter ;
     EditText etEmail, etMdp ;
-    private String url = "http://10.0.2.2:4000/connection";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
