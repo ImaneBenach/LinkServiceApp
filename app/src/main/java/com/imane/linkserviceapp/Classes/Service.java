@@ -1,16 +1,37 @@
 package com.imane.linkserviceapp.Classes;
 
-public class Service {
+import com.imane.linkserviceapp.R;
+
+import java.io.Serializable;
+
+public class Service implements Serializable {
     private int id;
     private String name;
+    private String description;
     private String date;
+    private String deadline;
+    private int cost;
+    private int profit;
+    private String adress;
+    private String city;
+    private int postcode;
+    private String access;
     private int id_type;
     private int id_creator;
 
-    public Service(int idService, String n, String d, int type, int creator){
+
+    public Service(int idService, String n, String desc, String da, String dl, int cost, int profit, String adress, String city, int pc, String access, int type, int creator){
         id = idService;
         name = n;
-        date = d;
+        description = desc;
+        date = da;
+        deadline = dl;
+        this.cost = cost;
+        this.profit = profit;
+        this.adress = adress;
+        this.city = city;
+        postcode = pc;
+        this.access = access;
         id_type = type;
         id_creator = creator;
     }
@@ -23,6 +44,18 @@ public class Service {
 
     public int getId_type() { return id_type; }
 
-    public String getDate() { return date; }
+    public String getDate() { return date.substring(0, 10); }
+
+    public String getDescription() { return description; }
+
+    public int getCost() { return cost; }
+
+    public int getProfit() { return profit; }
+
+    public String getAdress() { return adress; }
+
+    public String getAccess() { return access; }
+
+    public int getImage() { return R.drawable.services_logo; }
 }
 

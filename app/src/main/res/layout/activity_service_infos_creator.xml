@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_gravity="center_horizontal"
+    android:orientation="horizontal"
+    tools:context=".ServiceInfos.ServiceInfosActivityCreator">
+
+    <ImageView
+        android:id="@+id/imageService"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/appbar_padding"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"></ImageView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageService"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:id="@+id/headerService"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:textAlignment="center"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/imageService"
+            >
+
+            <TextView
+                android:id="@+id/nameService"
+                style="@style/ServiceHeader"
+                android:layout_width="wrap_content"
+
+                android:layout_height="wrap_content"
+                android:gravity="left"
+                android:orientation="vertical"
+                android:text="Service Details">
+
+            </TextView>
+
+            <TextView
+                style="@style/ServiceHeader"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=" -- ">
+
+            </TextView>
+
+            <TextView
+                android:id="@+id/creatorService"
+                style="@style/ServiceHeader"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Nom Propriétaire">
+
+            </TextView>
+        </LinearLayout>
+
+
+        <TextView
+            android:id="@+id/PointsService"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Nombre de points"
+            android:textSize="16dp"
+            >
+        </TextView>
+        <TextView
+            android:id="@+id/descriptionService"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Description"
+            android:textSize="16dp"
+            >
+        </TextView>
+        <TextView
+            android:id="@+id/dateService"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Date du service"
+            >
+        </TextView>
+        <TextView
+            android:id="@+id/typeService"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Type de service"
+            >
+        </TextView>
+
+        <Button
+            android:id="@+id/buttonVolunteers"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/ButtonPostuler"
+            android:text="Volontaires">
+
+        </Button>
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

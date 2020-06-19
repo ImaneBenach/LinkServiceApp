@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.gson.Gson;
 import com.imane.linkserviceapp.Classes.API;
+import com.imane.linkserviceapp.Classes.Service;
 import com.imane.linkserviceapp.Classes.TypeService;
 import com.imane.linkserviceapp.HomeActivity;
 import com.imane.linkserviceapp.R;
@@ -33,8 +34,8 @@ import java.util.List;
 public class ServicesListActivity extends AppCompatActivity {
 
     RecyclerView listServices;
-    List<TypeService> typeServices = new ArrayList<>();
-    ServicesAdapter adapter;
+    List<Service> Services = new ArrayList<>();
+    ServicesListAdapter adapter;
     SearchView searchView;
 
     private final Gson gson = new Gson();
@@ -42,38 +43,44 @@ public class ServicesListActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        HashMap<String, TypeService> typeData = new HashMap<>();
+        HashMap<String, Service> ServicesData = new HashMap<>();
         JSONObject jsonParam = new JSONObject();
-        String typeServicesListAsString = "";
+        JSONObject jsonParamValues = new JSONObject();
+
+        String ServicesList = "";
         int counter;
 
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_services);
 
-
+        String idTypeService = getIntent().getStringExtra("typeService");
         try {
-            jsonParam.put("table", "type_service");
+            jsonParamValues.put("where"," WHERE id_type="+idTypeService);
+
+            jsonParam.put("table", "service");
+            jsonParam.put("values",jsonParamValues);
+
         } catch (JSONException e) {
             e.printStackTrace();
         }
         try {
-            typeServicesListAsString = API.sendRequest(jsonParam.toString(), "readAll");
+            ServicesList = API.sendRequest(jsonParam.toString(), "readWithFilter");
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }
 
 
-        if (!typeServicesListAsString.equals("")) {
-            if (typeServicesListAsString.startsWith("i", 2)) {
-                typeData.put("0", gson.fromJson(typeServicesListAsString, TypeService.class));
+        if (!ServicesList.equals("")) {
+            if (ServicesList.startsWith("i", 2)) {
+                ServicesData.put("0", gson.fromJson(ServicesList, Service.class));
             } else {
-                typeData = API.decodeResponseMultipleAsTypeService(typeServicesListAsString);
+                ServicesData = API.decodeResponseMultipleAsService(ServicesList);
             }
 
-            for (counter = 0; counter < typeData.size(); counter++){
-                TypeService type = typeData.get(Integer.toString(counter));
-                typeServices.add(type);
+            for (counter = 0; counter < ServicesData.size(); counter++){
+                Service type = ServicesData.get(Integer.toString(counter));
+                Services.add(type);
             }
 
         }
@@ -85,7 +92,7 @@ public class ServicesListActivity extends AppCompatActivity {
         listServices.setHasFixedSize(true);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         listServices.setLayoutManager(linearLayoutManager);
-        adapter = new ServicesAdapter(typeServices, ServicesListActivity.this);
+        adapter = new ServicesListAdapter(Services, ServicesListActivity.this);
         listServices.setAdapter(adapter);
     }
 
@@ -110,7 +117,7 @@ public class ServicesListActivity extends AppCompatActivity {
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                final List<TypeService> filtermodelist = filter(typeServices, newText);
+                final List<Service> filtermodelist = filter(Services, newText);
                 adapter.setfilter(filtermodelist);
                 return true;
             }
@@ -118,11 +125,11 @@ public class ServicesListActivity extends AppCompatActivity {
         return true;
     }
 
-    private List<TypeService> filter(List<TypeService> p1, String query) {
+    private List<Service> filter(List<Service> p1, String query) {
         query = query.toLowerCase();
 
-        final List<TypeService> filteredModeList = new ArrayList<>();
-        for (TypeService model : p1) {
+        final List<Service> filteredModeList = new ArrayList<>();
+        for (Service model : p1) {
             final String text = model.getName().toLowerCase();
             if (text.startsWith(query)) {
                 filteredModeList.add(model);
