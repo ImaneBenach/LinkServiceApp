@@ -1,6 +1,7 @@
 package com.imane.linkserviceapp.Classes;
 
 
+import com.google.gson.Gson;
 import com.imane.linkserviceapp.Classes.API;
 
 import java.io.IOException;
@@ -20,6 +21,10 @@ public class User {
 
     public User(int idUser){
         id = idUser;
+    }
+
+    public User(){
+
     }
 
     public User(int idUser, String e, String n, String s, String b, int p, String a, String c, String t){
@@ -59,6 +64,31 @@ public class User {
     public String getCity() { return city; }
 
     public int getPoints() { return points; }
+
+
+    public static HashMap signin(String email, String password) throws NoSuchAlgorithmException, IOException, InterruptedException {
+        HashMap<String, String> inputValues = new HashMap<>();
+        inputValues.put("email",email);
+        inputValues.put("password", API.passwordHash(password));
+
+        return  inputValues;
+    }
+
+    public static HashMap register(String email, String password, String name, String surname, String birthdate,String type) throws NoSuchAlgorithmException, IOException, InterruptedException {
+        HashMap<String, String> inputValues = new HashMap<>();
+        inputValues.put("email",email);
+        inputValues.put("password", API.passwordHash(password));
+        inputValues.put("name",name);
+        inputValues.put("surname",surname);
+        inputValues.put("birthdate",birthdate);
+        inputValues.put("points", "10");
+        inputValues.put("category", "course");
+        inputValues.put("type",type);
+       // updateInDatabase(inputValues, "create");
+        return inputValues;
+    }
+
+    /*
 
     public void updateUser(String newName, String newSurname, String newBirthdate, String newAdress, String newCity) throws IOException, InterruptedException {
         name = newName;
@@ -110,5 +140,7 @@ public class User {
 
         //TODO: if API is disconnected
     }
+
+     */
 
 }
