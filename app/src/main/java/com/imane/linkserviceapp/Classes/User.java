@@ -5,10 +5,11 @@ import com.google.gson.Gson;
 import com.imane.linkserviceapp.Classes.API;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
 
-public class User {
+public class User implements Serializable {
     private  int id;
     private String email;
     private String name;

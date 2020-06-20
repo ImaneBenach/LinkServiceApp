@@ -87,7 +87,6 @@ public class API {
         while ((length = inputStream.read(buffer)) != -1) {
             baos.write(buffer, 0, length);
         }
-        System.out.println(baos);
         return baos;
     }
 

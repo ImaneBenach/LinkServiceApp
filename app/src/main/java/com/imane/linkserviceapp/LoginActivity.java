@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -13,6 +14,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.imane.linkserviceapp.Classes.Service;
 import com.imane.linkserviceapp.Classes.User;
 import com.imane.linkserviceapp.Classes.API;
 
@@ -25,6 +27,7 @@ public class LoginActivity extends AppCompatActivity {
 
     Button btnInscription, btnSeConnecter ;
     EditText etEmail, etMdp ;
+    private final Gson gson = new Gson();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +53,7 @@ public class LoginActivity extends AppCompatActivity {
                     User user = new User();
                     final String email = etEmail.getText().toString();
                     final String mdp = etMdp.getText().toString();
+                    String userId = "";
 
                     try {
                         String table =  "user";
@@ -65,7 +69,7 @@ public class LoginActivity extends AppCompatActivity {
                         String json = gson.toJson(userValue);
 
                         API api = new API();
-                        String id = api.sendRequest(json, "connection");
+                        userId = api.sendRequest(json, "connection");
                     } catch (NoSuchAlgorithmException e) {
                         e.printStackTrace();
                     } catch (IOException e) {
@@ -74,9 +78,17 @@ public class LoginActivity extends AppCompatActivity {
                         e.printStackTrace();
                     }
 
-                    Intent intent = new Intent(LoginActivity.this,HomeActivity.class);
-                    startActivity(intent);
-                    finish();
+                    if(!userId.equals("") && !userId.equals("null")){
+                        Log.i("USERID", userId);
+                        User userConnected = gson.fromJson(userId, User.class);
+                        Intent intent = new Intent(LoginActivity.this,HomeActivity.class);
+                        intent.putExtra("userId",userConnected.getId());
+                        startActivity(intent);
+                        finish();
+                    } else {
+                        Toast.makeText(getApplicationContext(), "Cette combinaison est inconnue", Toast.LENGTH_LONG).show();
+                    }
+
                 }
             }
         });
