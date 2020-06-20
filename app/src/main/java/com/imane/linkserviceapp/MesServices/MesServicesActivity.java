@@ -9,6 +9,8 @@ import android.os.Bundle;
 import android.view.MenuItem;
 
 import com.google.android.material.tabs.TabLayout;
+import com.imane.linkserviceapp.Classes.Service;
+import com.imane.linkserviceapp.Classes.User;
 import com.imane.linkserviceapp.HomeActivity;
 import com.imane.linkserviceapp.R;
 
@@ -17,19 +19,23 @@ public class MesServicesActivity extends AppCompatActivity {
     private TabLayout tabLayout ;
     private ViewPager viewPager ;
     private ViewPagerAdapter adapter ;
+    private User userConnected;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mes_services);
 
+        userConnected = (User) getIntent().getSerializableExtra("userConnected");
 
         tabLayout = (TabLayout) findViewById(R.id.tabLayout);
         viewPager = (ViewPager) findViewById(R.id.viewPager);
         adapter = new ViewPagerAdapter(getSupportFragmentManager());
 
-        adapter.AddFragment(new EffectuerFragment(), "Effectué(s)");
-        adapter.AddFragment(new ProposerFragment(), "Proposé(s)");
+        adapter.AddFragment(new EffectuerFragment(userConnected), "Effectué(s)");
+        adapter.AddFragment(new ProposerFragment(userConnected), "Proposé(s)");
+
+
 
 
         viewPager.setAdapter(adapter);

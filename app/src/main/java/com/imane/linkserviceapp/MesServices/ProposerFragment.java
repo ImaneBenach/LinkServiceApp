@@ -11,9 +11,18 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.gson.Gson;
+import com.imane.linkserviceapp.Classes.API;
+import com.imane.linkserviceapp.Classes.Service;
+import com.imane.linkserviceapp.Classes.User;
 import com.imane.linkserviceapp.R;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class ProposerFragment extends Fragment {
@@ -21,9 +30,12 @@ public class ProposerFragment extends Fragment {
 
     View v ;
     private RecyclerView recyclerView ;
-    private List<MyServices> services ;
+    private List<Service> services = new ArrayList<>();
+    private User userConnected;
+    private final Gson gson = new Gson();
 
-    public ProposerFragment() {
+    public ProposerFragment(User user) {
+        userConnected = user;
     }
 
     @Nullable
@@ -31,9 +43,12 @@ public class ProposerFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         v = inflater.inflate(R.layout.proposer_fragment,container,false);
         recyclerView = v.findViewById(R.id.recyclerView) ;
-        MesServicesRV recyclerViewAdapter = new MesServicesRV(getContext(), services) ;
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        recyclerView.setAdapter(recyclerViewAdapter);
+        MesServicesRV recyclerViewAdapter;
+        if(!services.isEmpty()){
+            recyclerViewAdapter = new MesServicesRV(getContext(), services);
+            recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+            recyclerView.setAdapter(recyclerViewAdapter);
+        }
         return v;
     }
 
@@ -41,13 +56,40 @@ public class ProposerFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        services = new ArrayList<>();
-        services.add(new MyServices("Test", "ceci est un test recycler", R.drawable.services_logo));
+        HashMap<String, Service> ServicesData = new HashMap<>();
+        JSONObject jsonParam = new JSONObject();
+        JSONObject jsonParamValues = new JSONObject();
+        String ServicesList = "";
+        int counter;
 
-        services.add(new MyServices("Test", "ceci est un test recycler", R.drawable.services_logo));
+        try {
+            jsonParamValues.put("where"," WHERE id_creator="+userConnected.getId());
 
-        services.add(new MyServices("Test", "ceci est un test recycler", R.drawable.services_logo));
+            jsonParam.put("table", "service");
+            jsonParam.put("values",jsonParamValues);
 
-        services.add(new MyServices("Test", "ceci est un test recycler", R.drawable.services_logo));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        try {
+            ServicesList = API.sendRequest(jsonParam.toString(), "readWithFilter");
+        } catch (IOException | InterruptedException e) {
+            e.printStackTrace();
+        }
+
+
+        if (!ServicesList.equals("") && !ServicesList.equals("null")) {
+            if (ServicesList.startsWith("i", 2)) {
+                ServicesData.put("0", gson.fromJson(ServicesList, Service.class));
+            } else {
+                ServicesData = API.decodeResponseMultipleAsService(ServicesList);
+            }
+
+            for (counter = 0; counter < ServicesData.size(); counter++){
+                Service type = ServicesData.get(Integer.toString(counter));
+                services.add(type);
+            }
+
+        }
     }
 }

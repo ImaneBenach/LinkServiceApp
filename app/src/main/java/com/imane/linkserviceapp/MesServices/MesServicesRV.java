@@ -10,6 +10,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.imane.linkserviceapp.Classes.Service;
 import com.imane.linkserviceapp.R;
 
 import java.util.List;
@@ -17,9 +18,9 @@ import java.util.List;
 public class MesServicesRV extends RecyclerView.Adapter<MesServicesRV.MyViewHolder>{
 
     Context context ;
-    List<MyServices> data ;
+    List<Service> data ;
 
-    public MesServicesRV(Context context, List<MyServices> data) {
+    public MesServicesRV(Context context, List<Service> data) {
         this.context = context;
         this.data = data;
     }
@@ -38,9 +39,9 @@ public class MesServicesRV extends RecyclerView.Adapter<MesServicesRV.MyViewHold
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
 
-        holder.name.setText(data.get(position).getNom());
+        holder.name.setText(data.get(position).getName());
         holder.desc.setText(data.get(position).getDescription());
-        holder.imageView.setImageResource(data.get(position).getPhoto());
+        holder.imageView.setImageResource(data.get(position).getImage());
 
     }
 
