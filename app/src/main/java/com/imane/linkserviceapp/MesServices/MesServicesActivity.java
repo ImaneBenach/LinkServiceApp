@@ -60,6 +60,7 @@ public class MesServicesActivity extends AppCompatActivity {
             case android.R.id.home:
                 // app icon in action bar clicked; go home
                 Intent intent = new Intent(this, HomeActivity.class);
+                intent.putExtra("userConnected", userConnected);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
                 return true;

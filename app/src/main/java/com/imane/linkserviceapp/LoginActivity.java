@@ -19,6 +19,9 @@ import com.imane.linkserviceapp.Classes.User;
 import com.imane.linkserviceapp.Classes.API;
 
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
@@ -79,12 +82,16 @@ public class LoginActivity extends AppCompatActivity {
                     }
 
                     if(!userId.equals("") && !userId.equals("null")){
-                        Log.i("USERID", userId);
-                        User userConnected = gson.fromJson(userId, User.class);
-                        Intent intent = new Intent(LoginActivity.this,HomeActivity.class);
-                        intent.putExtra("userId",userConnected.getId());
-                        startActivity(intent);
-                        finish();
+                        User userConnected = getUserConnectedInfos(gson.fromJson(userId, User.class));
+
+                        Log.i("user", userConnected.getName());
+
+                        if(userConnected != null){
+                            Intent intent = new Intent(LoginActivity.this,HomeActivity.class);
+                            intent.putExtra("userConnected",userConnected);
+                            startActivity(intent);
+                            finish();
+                        }
                     } else {
                         Toast.makeText(getApplicationContext(), "Cette combinaison est inconnue", Toast.LENGTH_LONG).show();
                     }
@@ -103,6 +110,34 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
+
+    }
+
+    private User getUserConnectedInfos(User userId){
+        JSONObject jsonParam = new JSONObject();
+        JSONObject jsonParamValues = new JSONObject();
+        String UserData = "";
+
+        try {
+            jsonParamValues.put("where"," WHERE id="+userId.getId());
+
+            jsonParam.put("table", "user");
+            jsonParam.put("values",jsonParamValues);
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        try {
+            UserData = API.sendRequest(jsonParam.toString(), "readWithFilter");
+        } catch (IOException | InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        if (!UserData.equals("")) {
+            return gson.fromJson(UserData, User.class);
+        } else {
+            return null;
+        }
 
     }
 }

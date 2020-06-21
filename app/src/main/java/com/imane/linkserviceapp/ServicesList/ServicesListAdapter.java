@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.imane.linkserviceapp.Classes.Service;
 import com.imane.linkserviceapp.Classes.TypeService;
+import com.imane.linkserviceapp.Classes.User;
 import com.imane.linkserviceapp.R;
 import com.imane.linkserviceapp.ServiceInfos.ServiceInfosActivity;
 import com.imane.linkserviceapp.TypesService.ServicesAdapter;
@@ -25,9 +26,11 @@ import java.util.List;
 public class ServicesListAdapter extends RecyclerView.Adapter<ServicesListAdapter.Holderview>{
 
     private List<Service> Services;
-    private Context context ;
+    private Context context;
+    private User userConnected;
 
-    public ServicesListAdapter(List<Service> Services, Context context) {
+    public ServicesListAdapter(List<Service> Services, Context context, User user) {
+        this.userConnected = user;
         this.Services = Services;
         this.context = context;
     }
@@ -51,6 +54,7 @@ public class ServicesListAdapter extends RecyclerView.Adapter<ServicesListAdapte
 
                 Intent intent = new Intent(context, ServiceInfosActivity.class);
                 intent.putExtra("Service",Services.get(position));
+                intent.putExtra("userConnected", userConnected);
                 context.startActivity(intent);
 
                 Toast.makeText(context,"click on " + Services.get(position).getName(), Toast.LENGTH_LONG).show();

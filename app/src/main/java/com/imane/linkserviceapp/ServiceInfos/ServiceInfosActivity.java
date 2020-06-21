@@ -36,6 +36,7 @@ import java.util.List;
 
 public class ServiceInfosActivity extends AppCompatActivity implements Serializable {
     Service service;
+    User userConnected;
     private final Gson gson = new Gson();
 
     @Override
@@ -43,6 +44,8 @@ public class ServiceInfosActivity extends AppCompatActivity implements Serializa
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_service_infos);
+
+        userConnected = (User) getIntent().getSerializableExtra("userConnected");
 
         TextView textView = (TextView) findViewById(R.id.PointsService);
         textView.setCompoundDrawablesWithIntrinsicBounds(R.drawable.coin, 0, 0, 0);
@@ -63,6 +66,7 @@ public class ServiceInfosActivity extends AppCompatActivity implements Serializa
                 // app icon in action bar clicked; go home
                 Intent intent = new Intent(this, ServicesListActivity.class);
                 intent.putExtra("typeService",Integer.toString(service.getId_type()));
+                intent.putExtra("userConnected", userConnected);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
                 return true;
