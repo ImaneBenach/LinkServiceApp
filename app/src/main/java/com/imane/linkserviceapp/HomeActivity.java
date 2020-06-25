@@ -49,7 +49,7 @@ public class HomeActivity extends AppCompatActivity {
         btnServices.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(HomeActivity.this, ServicesActivity.class);
+                Intent intent = new Intent(HomeActivity.this, serviceMenuActivity.class);
                 intent.putExtra("userConnected", userConnected);
                 startActivity(intent);
                 finish();

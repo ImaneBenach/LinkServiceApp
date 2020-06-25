@@ -49,7 +49,6 @@ public class ServicesAdapter extends RecyclerView.Adapter<ServicesAdapter.Holder
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.i("id type service",Integer.toString(typeServices.get(position).getId()));
                 Intent intent = new Intent(context, ServicesListActivity.class);
                 intent.putExtra("userConnected", userConnected);
                 intent.putExtra("typeService",Integer.toString(typeServices.get(position).getId()));

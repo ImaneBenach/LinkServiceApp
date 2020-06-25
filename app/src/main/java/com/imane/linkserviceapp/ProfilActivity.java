@@ -14,6 +14,8 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.imane.linkserviceapp.Classes.User;
+
 import java.io.IOException;
 
 public class ProfilActivity extends AppCompatActivity {
@@ -21,6 +23,7 @@ public class ProfilActivity extends AppCompatActivity {
     Button  btnDeco , btnPoints, btnNewsletter, btnNotif ;
     ImageView imageProfil ;
     TextView modifProfil, addJustif ;
+    User userConnected;
 
     private static final int PICK_IMAGE = 1 ;
     Uri imageUri ;
@@ -41,6 +44,7 @@ public class ProfilActivity extends AppCompatActivity {
 
         assert getSupportActionBar() != null;   //null check
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        userConnected = (User) getIntent().getSerializableExtra("userConnected");
 
 
         imageProfil.setOnClickListener(new View.OnClickListener() {
@@ -161,6 +165,7 @@ public class ProfilActivity extends AppCompatActivity {
             case android.R.id.home:
                 // app icon in action bar clicked; go home
                 Intent intent = new Intent(this, HomeActivity.class);
+                intent.putExtra("userConnected", userConnected);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
                 return true;
