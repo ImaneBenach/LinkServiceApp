@@ -21,6 +21,7 @@ import com.imane.linkserviceapp.Classes.API;
 import com.imane.linkserviceapp.Classes.Service;
 import com.imane.linkserviceapp.Classes.TypeService;
 import com.imane.linkserviceapp.Classes.User;
+import com.imane.linkserviceapp.MesServices.MesServicesActivity;
 import com.imane.linkserviceapp.R;
 import com.imane.linkserviceapp.ServicesList.ServicesListActivity;
 import com.imane.linkserviceapp.ServicesList.ServicesListAdapter;
@@ -38,6 +39,8 @@ public class ServiceInfosActivity extends AppCompatActivity implements Serializa
     Service service;
     User userConnected;
     private final Gson gson = new Gson();
+    String originActivity;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +49,7 @@ public class ServiceInfosActivity extends AppCompatActivity implements Serializa
         setContentView(R.layout.activity_service_infos);
 
         userConnected = (User) getIntent().getSerializableExtra("userConnected");
+        originActivity = getIntent().getStringExtra("from");
 
         TextView textView = (TextView) findViewById(R.id.PointsService);
         textView.setCompoundDrawablesWithIntrinsicBounds(R.drawable.coin, 0, 0, 0);
@@ -64,11 +68,23 @@ public class ServiceInfosActivity extends AppCompatActivity implements Serializa
         switch (item.getItemId()) {
             case android.R.id.home:
                 // app icon in action bar clicked; go home
-                Intent intent = new Intent(this, ServicesListActivity.class);
-                intent.putExtra("typeService",Integer.toString(service.getId_type()));
-                intent.putExtra("userConnected", userConnected);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(intent);
+
+
+                if(originActivity.equals("ServiceList")){
+                    Intent intent = new Intent(this, ServicesListActivity.class);
+                    intent.putExtra("typeService",Integer.toString(service.getId_type()));
+                    intent.putExtra("userConnected", userConnected);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(intent);
+                } else if (originActivity.equals("MesServicesActivity")){
+                    Intent intent = new Intent(this, MesServicesActivity.class);
+                    intent.putExtra("userConnected", userConnected);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(intent);
+                }
+
+
+
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

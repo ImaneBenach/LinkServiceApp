@@ -14,7 +14,9 @@ import com.imane.linkserviceapp.Classes.User;
 import com.imane.linkserviceapp.HomeActivity;
 import com.imane.linkserviceapp.R;
 
-public class MesServicesActivity extends AppCompatActivity {
+import java.io.Serializable;
+
+public class MesServicesActivity extends AppCompatActivity implements Serializable {
 
     private TabLayout tabLayout ;
     private ViewPager viewPager ;

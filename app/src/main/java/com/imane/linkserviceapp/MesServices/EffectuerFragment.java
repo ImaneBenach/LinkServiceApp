@@ -43,9 +43,9 @@ public class EffectuerFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         v = inflater.inflate(R.layout.effectuer_fragment,container,false);
         recyclerView = v.findViewById(R.id.recyclerView);
-        MesServicesRV recyclerViewAdapter;
+        EffectuerAdapter recyclerViewAdapter;
         if(!services.isEmpty()){
-            recyclerViewAdapter = new MesServicesRV(getContext(), services);
+            recyclerViewAdapter = new EffectuerAdapter(getContext(), services, userConnected);
             recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
             recyclerView.setAdapter(recyclerViewAdapter);
         }
