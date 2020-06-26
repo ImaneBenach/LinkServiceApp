@@ -30,6 +30,7 @@ import com.google.gson.Gson;
 import com.imane.linkserviceapp.Classes.User;
 import com.imane.linkserviceapp.HomeActivity;
 import com.imane.linkserviceapp.R;
+import com.imane.linkserviceapp.serviceMenuActivity;
 
 
 public class ServicesActivity extends AppCompatActivity {
@@ -155,7 +156,7 @@ public class ServicesActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case android.R.id.home:
                 // app icon in action bar clicked; go home
-                Intent intent = new Intent(this, HomeActivity.class);
+                Intent intent = new Intent(this, serviceMenuActivity.class);
                 intent.putExtra("userConnected", userConnected);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
