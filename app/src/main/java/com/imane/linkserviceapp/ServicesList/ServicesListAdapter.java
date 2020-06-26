@@ -18,6 +18,7 @@ import com.imane.linkserviceapp.Classes.TypeService;
 import com.imane.linkserviceapp.Classes.User;
 import com.imane.linkserviceapp.R;
 import com.imane.linkserviceapp.ServiceInfos.ServiceInfosActivity;
+import com.imane.linkserviceapp.Services;
 import com.imane.linkserviceapp.TypesService.ServicesAdapter;
 
 import java.util.ArrayList;
@@ -47,6 +48,7 @@ public class ServicesListAdapter extends RecyclerView.Adapter<ServicesListAdapte
     public void onBindViewHolder(@NonNull ServicesListAdapter.Holderview holder, final int position) {
         holder.v_name.setText(Services.get(position).getName());
         holder.v_image.setImageResource(Services.get(position).getImage());
+        holder.v_desc.setText(Services.get(position).getDescription());
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -76,13 +78,15 @@ public class ServicesListAdapter extends RecyclerView.Adapter<ServicesListAdapte
     }
 
     class Holderview extends RecyclerView.ViewHolder {
-        ImageView v_image ;
-        TextView v_name ;
+        ImageView v_image;
+        TextView v_name;
+        TextView v_desc;
 
         Holderview(View itemview){
             super(itemview);
             v_image = (ImageView) itemview.findViewById(R.id.service_image);
             v_name = (TextView) itemview.findViewById(R.id.service_title);
+            v_desc = (TextView) itemview.findViewById(R.id.desc);
         }
     }
 }

@@ -67,9 +67,6 @@ public class ServiceInfosActivity extends AppCompatActivity implements Serializa
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                // app icon in action bar clicked; go home
-
-
                 if(originActivity.equals("ServiceList")){
                     Intent intent = new Intent(this, ServicesListActivity.class);
                     intent.putExtra("typeService",Integer.toString(service.getId_type()));
@@ -82,9 +79,6 @@ public class ServiceInfosActivity extends AppCompatActivity implements Serializa
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     startActivity(intent);
                 }
-
-
-
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
