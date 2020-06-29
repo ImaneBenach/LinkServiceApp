@@ -19,8 +19,10 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.gson.Gson;
 import com.imane.linkserviceapp.Classes.API;
 import com.imane.linkserviceapp.Classes.Service;
+import com.imane.linkserviceapp.Classes.TypeService;
 import com.imane.linkserviceapp.Classes.User;
 import com.imane.linkserviceapp.ServicesList.ServicesListActivity;
 
@@ -28,10 +30,15 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
+import java.util.List;
 
 public class CreateServiceActivity extends AppCompatActivity {
+
+    private final Gson gson = new Gson();
 
     DatePickerDialog.OnDateSetListener dateSetListener, deadlineSetListener;
     EditText etDate, etDeadLine, newServiceName, newServiceDescription;
@@ -39,6 +46,7 @@ public class CreateServiceActivity extends AppCompatActivity {
     Button btn_create_service;
 
     User userConnected;
+    ArrayList<TypeService> typeServices;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -110,6 +118,8 @@ public class CreateServiceActivity extends AppCompatActivity {
 
         newServiceTypeService = findViewById(R.id.newServiceTypeService);
 
+        ArrayList<TypeService> ListTypeService = getTypeService();
+
         ArrayList<String> arrayList = new ArrayList<>();
         arrayList.add("JAVA");
         arrayList.add("ANDROID");
@@ -117,7 +127,7 @@ public class CreateServiceActivity extends AppCompatActivity {
         arrayList.add("CPP Language");
         arrayList.add("Go Language");
         arrayList.add("AVN SYSTEMS");
-        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, arrayList);
+        ArrayAdapter<TypeService> arrayAdapter = new ArrayAdapter<TypeService>(this,android.R.layout.simple_spinner_item, ListTypeService);
         arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         newServiceTypeService.setAdapter(arrayAdapter);
         newServiceTypeService.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -192,6 +202,45 @@ public class CreateServiceActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
+    }
+
+    private ArrayList<TypeService> getTypeService(){
+        typeServices = new ArrayList<>();
+        HashMap<String, TypeService> typeData = new HashMap<>();
+        JSONObject jsonParam = new JSONObject();
+        String typeServicesListAsString = "";
+
+        int counter;
+
+
+        try {
+            jsonParam.put("table", "type_service");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        try {
+            typeServicesListAsString = API.sendRequest(jsonParam.toString(), "readAll");
+        } catch (IOException | InterruptedException e) {
+            e.printStackTrace();
+        }
+
+
+        if (!typeServicesListAsString.equals("")) {
+            if (typeServicesListAsString.startsWith("i", 2)) {
+                typeData.put("0", gson.fromJson(typeServicesListAsString, TypeService.class));
+            } else {
+                typeData = API.decodeResponseMultipleAsTypeService(typeServicesListAsString);
+            }
+
+            for (counter = 0; counter < typeData.size(); counter++){
+                TypeService type = typeData.get(Integer.toString(counter));
+                typeServices.add(type);
+
+            }
+
+        }
+
+        return typeServices;
     }
 
 }
