@@ -15,8 +15,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.imane.linkserviceapp.Classes.Service;
 import com.imane.linkserviceapp.Classes.TypeService;
+import com.imane.linkserviceapp.Classes.User;
 import com.imane.linkserviceapp.R;
 import com.imane.linkserviceapp.ServiceInfos.ServiceInfosActivity;
+import com.imane.linkserviceapp.Services;
 import com.imane.linkserviceapp.TypesService.ServicesAdapter;
 
 import java.util.ArrayList;
@@ -25,9 +27,11 @@ import java.util.List;
 public class ServicesListAdapter extends RecyclerView.Adapter<ServicesListAdapter.Holderview>{
 
     private List<Service> Services;
-    private Context context ;
+    private Context context;
+    private User userConnected;
 
-    public ServicesListAdapter(List<Service> Services, Context context) {
+    public ServicesListAdapter(List<Service> Services, Context context, User user) {
+        this.userConnected = user;
         this.Services = Services;
         this.context = context;
     }
@@ -44,6 +48,7 @@ public class ServicesListAdapter extends RecyclerView.Adapter<ServicesListAdapte
     public void onBindViewHolder(@NonNull ServicesListAdapter.Holderview holder, final int position) {
         holder.v_name.setText(Services.get(position).getName());
         holder.v_image.setImageResource(Services.get(position).getImage());
+        holder.v_desc.setText(Services.get(position).getDescription());
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -51,6 +56,8 @@ public class ServicesListAdapter extends RecyclerView.Adapter<ServicesListAdapte
 
                 Intent intent = new Intent(context, ServiceInfosActivity.class);
                 intent.putExtra("Service",Services.get(position));
+                intent.putExtra("userConnected", userConnected);
+                intent.putExtra("from","ServiceList");
                 context.startActivity(intent);
 
                 Toast.makeText(context,"click on " + Services.get(position).getName(), Toast.LENGTH_LONG).show();
@@ -71,13 +78,15 @@ public class ServicesListAdapter extends RecyclerView.Adapter<ServicesListAdapte
     }
 
     class Holderview extends RecyclerView.ViewHolder {
-        ImageView v_image ;
-        TextView v_name ;
+        ImageView v_image;
+        TextView v_name;
+        TextView v_desc;
 
         Holderview(View itemview){
             super(itemview);
             v_image = (ImageView) itemview.findViewById(R.id.service_image);
             v_name = (TextView) itemview.findViewById(R.id.service_title);
+            v_desc = (TextView) itemview.findViewById(R.id.desc);
         }
     }
 }

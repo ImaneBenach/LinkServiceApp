@@ -36,25 +36,8 @@ public class HomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
-        int userId = getIntent().getIntExtra("userId",0);
-        try {
-            jsonParamValues.put("where"," WHERE id="+userId);
+        userConnected = (User) getIntent().getSerializableExtra("userConnected");
 
-            jsonParam.put("table", "user");
-            jsonParam.put("values",jsonParamValues);
-
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        try {
-            UserData = API.sendRequest(jsonParam.toString(), "readWithFilter");
-        } catch (IOException | InterruptedException e) {
-            e.printStackTrace();
-        }
-
-        if (!UserData.equals("")) {
-            userConnected = gson.fromJson(UserData, User.class);
-        }
         Log.i("USER CONNECTED", userConnected.getName());
 
         btnServices = (Button) findViewById(R.id.btnServices);
@@ -66,7 +49,7 @@ public class HomeActivity extends AppCompatActivity {
         btnServices.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(HomeActivity.this, ServicesActivity.class);
+                Intent intent = new Intent(HomeActivity.this, serviceMenuActivity.class);
                 intent.putExtra("userConnected", userConnected);
                 startActivity(intent);
                 finish();

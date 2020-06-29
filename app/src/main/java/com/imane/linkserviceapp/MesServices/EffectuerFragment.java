@@ -43,9 +43,9 @@ public class EffectuerFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         v = inflater.inflate(R.layout.effectuer_fragment,container,false);
         recyclerView = v.findViewById(R.id.recyclerView);
-        MesServicesRV recyclerViewAdapter;
+        EffectuerAdapter recyclerViewAdapter;
         if(!services.isEmpty()){
-            recyclerViewAdapter = new MesServicesRV(getContext(), services);
+            recyclerViewAdapter = new EffectuerAdapter(getContext(), services, userConnected);
             recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
             recyclerView.setAdapter(recyclerViewAdapter);
         }
@@ -64,9 +64,9 @@ public class EffectuerFragment extends Fragment {
         int counter;
 
         try {
-            jsonParamValues.put("where"," WHERE id_creator="+userConnected.getId());
+            jsonParamValues.put("where"," INNER JOIN service WHERE id_service = id and id_user="+userConnected.getId());
 
-            jsonParam.put("table", "service");
+            jsonParam.put("table", "apply");
             jsonParam.put("values",jsonParamValues);
 
         } catch (JSONException e) {
@@ -81,6 +81,7 @@ public class EffectuerFragment extends Fragment {
         Log.i("SERVICE LIST",ServicesList);
 
         if (!ServicesList.equals("") && !ServicesList.equals("null")) {
+            Log.i("SERVICES", ServicesList);
             if (ServicesList.startsWith("i", 2)) {
                 ServicesData.put("0", gson.fromJson(ServicesList, Service.class));
             } else {

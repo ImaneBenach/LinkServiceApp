@@ -18,6 +18,7 @@ import com.google.gson.Gson;
 import com.imane.linkserviceapp.Classes.API;
 import com.imane.linkserviceapp.Classes.Service;
 import com.imane.linkserviceapp.Classes.TypeService;
+import com.imane.linkserviceapp.Classes.User;
 import com.imane.linkserviceapp.HomeActivity;
 import com.imane.linkserviceapp.R;
 import com.imane.linkserviceapp.TypesService.ServicesActivity;
@@ -37,6 +38,7 @@ public class ServicesListActivity extends AppCompatActivity {
     List<Service> Services = new ArrayList<>();
     ServicesListAdapter adapter;
     SearchView searchView;
+    User userConnected;
 
     private final Gson gson = new Gson();
 
@@ -54,7 +56,9 @@ public class ServicesListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_services);
 
+        userConnected = (User) getIntent().getSerializableExtra("userConnected");
         String idTypeService = getIntent().getStringExtra("typeService");
+
         try {
             jsonParamValues.put("where"," WHERE id_type="+idTypeService);
 
@@ -92,7 +96,7 @@ public class ServicesListActivity extends AppCompatActivity {
         listServices.setHasFixedSize(true);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         listServices.setLayoutManager(linearLayoutManager);
-        adapter = new ServicesListAdapter(Services, ServicesListActivity.this);
+        adapter = new ServicesListAdapter(Services, ServicesListActivity.this, userConnected);
         listServices.setAdapter(adapter);
     }
 
@@ -160,6 +164,7 @@ public class ServicesListActivity extends AppCompatActivity {
             case android.R.id.home:
                 // app icon in action bar clicked; go home
                 Intent intent = new Intent(this, ServicesActivity.class);
+                intent.putExtra("userConnected", userConnected);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
                 return true;

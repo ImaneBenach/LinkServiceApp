@@ -14,6 +14,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.imane.linkserviceapp.Classes.TypeService;
+import com.imane.linkserviceapp.Classes.User;
 import com.imane.linkserviceapp.R;
 import com.imane.linkserviceapp.ServicesList.ServicesListActivity;
 
@@ -24,8 +25,10 @@ public class ServicesAdapter extends RecyclerView.Adapter<ServicesAdapter.Holder
 
     private List<TypeService> typeServices;
     private Context context ;
+    private User userConnected;
 
-    public ServicesAdapter(List<TypeService> typeServices, Context context) {
+    public ServicesAdapter(List<TypeService> typeServices, Context context, User user) {
+        this.userConnected = user;
         this.typeServices = typeServices;
         this.context = context;
     }
@@ -46,8 +49,8 @@ public class ServicesAdapter extends RecyclerView.Adapter<ServicesAdapter.Holder
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.i("id type service",Integer.toString(typeServices.get(position).getId()));
                 Intent intent = new Intent(context, ServicesListActivity.class);
+                intent.putExtra("userConnected", userConnected);
                 intent.putExtra("typeService",Integer.toString(typeServices.get(position).getId()));
                 context.startActivity(intent);
 
