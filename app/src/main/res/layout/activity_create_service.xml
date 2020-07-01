@@ -8,50 +8,66 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toTopOf="parent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        >
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Créez votre service"
-            android:textSize="32sp">
+            android:textAlignment="center"
+            android:textColor="@color/colorTab"
+            android:textSize="32sp"
+            android:textAllCaps="true">
         </TextView>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Type du service"
+            android:text="Quel est le type de votre service ? "
+            android:textColor="@color/colorTab"
             android:textSize="20sp">
         </TextView>
 
         <Spinner
             android:id="@+id/newServiceTypeService"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Nom du service"
+            android:layout_marginTop="5dp"
+            android:text="Quel nom le décrit ?"
+            android:textColor="@color/colorTab"
             android:textSize="20sp">
         </TextView>
         <EditText
             android:id="@+id/newServiceName"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:background="@drawable/field_border"
+            android:padding="5dp"
+            android:textColorHint="@color/colorLightBlue"
             android:hint="Nom de votre service">
         </EditText>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
             android:text="Description"
+            android:textColor="@color/colorTab"
             android:textSize="20sp">
         </TextView>
         <EditText
             android:id="@+id/newServiceDescription"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:background="@drawable/field_border"
+            android:padding="5dp"
+            android:textColorHint="@color/colorLightBlue"
             android:hint="Description de votre service">
         </EditText>
 
@@ -59,12 +75,17 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Date du Service"
+            android:layout_marginTop="5dp"
+            android:textColor="@color/colorTab"
             android:textSize="20sp">
         </TextView>
         <EditText
             android:id="@+id/etDate"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:background="@drawable/field_border"
+            android:padding="5dp"
+            android:textColorHint="@color/colorLightBlue"
             android:hint="Description de votre service">
         </EditText>
 
@@ -72,12 +93,17 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Date limite de volontariat"
+            android:layout_marginTop="5dp"
+            android:textColor="@color/colorTab"
             android:textSize="20sp">
         </TextView>
         <EditText
             android:id="@+id/etDeadLine"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:background="@drawable/field_border"
+            android:padding="5dp"
+            android:textColorHint="@color/colorLightBlue"
             android:hint="Description de votre service">
         </EditText>
 
@@ -87,7 +113,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Créez votre service"
-            android:textSize="20sp">
+            android:textSize="20sp"
+            android:padding="10dp"
+            android:layout_margin="15dp"
+            android:textColor="@color/colorTab"
+            android:background="@drawable/field_border">
         </Button>
     </LinearLayout>
 
