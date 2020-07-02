@@ -46,22 +46,6 @@
 
             </TextView>
 
-            <TextView
-                style="@style/ServiceHeader"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text=" -- ">
-
-            </TextView>
-
-            <TextView
-                android:id="@+id/creatorService"
-                style="@style/ServiceHeader"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Nom Propriétaire">
-
-            </TextView>
         </LinearLayout>
 
 

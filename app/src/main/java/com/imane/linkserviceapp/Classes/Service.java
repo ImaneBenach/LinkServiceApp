@@ -1,8 +1,19 @@
 package com.imane.linkserviceapp.Classes;
 
+import android.util.Log;
+
+import com.google.gson.Gson;
 import com.imane.linkserviceapp.R;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
 import java.io.Serializable;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 public class Service implements Serializable {
     private int id;
@@ -57,5 +68,66 @@ public class Service implements Serializable {
     public String getAccess() { return access; }
 
     public int getImage() { return R.drawable.services_logo; }
+
+    public void apply(int userId) {
+        JSONObject jsonParam = new JSONObject();
+        JSONObject jsonParamValues = new JSONObject();
+
+        try {
+            jsonParamValues.put("id_service", id);
+            jsonParamValues.put("id_user", userId);
+
+            jsonParam.put("table", "apply");
+            jsonParam.put("values", jsonParamValues);
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        try {
+            API.sendRequest(jsonParam.toString(), "create");
+        } catch (IOException | InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public List<User> getVolunteers(){
+        HashMap<String, User> hashMapVolunteers = new HashMap<>();
+        List<User> ListVolunteers = new ArrayList<>();
+        String volunteers = "";
+        int counter;
+
+        JSONObject jsonParam = new JSONObject();
+        JSONObject jsonParamValues = new JSONObject();
+        final Gson gson = new Gson();
+
+        try {
+            jsonParamValues.put("where", " inner JOIN USER WHERE id_user=id AND id_service="+id);
+
+            jsonParam.put("table", "apply");
+            jsonParam.put("values", jsonParamValues);
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        try {
+            volunteers = API.sendRequest(jsonParam.toString(), "readWithFilter");
+        } catch (IOException | InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        if (!volunteers.equals("")) {
+            if (volunteers.startsWith("i", 2)) {
+                hashMapVolunteers.put("0",gson.fromJson(volunteers, User.class));
+            } else {
+                hashMapVolunteers = API.decodeResponseMultipleAsUser(volunteers);
+            }
+            for (counter = 0; counter < hashMapVolunteers.size(); counter++){
+                User type = hashMapVolunteers.get(Integer.toString(counter));
+                ListVolunteers.add(type);
+            }
+        }
+
+        return ListVolunteers;
+    }
 }
 

@@ -69,9 +69,16 @@ public class API {
         return retMap;
     }
 
-    public static HashMap<String, Service> decodeResponseMultipleAsService (String typesService){
+    public static HashMap<String, Service> decodeResponseMultipleAsService (String services){
         HashMap<String, Service> retMap = new Gson().fromJson(
-                typesService, new TypeToken<HashMap<String, Service>>() {}.getType()
+                services, new TypeToken<HashMap<String, Service>>() {}.getType()
+        );
+        return retMap;
+    }
+
+    public static HashMap<String, User> decodeResponseMultipleAsUser (String users){
+        HashMap<String, User> retMap = new Gson().fromJson(
+                users, new TypeToken<HashMap<String, User>>() {}.getType()
         );
         return retMap;
     }

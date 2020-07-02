@@ -27,7 +27,6 @@ import java.util.List;
 
 public class ProposerFragment extends Fragment {
 
-
     View v ;
     private RecyclerView recyclerView ;
     private List<Service> services = new ArrayList<>();
@@ -43,9 +42,9 @@ public class ProposerFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         v = inflater.inflate(R.layout.proposer_fragment,container,false);
         recyclerView = v.findViewById(R.id.recyclerView) ;
-        MesServicesRV recyclerViewAdapter;
+        ProposerAdapter recyclerViewAdapter;
         if(!services.isEmpty()){
-            recyclerViewAdapter = new MesServicesRV(getContext(), services);
+            recyclerViewAdapter = new ProposerAdapter(getContext(), services, userConnected);
             recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
             recyclerView.setAdapter(recyclerViewAdapter);
         }
