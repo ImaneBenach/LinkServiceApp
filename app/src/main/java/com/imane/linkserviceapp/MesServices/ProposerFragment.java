@@ -62,7 +62,7 @@ public class ProposerFragment extends Fragment {
         int counter;
 
         try {
-            jsonParamValues.put("where"," WHERE id_creator="+userConnected.getId());
+            jsonParamValues.put("where"," WHERE Statut>0 AND id_creator="+userConnected.getId());
 
             jsonParam.put("table", "service");
             jsonParam.put("values",jsonParamValues);

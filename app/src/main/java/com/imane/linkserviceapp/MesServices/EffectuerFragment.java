@@ -63,7 +63,7 @@ public class EffectuerFragment extends Fragment {
         int counter;
 
         try {
-            jsonParamValues.put("where"," INNER JOIN service WHERE id_service = id and id_user="+userConnected.getId());
+            jsonParamValues.put("where"," INNER JOIN service WHERE id_service = id AND Statut>0 AND id_user="+userConnected.getId());
 
             jsonParam.put("table", "apply");
             jsonParam.put("values",jsonParamValues);

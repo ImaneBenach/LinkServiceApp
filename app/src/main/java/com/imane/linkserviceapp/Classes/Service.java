@@ -4,6 +4,7 @@ import android.sax.ElementListener;
 import android.util.Log;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import com.imane.linkserviceapp.R;
 
 import org.json.JSONException;
@@ -74,7 +75,6 @@ public class Service implements Serializable {
     public User getExecutorUser() { return executorUser; }
 
     public void setExecutorIfExist(){
-        JSONObject jsonParam = new JSONObject();
         JSONObject jsonParamValues = new JSONObject();
         final Gson gson = new Gson();
         String executor = "";
@@ -82,68 +82,44 @@ public class Service implements Serializable {
         try {
             jsonParamValues.put("where"," INNER JOIN USER WHERE execute=2 AND id_user=id AND id_service="+id);
 
-            jsonParam.put("table", "apply");
-            jsonParam.put("values", jsonParamValues);
-
+            executor = sendToAPI(jsonParamValues, "apply", "readWithFilter");
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        try {
-            executor = API.sendRequest(jsonParam.toString(), "readWithFilter");
-        } catch (IOException | InterruptedException e) {
-            e.printStackTrace();
-        }
-
-        if (!executor.equals("")) {
+        if (executor != null && !executor.equals("null")) {
             if (executor.startsWith("i", 2)) {
                 executorUser = gson.fromJson(executor, User.class);
             }
         } else {
             executorUser = null;
         }
-
     }
 
     public void delete(){
-        JSONObject jsonParam = new JSONObject();
         JSONObject jsonParamValues = new JSONObject();
 
         deleteApply();
 
         try {
             jsonParamValues.put("id", id);
+            jsonParamValues.put("Statut",0);
 
-            jsonParam.put("table", "service");
-            jsonParam.put("values", jsonParamValues);
-
+            sendToAPI(jsonParamValues, "service", "update");
         } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        try {
-            API.sendRequest(jsonParam.toString(), "deleteOne");
-        } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }
     }
 
     public void apply(int userId) {
-        JSONObject jsonParam = new JSONObject();
         JSONObject jsonParamValues = new JSONObject();
 
         try {
             jsonParamValues.put("id_service", id);
             jsonParamValues.put("id_user", userId);
-            jsonParamValues.put("execute", 0);
+            jsonParamValues.put("execute", 1);
 
-            jsonParam.put("table", "apply");
-            jsonParam.put("values", jsonParamValues);
-
+            sendToAPI(jsonParamValues, "apply", "create");
         } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        try {
-            API.sendRequest(jsonParam.toString(), "create");
-        } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }
     }
@@ -154,26 +130,18 @@ public class Service implements Serializable {
         String volunteers = "";
         int counter;
 
-        JSONObject jsonParam = new JSONObject();
         JSONObject jsonParamValues = new JSONObject();
         final Gson gson = new Gson();
 
         try {
             jsonParamValues.put("where", " inner JOIN USER WHERE id_user=id AND id_service="+id);
 
-            jsonParam.put("table", "apply");
-            jsonParam.put("values", jsonParamValues);
-
+            volunteers = sendToAPI(jsonParamValues, "apply", "readWithFilter");
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        try {
-            volunteers = API.sendRequest(jsonParam.toString(), "readWithFilter");
-        } catch (IOException | InterruptedException e) {
-            e.printStackTrace();
-        }
 
-        if (!volunteers.equals("")) {
+        if (volunteers != null && !volunteers.equals("null")) {
             if (volunteers.startsWith("i", 2)) {
                 hashMapVolunteers.put("0",gson.fromJson(volunteers, User.class));
             } else {
@@ -184,12 +152,10 @@ public class Service implements Serializable {
                 ListVolunteers.add(type);
             }
         }
-
         return ListVolunteers;
     }
 
     public void validateVolunteer(int userId, List<User> listVolunteers){
-        JSONObject jsonParam = new JSONObject();
         JSONObject jsonParamValues = new JSONObject();
 
         try {
@@ -197,18 +163,10 @@ public class Service implements Serializable {
             jsonParamValues.put("id_user", userId);
             jsonParamValues.put("execute", 2);
 
-            jsonParam.put("table", "apply");
-            jsonParam.put("values", jsonParamValues);
-
+            sendToAPI(jsonParamValues, "apply", "update");
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        try {
-            API.sendRequest(jsonParam.toString(), "update");
-        } catch (IOException | InterruptedException e) {
-            e.printStackTrace();
-        }
-
         unvalidateOtherVolunteers(userId, listVolunteers);
     }
 
@@ -216,23 +174,15 @@ public class Service implements Serializable {
         int counter;
 
         for (counter = 0; counter < listVolunteers.size(); counter++){
-            JSONObject jsonParam = new JSONObject();
             JSONObject jsonParamValues = new JSONObject();
             if(listVolunteers.get(counter).getId() != userId){
                 try {
                     jsonParamValues.put("id_service", id);
                     jsonParamValues.put("id_user", listVolunteers.get(counter).getId());
-                    jsonParamValues.put("execute", 1);
+                    jsonParamValues.put("execute", 0);
 
-                    jsonParam.put("table", "apply");
-                    jsonParam.put("values", jsonParamValues);
-
+                    sendToAPI(jsonParamValues, "apply", "update");
                 } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                try {
-                    API.sendRequest(jsonParam.toString(), "update");
-                } catch (IOException | InterruptedException e) {
                     e.printStackTrace();
                 }
             }
@@ -240,27 +190,19 @@ public class Service implements Serializable {
     }
 
     public void deleteApply(){
-        JSONObject jsonParam = new JSONObject();
         JSONObject jsonParamValues = new JSONObject();
 
         try {
-            jsonParamValues.put("where", " WHERE id_service="+id);
+            jsonParamValues.put("id_service", id);
+            jsonParamValues.put("execute",0);
 
-            jsonParam.put("table", "apply");
-            jsonParam.put("values", jsonParamValues);
-            Log.i("json",jsonParam.toString());
+            sendToAPI(jsonParamValues, "apply", "deleteWithFilter");
         } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        try {
-            API.sendRequest(jsonParam.toString(), "deleteWithFilter");
-        } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }
     }
 
     public void setEvaluation(int note, String comment){
-        JSONObject jsonParam = new JSONObject();
         JSONObject jsonParamValues = new JSONObject();
 
         try {
@@ -269,40 +211,35 @@ public class Service implements Serializable {
             jsonParamValues.put("note",Integer.toString(note));
             jsonParamValues.put("commentaire", comment);
 
-            jsonParam.put("table", "apply");
-            jsonParam.put("values", jsonParamValues);
-            Log.d("JSONPARAM",jsonParam.toString());
+            sendToAPI(jsonParamValues, "apply", "update");
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        try {
-            API.sendRequest(jsonParam.toString(), "update");
-        } catch (IOException | InterruptedException e) {
-            e.printStackTrace();
-        }
-
         givePointToExecutor();
     }
 
     private void givePointToExecutor(){
-        JSONObject jsonParam = new JSONObject();
         JSONObject jsonParamValues = new JSONObject();
 
         try {
             jsonParamValues.put("id", executorUser.getId());
             jsonParamValues.put("points", executorUser.getPoints()+profit);
 
-            jsonParam.put("table", "user");
-            jsonParam.put("values", jsonParamValues);
-            Log.d("JSONPARAM",jsonParam.toString());
+            sendToAPI(jsonParamValues,"user", "update");
         } catch (JSONException e) {
             e.printStackTrace();
         }
+    }
+
+    private String sendToAPI(JSONObject values, String table, String action){
+        JSONObject jsonParam = new JSONObject();
         try {
-            API.sendRequest(jsonParam.toString(), "update");
-        } catch (IOException | InterruptedException e) {
+            jsonParam.put("table", table);
+            jsonParam.put("values", values);
+            return API.sendRequest(jsonParam.toString(), action);
+        } catch (JSONException | IOException | InterruptedException e) {
             e.printStackTrace();
         }
+        return null;
     }
 }
-
