@@ -48,7 +48,7 @@
     </Button>
 
     <Button
-        android:id="@+id/btnValidateUser"
+        android:id="@+id/btnValidateVolunteer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Valider ce volontaire">

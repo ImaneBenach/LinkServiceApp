@@ -1,5 +1,6 @@
 package com.imane.linkserviceapp.Classes;
 
+import android.sax.ElementListener;
 import android.util.Log;
 
 import com.google.gson.Gson;
@@ -128,6 +129,59 @@ public class Service implements Serializable {
         }
 
         return ListVolunteers;
+    }
+
+    public void validateVolunteer(int userId, List<User> listVolunteers){
+        JSONObject jsonParam = new JSONObject();
+        JSONObject jsonParamValues = new JSONObject();
+
+        try {
+            jsonParamValues.put("id_service", id);
+            jsonParamValues.put("id_user", userId);
+            jsonParamValues.put("execute", 2);
+
+            jsonParam.put("table", "apply");
+            jsonParam.put("values", jsonParamValues);
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        try {
+            API.sendRequest(jsonParam.toString(), "update");
+        } catch (IOException | InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        unvalidateOtherVolunteers(userId, listVolunteers);
+    }
+
+    private void unvalidateOtherVolunteers(int userId, List<User> listVolunteers){
+
+        int counter;
+
+        for (counter = 0; counter < listVolunteers.size(); counter++){
+            JSONObject jsonParam = new JSONObject();
+            JSONObject jsonParamValues = new JSONObject();
+            if(listVolunteers.get(counter).getId() != userId){
+                try {
+                    jsonParamValues.put("id_service", id);
+                    jsonParamValues.put("id_user", listVolunteers.get(counter).getId());
+                    jsonParamValues.put("execute", 1);
+
+                    jsonParam.put("table", "apply");
+                    jsonParam.put("values", jsonParamValues);
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                try {
+                    API.sendRequest(jsonParam.toString(), "update");
+                } catch (IOException | InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        }
     }
 }
 

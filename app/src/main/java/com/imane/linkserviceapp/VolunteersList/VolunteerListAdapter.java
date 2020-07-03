@@ -2,10 +2,15 @@ package com.imane.linkserviceapp.VolunteersList;
 
 import android.content.Context;
 import android.content.Intent;
+import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -16,6 +21,7 @@ import com.imane.linkserviceapp.Classes.Service;
 import com.imane.linkserviceapp.Classes.User;
 import com.imane.linkserviceapp.R;
 import com.imane.linkserviceapp.ServiceInfos.ServiceInfosActivity;
+import com.imane.linkserviceapp.ServiceInfos.ServiceInfosActivityCreator;
 import com.imane.linkserviceapp.ServicesList.ServicesListAdapter;
 
 import java.util.ArrayList;
@@ -26,9 +32,11 @@ public class VolunteerListAdapter extends RecyclerView.Adapter<VolunteerListAdap
     private List<User> Users;
     private Context context;
     private User userConnected;
+    private Service service;
 
-    public VolunteerListAdapter(List<User> Users, Context context, User user) {
+    public VolunteerListAdapter(List<User> Users, Service service, Context context, User user) {
         this.userConnected = user;
+        this.service = service;
         this.Users = Users;
         this.context = context;
     }
@@ -42,10 +50,51 @@ public class VolunteerListAdapter extends RecyclerView.Adapter<VolunteerListAdap
     }
 
     @Override
-    public void onBindViewHolder(@NonNull VolunteerListAdapter.Holderview holder, final int position) {
+    public void onBindViewHolder(@NonNull final VolunteerListAdapter.Holderview holder, final int position) {
         holder.v_name.setText(Users.get(position).getName());
         //holder.v_image.setImageResource(Users.get(position).getImage());
         //holder.v_desc.setText(Users.get(position).getDescription());
+
+        holder.btnValidateVolunteer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // inflate the layout of the popup window
+                LayoutInflater inflater = (LayoutInflater)
+                        context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                View popupView = inflater.inflate(R.layout.popup_window, null);
+
+                // create the popup window
+                int width = LinearLayout.LayoutParams.WRAP_CONTENT;
+                int height = LinearLayout.LayoutParams.WRAP_CONTENT;
+                boolean focusable = true; // lets taps outside the popup also dismiss it
+                final PopupWindow popupWindow = new PopupWindow(popupView, width, height, focusable);
+
+                // show the popup window
+                // which view you pass in doesn't matter, it is only used for the window tolken
+                popupWindow.showAtLocation(holder.itemView1, Gravity.CENTER, 0, 0);
+
+
+                Button btnValidate = popupView.findViewById(R.id.btn_validVolunteer);
+                Button btnCancel = popupView.findViewById(R.id.btn_cancelVolunteer);
+
+                btnValidate.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        service.validateVolunteer(Users.get(position).getId(), Users);
+
+
+                    }
+                });
+
+                btnCancel.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        popupWindow.dismiss();
+                    }
+                });
+
+            }
+        });
     }
 
     @Override
@@ -63,12 +112,16 @@ public class VolunteerListAdapter extends RecyclerView.Adapter<VolunteerListAdap
         //ImageView v_image;
         TextView v_name;
         //TextView v_desc;
+        Button btnValidateVolunteer;
+        View itemView1;
 
         Holderview(View itemview){
             super(itemview);
             //v_image = (ImageView) itemview.findViewById(R.id.service_image);
             v_name = (TextView) itemview.findViewById(R.id.volunteer_name);
             //v_desc = (TextView) itemview.findViewById(R.id.desc);
+            btnValidateVolunteer = (Button) itemview.findViewById(R.id.btnValidateVolunteer);
+            itemView1 = itemview;
         }
     }
 }

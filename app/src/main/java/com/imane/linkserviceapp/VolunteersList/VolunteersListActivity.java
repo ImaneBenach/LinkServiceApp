@@ -45,7 +45,7 @@ public class VolunteersListActivity extends AppCompatActivity implements Seriali
         recyclerViewVolunteers.setHasFixedSize(true);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         recyclerViewVolunteers.setLayoutManager(linearLayoutManager);
-        adapter = new VolunteerListAdapter(listVolunteers, VolunteersListActivity.this, userConnected);
+        adapter = new VolunteerListAdapter(listVolunteers, service, VolunteersListActivity.this, userConnected);
         recyclerViewVolunteers.setAdapter(adapter);
 
     }
