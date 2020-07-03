@@ -30,6 +30,7 @@ public class Service implements Serializable {
     private String access;
     private int id_type;
     private int id_creator;
+    private User executorUser;
 
 
     public Service(int idService, String n, String desc, String da, String dl, int cost, int profit, String adress, String city, int pc, String access, int type, int creator){
@@ -69,6 +70,39 @@ public class Service implements Serializable {
     public String getAccess() { return access; }
 
     public int getImage() { return R.drawable.services_logo; }
+
+    public User getExecutorUser() { return executorUser; }
+
+    public void setExecutorIfExist(){
+        JSONObject jsonParam = new JSONObject();
+        JSONObject jsonParamValues = new JSONObject();
+        final Gson gson = new Gson();
+        String executor = "";
+
+        try {
+            jsonParamValues.put("where"," INNER JOIN USER WHERE execute=2 AND id_user=id AND id_service="+id);
+
+            jsonParam.put("table", "apply");
+            jsonParam.put("values", jsonParamValues);
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        try {
+            executor = API.sendRequest(jsonParam.toString(), "readWithFilter");
+        } catch (IOException | InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        if (!executor.equals("")) {
+            if (executor.startsWith("i", 2)) {
+                executorUser = gson.fromJson(executor, User.class);
+            }
+        } else {
+            executorUser = null;
+        }
+
+    }
 
     public void delete(){
         JSONObject jsonParam = new JSONObject();

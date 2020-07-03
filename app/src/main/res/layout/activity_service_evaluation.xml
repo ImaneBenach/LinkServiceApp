@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <LinearLayout
+        android:id="@+id/evaluationForm"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:orientation="vertical"
+        >
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Evaluez votre service"
+            android:textSize="24dp"
+            android:textAlignment="center">
+
+        </TextView>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Note">
+        </TextView>
+
+        <SeekBar
+            android:id="@+id/EvaluationNote"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:max="5"
+            android:thumb="@drawable/ic_star"
+            android:theme="@style/Widget.AppCompat.SeekBar.Discrete">
+
+        </SeekBar>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Commentaire">
+
+        </TextView>
+
+        <EditText
+            android:id="@+id/EvaluationComment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Commentaire sur la réalisation">
+        </EditText>
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/EvaluationValidation"
+        app:layout_constraintTop_toBottomOf="@+id/evaluationForm"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/field_button"
+        android:textColor="@color/colorWhite"
+        android:text="Valider">
+
+    </Button>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

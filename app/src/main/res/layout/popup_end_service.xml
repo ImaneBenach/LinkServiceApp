@@ -15,7 +15,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         android:textSize="22sp"
-        android:text="Confirmer la validation ?"/>
+        android:text="Mettre fin au service ?"/>
 
     <Button
         android:id="@+id/btn_validVolunteer"

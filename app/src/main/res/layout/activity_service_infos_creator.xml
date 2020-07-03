@@ -103,7 +103,21 @@
         android:layout_marginBottom="@dimen/appbar_padding"
         android:textColor="@color/colorWhite"
         android:text="Supprimer mon service">
+    </Button>
 
+    <Button
+        android:id="@+id/buttonEndService"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:background="@drawable/field_button"
+        android:padding="5dp"
+        android:layout_marginBottom="@dimen/appbar_padding"
+        android:textColor="@color/colorWhite"
+        android:visibility="invisible"
+        android:text="Le service est terminé !">
     </Button>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

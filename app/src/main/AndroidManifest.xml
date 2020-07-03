@@ -17,6 +17,7 @@
         <activity android:name=".ServicesList.ServicesListActivity" />
         <activity android:name=".ServiceInfos.ServiceInfosActivity" />
         <activity android:name=".ServiceInfos.ServiceInfosActivityCreator" />
+        <activity android:name=".ServiceInfos.ServiceEvaluationActivity" />
         <activity android:name="serviceMenuActivity"/>
         <activity android:name=".VolunteersList.VolunteersListActivity"/>
         <activity android:name="CreateServiceActivity"/>
