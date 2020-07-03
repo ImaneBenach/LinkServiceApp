@@ -8,8 +8,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.SearchView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -21,11 +23,13 @@ import com.imane.linkserviceapp.Classes.API;
 import com.imane.linkserviceapp.Classes.Service;
 import com.imane.linkserviceapp.Classes.TypeService;
 import com.imane.linkserviceapp.Classes.User;
+import com.imane.linkserviceapp.HomeActivity;
 import com.imane.linkserviceapp.MesServices.MesServicesActivity;
 import com.imane.linkserviceapp.R;
 import com.imane.linkserviceapp.ServicesList.ServicesListActivity;
 import com.imane.linkserviceapp.ServicesList.ServicesListAdapter;
 import com.imane.linkserviceapp.TypesService.ServicesActivity;
+import com.imane.linkserviceapp.serviceMenuActivity;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -57,6 +61,15 @@ public class ServiceInfosActivity extends AppCompatActivity implements Serializa
         service = (Service) getIntent().getSerializableExtra("Service");
         setServiceInfo();
 
+        final Button btnPostulate = findViewById(R.id.buttonPostuler);
+
+        btnPostulate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                service.apply(userConnected.getId());
+                Log.i("click on postulate", service.getName());
+            }
+        });
 
         assert getSupportActionBar() != null;   //null check
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);

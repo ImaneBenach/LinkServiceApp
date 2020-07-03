@@ -1,11 +1,16 @@
 package com.imane.linkserviceapp;
 
 import android.app.DatePickerDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.icu.util.VersionInfo;
 import android.os.Bundle;
+import android.provider.CalendarContract;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -13,6 +18,8 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -24,6 +31,7 @@ import com.imane.linkserviceapp.Classes.API;
 import com.imane.linkserviceapp.Classes.Service;
 import com.imane.linkserviceapp.Classes.TypeService;
 import com.imane.linkserviceapp.Classes.User;
+import com.imane.linkserviceapp.ServiceInfos.ServiceEvaluationActivity;
 import com.imane.linkserviceapp.ServicesList.ServicesListActivity;
 
 import org.json.JSONException;
@@ -70,7 +78,7 @@ public class CreateServiceActivity extends AppCompatActivity {
                         CreateServiceActivity.this,
                         android.R.style.Theme_Holo_Light_Dialog_MinWidth,
                         dateSetListener,
-                        year,month,day);
+                        year, month, day);
                 dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                 dialog.show();
             }
@@ -100,7 +108,7 @@ public class CreateServiceActivity extends AppCompatActivity {
                         CreateServiceActivity.this,
                         android.R.style.Theme_Holo_Light_Dialog_MinWidth,
                         deadlineSetListener,
-                        year,month,day);
+                        year, month, day);
                 dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                 dialog.show();
             }
@@ -118,26 +126,21 @@ public class CreateServiceActivity extends AppCompatActivity {
 
         newServiceTypeService = findViewById(R.id.newServiceTypeService);
 
-        ArrayList<TypeService> ListTypeService = getTypeService();
+        getAllTypesService();
+        ArrayList<String> arrayList = getStringListTypeSerice();
 
-        ArrayList<String> arrayList = new ArrayList<>();
-        arrayList.add("JAVA");
-        arrayList.add("ANDROID");
-        arrayList.add("C Language");
-        arrayList.add("CPP Language");
-        arrayList.add("Go Language");
-        arrayList.add("AVN SYSTEMS");
-        ArrayAdapter<TypeService> arrayAdapter = new ArrayAdapter<TypeService>(this,android.R.layout.simple_spinner_item, ListTypeService);
+        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, arrayList);
         arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         newServiceTypeService.setAdapter(arrayAdapter);
         newServiceTypeService.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                String tutorialsName = parent.getItemAtPosition(position).toString();
-                Toast.makeText(parent.getContext(), "Selected: " + tutorialsName,Toast.LENGTH_LONG).show();
+                String typeServiceSelected = parent.getItemAtPosition(position).toString();
+                Toast.makeText(parent.getContext(), "Selected: " + typeServiceSelected, Toast.LENGTH_LONG).show();
             }
+
             @Override
-            public void onNothingSelected(AdapterView <?> parent) {
+            public void onNothingSelected(AdapterView<?> parent) {
             }
         });
 
@@ -145,13 +148,22 @@ public class CreateServiceActivity extends AppCompatActivity {
         btn_create_service.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                submitFormCreate();
+                submitFormCreate(view);
             }
         });
 
         assert getSupportActionBar() != null;   //null check
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+    }
+
+    private ArrayList<String> getStringListTypeSerice() {
+        int counter = 0;
+        ArrayList<String> typesServicesString = new ArrayList<>();
+        for (counter = 0; counter < typeServices.size(); counter++) {
+            typesServicesString.add(typeServices.get(counter).getName());
+        }
+        return typesServicesString;
     }
 
     @Override
@@ -169,7 +181,7 @@ public class CreateServiceActivity extends AppCompatActivity {
         }
     }
 
-    private void submitFormCreate(){
+    private void submitFormCreate(View view) {
         JSONObject jsonParam = new JSONObject();
         JSONObject jsonParamValues = new JSONObject();
 
@@ -178,33 +190,50 @@ public class CreateServiceActivity extends AppCompatActivity {
         newServiceDescription = findViewById(R.id.newServiceDescription);
         etDate = findViewById(R.id.etDate);
         etDeadLine = findViewById(R.id.etDeadLine);
+        String typeService = newServiceTypeService.getSelectedItem().toString();
 
-        try {
-            jsonParamValues.put("name",newServiceName.getText());
-            jsonParamValues.put("description",newServiceDescription.getText());
-            jsonParamValues.put("id_type",4);
-            jsonParamValues.put("date",etDate.getText());
-            jsonParamValues.put("deadline",etDeadLine.getText());
-            jsonParamValues.put("cost",1);
-            jsonParamValues.put("profit",1);
-            jsonParamValues.put("access","general");
-            jsonParamValues.put("id_creator",userConnected.getId());
+        int idTypeService = getIdTypeService(typeService);
 
-            jsonParam.put("table", "service");
-            jsonParam.put("values",jsonParamValues);
-
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        try {
-             API.sendRequest(jsonParam.toString(), "create");
-        } catch (IOException | InterruptedException e) {
-            e.printStackTrace();
+        if (idTypeService < 0) {
+            newServiceTypeService.setBackgroundResource(R.drawable.field_border_error);
+        } else {
+            newServiceTypeService.setBackgroundColor(Color.argb(200, 255, 255, 255));
         }
 
+        if (checkFieldTextEdit(newServiceName) && checkFieldTextEdit(newServiceDescription) && checkFieldTextEdit(etDate) && checkFieldTextEdit(etDeadLine)) {
+
+            if(userConnected.buyService(1)){
+                try {
+                    jsonParamValues.put("name", newServiceName.getText());
+                    jsonParamValues.put("description", newServiceDescription.getText());
+                    jsonParamValues.put("id_type", idTypeService);
+                    jsonParamValues.put("date", etDate.getText());
+                    jsonParamValues.put("deadline", etDeadLine.getText());
+                    jsonParamValues.put("cost", 1);
+                    jsonParamValues.put("profit", 1);
+                    jsonParamValues.put("access", "general");
+                    jsonParamValues.put("id_creator", userConnected.getId());
+
+                    jsonParam.put("table", "service");
+                    jsonParam.put("values", jsonParamValues);
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                try {
+                    API.sendRequest(jsonParam.toString(), "create");
+                    displayPopUpServiceCreated(view);
+                } catch (IOException | InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+            } else {
+                displayPopUpError(view);
+            }
+        }
     }
 
-    private ArrayList<TypeService> getTypeService(){
+    private void getAllTypesService() {
         typeServices = new ArrayList<>();
         HashMap<String, TypeService> typeData = new HashMap<>();
         JSONObject jsonParam = new JSONObject();
@@ -212,6 +241,8 @@ public class CreateServiceActivity extends AppCompatActivity {
 
         int counter;
 
+        TypeService undefinedType = new TypeService(-1, "--TypeService--", "", "", 1);
+        typeServices.add(undefinedType);
 
         try {
             jsonParam.put("table", "type_service");
@@ -231,16 +262,93 @@ public class CreateServiceActivity extends AppCompatActivity {
             } else {
                 typeData = API.decodeResponseMultipleAsTypeService(typeServicesListAsString);
             }
-
-            for (counter = 0; counter < typeData.size(); counter++){
+            for (counter = 0; counter < typeData.size(); counter++) {
                 TypeService type = typeData.get(Integer.toString(counter));
                 typeServices.add(type);
-
             }
-
         }
-
-        return typeServices;
     }
 
+    private int getIdTypeService(String nameTypeService) {
+        int counter;
+        for (counter = 0; counter < typeServices.size(); counter++) {
+            if (typeServices.get(counter).getName() == nameTypeService) {
+                return typeServices.get(counter).getId();
+            }
+        }
+        return -1;
+    }
+
+    private boolean checkFieldTextEdit(TextView field) {
+        if (field.length() <= 0) {
+            field.setBackgroundResource(R.drawable.field_border_error);
+            return false;
+        }
+        field.setBackgroundColor(Color.argb(200, 255, 255, 255));
+        return true;
+
+    }
+
+    private void displayPopUpError(View view){
+
+            // inflate the layout of the popup window
+            LayoutInflater inflater = (LayoutInflater)
+                    getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            View popupView = inflater.inflate(R.layout.popup_error_creation_service, null);
+
+            // create the popup window
+            int width = LinearLayout.LayoutParams.WRAP_CONTENT;
+            int height = LinearLayout.LayoutParams.WRAP_CONTENT;
+            boolean focusable = true; // lets taps outside the popup also dismiss it
+            final PopupWindow popupWindow = new PopupWindow(popupView, width, height, focusable);
+
+            // show the popup window
+            // which view you pass in doesn't matter, it is only used for the window tolken
+            popupWindow.showAtLocation(view, Gravity.CENTER, 0, 0);
+
+            Button btnCancel = popupView.findViewById(R.id.btn_cancel);
+
+            btnCancel.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    popupWindow.dismiss();
+                    Intent intent = new Intent(view.getContext(), HomeActivity.class);
+                    intent.putExtra("userConnected", userConnected);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(intent);
+
+                }
+            });
+    }
+
+    private void displayPopUpServiceCreated(View view){
+
+        // inflate the layout of the popup window
+        LayoutInflater inflater = (LayoutInflater)
+                getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View popupView = inflater.inflate(R.layout.popup_service_created, null);
+
+        // create the popup window
+        int width = LinearLayout.LayoutParams.WRAP_CONTENT;
+        int height = LinearLayout.LayoutParams.WRAP_CONTENT;
+        boolean focusable = true; // lets taps outside the popup also dismiss it
+        final PopupWindow popupWindow = new PopupWindow(popupView, width, height, focusable);
+
+        // show the popup window
+        // which view you pass in doesn't matter, it is only used for the window tolken
+        popupWindow.showAtLocation(view, Gravity.CENTER, 0, 0);
+
+        Button btnCancel = popupView.findViewById(R.id.btn_cancel);
+
+        btnCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                popupWindow.dismiss();
+                Intent intent = new Intent(view.getContext(), HomeActivity.class);
+                intent.putExtra("userConnected", userConnected);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
+            }
+        });
+    }
 }

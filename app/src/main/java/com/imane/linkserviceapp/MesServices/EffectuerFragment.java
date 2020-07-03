@@ -50,7 +50,6 @@ public class EffectuerFragment extends Fragment {
             recyclerView.setAdapter(recyclerViewAdapter);
         }
 
-
         return v;
     }
 

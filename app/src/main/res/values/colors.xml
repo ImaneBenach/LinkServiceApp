@@ -6,6 +6,10 @@
 
     <color name="colorTitle">#535252</color>
     <color name="colorTab">#0492FF</color>
+    <color name="colorLightBlue">#B2DEFF</color>
+    <color name="colorOrange">#F64801</color>
+    <color name="colorLightOrange">#FFC6AE</color>
+    <color name="colorError">#f54747</color>
     <color name="colorWhite">#FFFFFF</color>
     <color name="colorWhiteAttenue">#20FFFFFF</color>
     <color name="transparent">#00000000</color>
