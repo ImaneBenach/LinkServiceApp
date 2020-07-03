@@ -112,6 +112,7 @@ public class Service implements Serializable {
 
         try {
             jsonParamValues.put("id", id);
+            jsonParamValues.put("Statut",0);
 
             jsonParam.put("table", "service");
             jsonParam.put("values", jsonParamValues);
@@ -120,7 +121,7 @@ public class Service implements Serializable {
             e.printStackTrace();
         }
         try {
-            API.sendRequest(jsonParam.toString(), "deleteOne");
+            API.sendRequest(jsonParam.toString(), "update");
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }
@@ -133,7 +134,7 @@ public class Service implements Serializable {
         try {
             jsonParamValues.put("id_service", id);
             jsonParamValues.put("id_user", userId);
-            jsonParamValues.put("execute", 0);
+            jsonParamValues.put("execute", 1);
 
             jsonParam.put("table", "apply");
             jsonParam.put("values", jsonParamValues);
@@ -222,7 +223,7 @@ public class Service implements Serializable {
                 try {
                     jsonParamValues.put("id_service", id);
                     jsonParamValues.put("id_user", listVolunteers.get(counter).getId());
-                    jsonParamValues.put("execute", 1);
+                    jsonParamValues.put("execute", 0);
 
                     jsonParam.put("table", "apply");
                     jsonParam.put("values", jsonParamValues);
@@ -244,7 +245,9 @@ public class Service implements Serializable {
         JSONObject jsonParamValues = new JSONObject();
 
         try {
-            jsonParamValues.put("where", " WHERE id_service="+id);
+            jsonParamValues.put("id_service", id);
+            jsonParamValues.put("execute",0);
+
 
             jsonParam.put("table", "apply");
             jsonParam.put("values", jsonParamValues);

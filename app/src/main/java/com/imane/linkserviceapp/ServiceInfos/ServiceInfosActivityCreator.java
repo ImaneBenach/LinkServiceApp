@@ -147,6 +147,11 @@ public class ServiceInfosActivityCreator extends AppCompatActivity implements Se
             @Override
             public void onClick(View view) {
                 service.delete();
+                popupWindow.dismiss();
+                Intent intent = new Intent(view.getContext(), MesServicesActivity.class);
+                intent.putExtra("userConnected", userConnected);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
             }
         });
 
