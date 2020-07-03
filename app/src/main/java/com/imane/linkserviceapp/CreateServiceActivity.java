@@ -1,12 +1,16 @@
 package com.imane.linkserviceapp;
 
 import android.app.DatePickerDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.icu.util.VersionInfo;
 import android.os.Bundle;
 import android.provider.CalendarContract;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -14,6 +18,8 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -25,6 +31,7 @@ import com.imane.linkserviceapp.Classes.API;
 import com.imane.linkserviceapp.Classes.Service;
 import com.imane.linkserviceapp.Classes.TypeService;
 import com.imane.linkserviceapp.Classes.User;
+import com.imane.linkserviceapp.ServiceInfos.ServiceEvaluationActivity;
 import com.imane.linkserviceapp.ServicesList.ServicesListActivity;
 
 import org.json.JSONException;
@@ -141,7 +148,7 @@ public class CreateServiceActivity extends AppCompatActivity {
         btn_create_service.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                submitFormCreate();
+                submitFormCreate(view);
             }
         });
 
@@ -174,7 +181,7 @@ public class CreateServiceActivity extends AppCompatActivity {
         }
     }
 
-    private void submitFormCreate() {
+    private void submitFormCreate(View view) {
         JSONObject jsonParam = new JSONObject();
         JSONObject jsonParamValues = new JSONObject();
 
@@ -194,27 +201,34 @@ public class CreateServiceActivity extends AppCompatActivity {
         }
 
         if (checkFieldTextEdit(newServiceName) && checkFieldTextEdit(newServiceDescription) && checkFieldTextEdit(etDate) && checkFieldTextEdit(etDeadLine)) {
-            try {
-                jsonParamValues.put("name", newServiceName.getText());
-                jsonParamValues.put("description", newServiceDescription.getText());
-                jsonParamValues.put("id_type", idTypeService);
-                jsonParamValues.put("date", etDate.getText());
-                jsonParamValues.put("deadline", etDeadLine.getText());
-                jsonParamValues.put("cost", 1);
-                jsonParamValues.put("profit", 1);
-                jsonParamValues.put("access", "general");
-                jsonParamValues.put("id_creator", userConnected.getId());
 
-                jsonParam.put("table", "service");
-                jsonParam.put("values", jsonParamValues);
+            if(userConnected.buyService(1)){
+                try {
+                    jsonParamValues.put("name", newServiceName.getText());
+                    jsonParamValues.put("description", newServiceDescription.getText());
+                    jsonParamValues.put("id_type", idTypeService);
+                    jsonParamValues.put("date", etDate.getText());
+                    jsonParamValues.put("deadline", etDeadLine.getText());
+                    jsonParamValues.put("cost", 1);
+                    jsonParamValues.put("profit", 1);
+                    jsonParamValues.put("access", "general");
+                    jsonParamValues.put("id_creator", userConnected.getId());
 
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-            try {
-                API.sendRequest(jsonParam.toString(), "create");
-            } catch (IOException | InterruptedException e) {
-                e.printStackTrace();
+                    jsonParam.put("table", "service");
+                    jsonParam.put("values", jsonParamValues);
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                try {
+                    API.sendRequest(jsonParam.toString(), "create");
+                    displayPopUpServiceCreated(view);
+                } catch (IOException | InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+            } else {
+                displayPopUpError(view);
             }
         }
     }
@@ -275,4 +289,66 @@ public class CreateServiceActivity extends AppCompatActivity {
 
     }
 
+    private void displayPopUpError(View view){
+
+            // inflate the layout of the popup window
+            LayoutInflater inflater = (LayoutInflater)
+                    getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            View popupView = inflater.inflate(R.layout.popup_error_creation_service, null);
+
+            // create the popup window
+            int width = LinearLayout.LayoutParams.WRAP_CONTENT;
+            int height = LinearLayout.LayoutParams.WRAP_CONTENT;
+            boolean focusable = true; // lets taps outside the popup also dismiss it
+            final PopupWindow popupWindow = new PopupWindow(popupView, width, height, focusable);
+
+            // show the popup window
+            // which view you pass in doesn't matter, it is only used for the window tolken
+            popupWindow.showAtLocation(view, Gravity.CENTER, 0, 0);
+
+            Button btnCancel = popupView.findViewById(R.id.btn_cancel);
+
+            btnCancel.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    popupWindow.dismiss();
+                    Intent intent = new Intent(view.getContext(), HomeActivity.class);
+                    intent.putExtra("userConnected", userConnected);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(intent);
+
+                }
+            });
+    }
+
+    private void displayPopUpServiceCreated(View view){
+
+        // inflate the layout of the popup window
+        LayoutInflater inflater = (LayoutInflater)
+                getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View popupView = inflater.inflate(R.layout.popup_service_created, null);
+
+        // create the popup window
+        int width = LinearLayout.LayoutParams.WRAP_CONTENT;
+        int height = LinearLayout.LayoutParams.WRAP_CONTENT;
+        boolean focusable = true; // lets taps outside the popup also dismiss it
+        final PopupWindow popupWindow = new PopupWindow(popupView, width, height, focusable);
+
+        // show the popup window
+        // which view you pass in doesn't matter, it is only used for the window tolken
+        popupWindow.showAtLocation(view, Gravity.CENTER, 0, 0);
+
+        Button btnCancel = popupView.findViewById(R.id.btn_cancel);
+
+        btnCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                popupWindow.dismiss();
+                Intent intent = new Intent(view.getContext(), HomeActivity.class);
+                intent.putExtra("userConnected", userConnected);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
+            }
+        });
+    }
 }

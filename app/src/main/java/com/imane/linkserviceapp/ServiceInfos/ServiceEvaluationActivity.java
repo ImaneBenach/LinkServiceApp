@@ -111,6 +111,7 @@ public class ServiceEvaluationActivity extends AppCompatActivity implements Seri
             @Override
             public void onClick(View view) {
                 service.setEvaluation(note, comment);
+
                 Intent intent = new Intent(ServiceEvaluationActivity.this, MesServicesActivity.class);
                 intent.putExtra("userConnected", userConnected);
                 intent.putExtra("service", service);

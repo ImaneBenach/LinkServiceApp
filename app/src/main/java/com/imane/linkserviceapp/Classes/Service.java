@@ -133,6 +133,7 @@ public class Service implements Serializable {
         try {
             jsonParamValues.put("id_service", id);
             jsonParamValues.put("id_user", userId);
+            jsonParamValues.put("execute", 0);
 
             jsonParam.put("table", "apply");
             jsonParam.put("values", jsonParamValues);
@@ -269,6 +270,29 @@ public class Service implements Serializable {
             jsonParamValues.put("commentaire", comment);
 
             jsonParam.put("table", "apply");
+            jsonParam.put("values", jsonParamValues);
+            Log.d("JSONPARAM",jsonParam.toString());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        try {
+            API.sendRequest(jsonParam.toString(), "update");
+        } catch (IOException | InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        givePointToExecutor();
+    }
+
+    private void givePointToExecutor(){
+        JSONObject jsonParam = new JSONObject();
+        JSONObject jsonParamValues = new JSONObject();
+
+        try {
+            jsonParamValues.put("id", executorUser.getId());
+            jsonParamValues.put("points", executorUser.getPoints()+profit);
+
+            jsonParam.put("table", "user");
             jsonParam.put("values", jsonParamValues);
             Log.d("JSONPARAM",jsonParam.toString());
         } catch (JSONException e) {

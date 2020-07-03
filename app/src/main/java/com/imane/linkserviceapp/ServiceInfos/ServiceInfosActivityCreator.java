@@ -172,6 +172,7 @@ public class ServiceInfosActivityCreator extends AppCompatActivity implements Se
             public void onClick(View view) {
                 Intent intent = new Intent(view.getContext(), ServiceEvaluationActivity.class);
                 intent.putExtra("userConnected", userConnected);
+                intent.putExtra("Service", service);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
 

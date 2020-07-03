@@ -1,8 +1,13 @@
 package com.imane.linkserviceapp.Classes;
 
 
+import android.util.Log;
+
 import com.google.gson.Gson;
 import com.imane.linkserviceapp.Classes.API;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -66,6 +71,7 @@ public class User implements Serializable {
 
     public int getPoints() { return points; }
 
+    public void setPoints(int points) { this.points = points; }
 
     public static HashMap signin(String email, String password) throws NoSuchAlgorithmException, IOException, InterruptedException {
         HashMap<String, String> inputValues = new HashMap<>();
@@ -87,6 +93,34 @@ public class User implements Serializable {
         inputValues.put("type",type);
        // updateInDatabase(inputValues, "create");
         return inputValues;
+    }
+
+    public boolean buyService(int cost){
+        if(points - cost >= 0){
+            setPoints(points-cost);
+
+            JSONObject jsonParam = new JSONObject();
+            JSONObject jsonParamValues = new JSONObject();
+
+            try {
+                jsonParamValues.put("id", id);
+                jsonParamValues.put("points", points);
+
+                jsonParam.put("table", "user");
+                jsonParam.put("values", jsonParamValues);
+                Log.d("JSONPARAM",jsonParam.toString());
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            try {
+                API.sendRequest(jsonParam.toString(), "update");
+            } catch (IOException | InterruptedException e) {
+                e.printStackTrace();
+            }
+
+            return true;
+        }
+        return false;
     }
 
     /*
