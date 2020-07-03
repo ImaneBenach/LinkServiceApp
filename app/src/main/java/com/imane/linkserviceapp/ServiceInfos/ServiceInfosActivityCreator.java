@@ -68,6 +68,7 @@ public class ServiceInfosActivityCreator extends AppCompatActivity implements Se
 
         } else {
             buttonDeleteService.setVisibility(View.INVISIBLE);
+            btnVolunteers.setVisibility(View.INVISIBLE);
 
             buttonEndService.setVisibility(View.VISIBLE);
             buttonEndService.setOnClickListener(new View.OnClickListener() {
@@ -115,7 +116,7 @@ public class ServiceInfosActivityCreator extends AppCompatActivity implements Se
         // inflate the layout of the popup window
         LayoutInflater inflater = (LayoutInflater)
                 getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View popupView = inflater.inflate(R.layout.popup_window, null);
+        View popupView = inflater.inflate(R.layout.popup_confirmation, null);
 
         // create the popup window
         int width = LinearLayout.LayoutParams.WRAP_CONTENT;

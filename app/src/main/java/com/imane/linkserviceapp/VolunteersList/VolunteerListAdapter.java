@@ -1,18 +1,14 @@
 package com.imane.linkserviceapp.VolunteersList;
 
 import android.content.Context;
-import android.content.Intent;
 import android.view.Gravity;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -20,9 +16,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.imane.linkserviceapp.Classes.Service;
 import com.imane.linkserviceapp.Classes.User;
 import com.imane.linkserviceapp.R;
-import com.imane.linkserviceapp.ServiceInfos.ServiceInfosActivity;
-import com.imane.linkserviceapp.ServiceInfos.ServiceInfosActivityCreator;
-import com.imane.linkserviceapp.ServicesList.ServicesListAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -61,7 +54,7 @@ public class VolunteerListAdapter extends RecyclerView.Adapter<VolunteerListAdap
                 // inflate the layout of the popup window
                 LayoutInflater inflater = (LayoutInflater)
                         context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                View popupView = inflater.inflate(R.layout.popup_window, null);
+                View popupView = inflater.inflate(R.layout.popup_confirmation, null);
 
                 // create the popup window
                 int width = LinearLayout.LayoutParams.WRAP_CONTENT;

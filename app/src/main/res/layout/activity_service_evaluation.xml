@@ -10,6 +10,7 @@
         android:layout_height="wrap_content"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
+        android:padding="10dp"
         android:orientation="vertical"
         >
 
@@ -17,7 +18,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Evaluez votre service"
-            android:textSize="24dp"
+            android:textSize="32dp"
             android:textAlignment="center">
 
         </TextView>
@@ -25,6 +26,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textSize="24dp"
             android:text="Note">
         </TextView>
 
@@ -32,6 +34,7 @@
             android:id="@+id/EvaluationNote"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_margin="5dp"
             android:max="5"
             android:thumb="@drawable/ic_star"
             android:theme="@style/Widget.AppCompat.SeekBar.Discrete">
@@ -41,6 +44,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textSize="24dp"
             android:text="Commentaire">
 
         </TextView>
@@ -49,13 +53,16 @@
             android:id="@+id/EvaluationComment"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:padding="8dp"
+
+            android:background="@drawable/field_border"
             android:hint="Commentaire sur la réalisation">
         </EditText>
 
     </LinearLayout>
 
     <Button
-        android:id="@+id/EvaluationValidation"
+        android:id="@+id/btnEvaluationValidation"
         app:layout_constraintTop_toBottomOf="@+id/evaluationForm"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"

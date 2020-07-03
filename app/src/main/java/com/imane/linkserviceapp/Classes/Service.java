@@ -234,7 +234,6 @@ public class Service implements Serializable {
                 } catch (IOException | InterruptedException e) {
                     e.printStackTrace();
                 }
-
             }
         }
     }
@@ -254,6 +253,29 @@ public class Service implements Serializable {
         }
         try {
             API.sendRequest(jsonParam.toString(), "deleteWithFilter");
+        } catch (IOException | InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void setEvaluation(int note, String comment){
+        JSONObject jsonParam = new JSONObject();
+        JSONObject jsonParamValues = new JSONObject();
+
+        try {
+            jsonParamValues.put("id_service", id);
+            jsonParamValues.put("id_user", executorUser.getId());
+            jsonParamValues.put("note",Integer.toString(note));
+            jsonParamValues.put("commentaire", comment);
+
+            jsonParam.put("table", "apply");
+            jsonParam.put("values", jsonParamValues);
+            Log.d("JSONPARAM",jsonParam.toString());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        try {
+            API.sendRequest(jsonParam.toString(), "update");
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }
