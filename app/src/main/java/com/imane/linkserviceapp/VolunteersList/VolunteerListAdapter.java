@@ -81,8 +81,6 @@ public class VolunteerListAdapter extends RecyclerView.Adapter<VolunteerListAdap
                     @Override
                     public void onClick(View view) {
                         service.validateVolunteer(Users.get(position).getId(), Users);
-
-
                     }
                 });
 

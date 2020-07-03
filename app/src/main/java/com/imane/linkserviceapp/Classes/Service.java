@@ -70,6 +70,28 @@ public class Service implements Serializable {
 
     public int getImage() { return R.drawable.services_logo; }
 
+    public void delete(){
+        JSONObject jsonParam = new JSONObject();
+        JSONObject jsonParamValues = new JSONObject();
+
+        deleteApply();
+
+        try {
+            jsonParamValues.put("id", id);
+
+            jsonParam.put("table", "service");
+            jsonParam.put("values", jsonParamValues);
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        try {
+            API.sendRequest(jsonParam.toString(), "deleteOne");
+        } catch (IOException | InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
     public void apply(int userId) {
         JSONObject jsonParam = new JSONObject();
         JSONObject jsonParamValues = new JSONObject();
@@ -156,7 +178,6 @@ public class Service implements Serializable {
     }
 
     private void unvalidateOtherVolunteers(int userId, List<User> listVolunteers){
-
         int counter;
 
         for (counter = 0; counter < listVolunteers.size(); counter++){
@@ -181,6 +202,26 @@ public class Service implements Serializable {
                 }
 
             }
+        }
+    }
+
+    public void deleteApply(){
+        JSONObject jsonParam = new JSONObject();
+        JSONObject jsonParamValues = new JSONObject();
+
+        try {
+            jsonParamValues.put("where", " WHERE id_service="+id);
+
+            jsonParam.put("table", "apply");
+            jsonParam.put("values", jsonParamValues);
+            Log.i("json",jsonParam.toString());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        try {
+            API.sendRequest(jsonParam.toString(), "deleteWithFilter");
+        } catch (IOException | InterruptedException e) {
+            e.printStackTrace();
         }
     }
 }
