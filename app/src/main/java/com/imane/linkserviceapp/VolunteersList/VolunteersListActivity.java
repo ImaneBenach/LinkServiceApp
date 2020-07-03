@@ -36,7 +36,6 @@ public class VolunteersListActivity extends AppCompatActivity implements Seriali
         service = (Service) getIntent().getSerializableExtra("service");
 
         listVolunteers = service.getVolunteers();
-        Log.i("Volunteers", listVolunteers.get(0).getName());
 
         assert getSupportActionBar() != null;   //null check
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);

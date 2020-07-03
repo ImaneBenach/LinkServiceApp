@@ -43,10 +43,14 @@ public class ServiceInfosActivityCreator extends AppCompatActivity implements Se
         final Button buttonEndService = findViewById(R.id.buttonEndService);
         final Button buttonDeleteService = findViewById(R.id.buttonDeleteService);
         final Button btnVolunteers = findViewById(R.id.buttonVolunteers);
+        final Button btnsendMessage = findViewById(R.id.btnsendMessage);
+        final LinearLayout VolunteerInfos = findViewById(R.id.volunteer_infos);
 
         service.setExecutorIfExist();
 
         if(service.getExecutorUser() == null){
+            btnsendMessage.setVisibility(View.INVISIBLE);
+            VolunteerInfos.setVisibility(View.INVISIBLE);
             buttonDeleteService.setVisibility(View.VISIBLE);
             buttonDeleteService.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -69,6 +73,13 @@ public class ServiceInfosActivityCreator extends AppCompatActivity implements Se
         } else {
             buttonDeleteService.setVisibility(View.INVISIBLE);
             btnVolunteers.setVisibility(View.INVISIBLE);
+
+            btnsendMessage.setVisibility(View.VISIBLE);
+            VolunteerInfos.setVisibility(View.VISIBLE);
+
+            final TextView volunteer_name = findViewById(R.id.volunteer_name);
+            volunteer_name.setText(service.getExecutorUser().getName());
+
 
             buttonEndService.setVisibility(View.VISIBLE);
             buttonEndService.setOnClickListener(new View.OnClickListener() {

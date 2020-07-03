@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_gravity="center_horizontal"
     android:orientation="horizontal"
     tools:context=".ServiceInfos.ServiceInfosActivityCreator">
@@ -18,11 +17,12 @@
         app:layout_constraintTop_toTopOf="parent"></ImageView>
 
     <LinearLayout
+        android:id="@+id/serviceInfos"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:orientation="vertical"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageService"
-        android:orientation="vertical">
+        app:layout_constraintTop_toBottomOf="@+id/imageService">
 
         <LinearLayout
             android:id="@+id/headerService"
@@ -31,8 +31,7 @@
             android:orientation="horizontal"
             android:textAlignment="center"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/imageService"
-            >
+            app:layout_constraintTop_toBottomOf="@+id/imageService">
 
             <TextView
                 android:id="@+id/nameService"
@@ -54,70 +53,133 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Nombre de points"
-            android:textSize="16dp"
-            >
+            android:textSize="16dp">
         </TextView>
+
         <TextView
             android:id="@+id/descriptionService"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Description"
-            android:textSize="16dp"
-            >
+            android:textSize="16dp">
         </TextView>
+
         <TextView
             android:id="@+id/dateService"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Date du service"
-            >
+            android:text="Date du service">
         </TextView>
+
         <TextView
             android:id="@+id/typeService"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Type de service"
-            >
+            android:text="Type de service">
         </TextView>
 
         <Button
             android:id="@+id/buttonVolunteers"
+            style="@style/ButtonPostuler"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            style="@style/ButtonPostuler"
             android:text="Volontaires">
-
         </Button>
 
     </LinearLayout>
+
+    <TextView
+        android:id="@+id/volunteerTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/serviceInfos"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:text="Volontaire sélectionné.e par vos soins :">
+    </TextView>
+
+    <LinearLayout
+        android:id="@+id/volunteer_infos"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/volunteerTitle"
+        app:layout_constraintLeft_toLeftOf="parent"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/volunteer_image"
+            android:layout_width="100dp"
+            android:layout_height="80dp"
+            android:padding="0.75dp"
+            android:scaleType="centerCrop">
+        </ImageView>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginLeft="16dp">
+
+            <TextView
+                android:id="@+id/volunteer_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_toRightOf="@id/service_image"
+                android:text="Nom du Volontaire"
+                android:textAppearance="@style/TextAppearance.AppCompat.Small">
+            </TextView>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Description">
+            </TextView>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/btnsendMessage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/volunteerTitle"
+        app:layout_constraintBottom_toBottomOf="@id/volunteer_infos"
+        app:layout_constraintLeft_toRightOf="@id/volunteer_infos"
+        app:layout_constraintRight_toRightOf="parent"
+        android:background="@drawable/field_button"
+        android:text="Détails">
+    </Button>
 
     <Button
         android:id="@+id/buttonDeleteService"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginBottom="@dimen/appbar_padding"
         android:background="@drawable/field_border_error"
         android:padding="5dp"
-        android:layout_marginBottom="@dimen/appbar_padding"
+        android:text="Supprimer mon service"
         android:textColor="@color/colorWhite"
-        android:text="Supprimer mon service">
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent">
     </Button>
 
     <Button
         android:id="@+id/buttonEndService"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginBottom="@dimen/appbar_padding"
         android:background="@drawable/field_button"
         android:padding="5dp"
-        android:layout_marginBottom="@dimen/appbar_padding"
+        android:text="Le service est terminé !"
         android:textColor="@color/colorWhite"
         android:visibility="invisible"
-        android:text="Le service est terminé !">
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent">
     </Button>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

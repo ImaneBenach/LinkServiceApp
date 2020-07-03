@@ -1,6 +1,7 @@
 package com.imane.linkserviceapp.VolunteersList;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.imane.linkserviceapp.Classes.Service;
 import com.imane.linkserviceapp.Classes.User;
 import com.imane.linkserviceapp.R;
+import com.imane.linkserviceapp.ServiceInfos.ServiceInfosActivityCreator;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -63,9 +65,7 @@ public class VolunteerListAdapter extends RecyclerView.Adapter<VolunteerListAdap
                 final PopupWindow popupWindow = new PopupWindow(popupView, width, height, focusable);
 
                 // show the popup window
-                // which view you pass in doesn't matter, it is only used for the window tolken
                 popupWindow.showAtLocation(holder.itemView1, Gravity.CENTER, 0, 0);
-
 
                 Button btnValidate = popupView.findViewById(R.id.btn_validVolunteer);
                 Button btnCancel = popupView.findViewById(R.id.btn_cancelVolunteer);
@@ -74,6 +74,12 @@ public class VolunteerListAdapter extends RecyclerView.Adapter<VolunteerListAdap
                     @Override
                     public void onClick(View view) {
                         service.validateVolunteer(Users.get(position).getId(), Users);
+                        popupWindow.dismiss();
+                        Intent intent = new Intent(context, ServiceInfosActivityCreator.class);
+                        intent.putExtra("userConnected", userConnected);
+                        intent.putExtra("Service", service);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        context.startActivity(intent);
                     }
                 });
 
@@ -83,7 +89,6 @@ public class VolunteerListAdapter extends RecyclerView.Adapter<VolunteerListAdap
                         popupWindow.dismiss();
                     }
                 });
-
             }
         });
     }
@@ -91,12 +96,6 @@ public class VolunteerListAdapter extends RecyclerView.Adapter<VolunteerListAdap
     @Override
     public int getItemCount() {
         return Users.size();
-    }
-
-    public void setfilter(List<User> listservices){
-        Users = new ArrayList<>();
-        Users.addAll(listservices);
-        notifyDataSetChanged();
     }
 
     class Holderview extends RecyclerView.ViewHolder {

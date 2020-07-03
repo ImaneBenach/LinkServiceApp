@@ -75,7 +75,7 @@ public class ServicesListActivity extends AppCompatActivity {
         }
 
 
-        if (!ServicesList.equals("")) {
+        if (!ServicesList.equals("null")) {
             if (ServicesList.startsWith("i", 2)) {
                 ServicesData.put("0", gson.fromJson(ServicesList, Service.class));
             } else {

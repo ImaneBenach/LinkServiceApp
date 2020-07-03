@@ -173,7 +173,7 @@ public class Service implements Serializable {
             e.printStackTrace();
         }
 
-        if (!volunteers.equals("")) {
+        if (!volunteers.equals("null")) {
             if (volunteers.startsWith("i", 2)) {
                 hashMapVolunteers.put("0",gson.fromJson(volunteers, User.class));
             } else {
