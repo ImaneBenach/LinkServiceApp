@@ -152,6 +152,8 @@ public class ServiceInfosActivity extends AppCompatActivity implements Serializa
         try {
             userCreator = gson.fromJson(API.sendRequest(jsonParam.toString(), "readWithFilter"),User.class);
 
+            checkIfCreatorIsConnectedUser(userCreator);
+
             return userCreator.getName() + " " + userCreator.getSurname();
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
@@ -193,6 +195,15 @@ public class ServiceInfosActivity extends AppCompatActivity implements Serializa
                 popupWindow.dismiss();
             }
         });
+    }
+
+    private void checkIfCreatorIsConnectedUser(User userCreator){
+
+        if(userCreator.getId() == userConnected.getId()){
+            final Button btnPostulate = findViewById(R.id.buttonPostuler);
+            btnPostulate.setVisibility(View.INVISIBLE);
+        }
+
     }
 
 }
