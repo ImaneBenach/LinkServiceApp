@@ -29,9 +29,6 @@ public class API {
     public static String sendRequest(final String jsonData, final String action) throws IOException, InterruptedException {
         final String[] data = {null};
         final CountDownLatch latch = new CountDownLatch(1);
-        InputStream inputStream = null;
-
-
         Thread thread = new Thread(new Runnable() {
 
             @Override
@@ -53,7 +50,7 @@ public class API {
 
                 System.out.println(conn.getInputStream());
 
-                //data[0] = readFully(conn.getInputStream());
+                data[0] = readFullyAsString(conn.getInputStream(), "UTF-8");
 
                 conn.disconnect();
             } catch (Exception e) {
@@ -64,10 +61,7 @@ public class API {
 
         });
 
-
-
-
-        //thread.start();
+        thread.start();
         latch.await();
 
         return data[0];

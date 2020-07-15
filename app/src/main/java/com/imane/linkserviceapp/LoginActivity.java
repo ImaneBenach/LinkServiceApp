@@ -7,8 +7,6 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -16,7 +14,6 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 import com.imane.linkserviceapp.API.ConfigAPI;
 import com.imane.linkserviceapp.API.UserAPI;
-import com.imane.linkserviceapp.Classes.Service;
 import com.imane.linkserviceapp.Classes.User;
 import com.imane.linkserviceapp.Classes.API;
 
@@ -26,7 +23,6 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
-import java.util.HashMap;
 import java.util.List;
 
 import retrofit2.Call;

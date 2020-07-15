@@ -3,6 +3,7 @@ package com.imane.linkserviceapp.ServicesList;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -52,7 +53,7 @@ public class ServicesListActivity extends AppCompatActivity {
         String ServicesList = "";
         int counter;
 
-
+        Log.d("ICI","CA MARCHE PAS");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_services);
 
