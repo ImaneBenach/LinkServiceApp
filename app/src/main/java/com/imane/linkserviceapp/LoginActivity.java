@@ -14,6 +14,8 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.imane.linkserviceapp.API.ConfigAPI;
+import com.imane.linkserviceapp.API.UserAPI;
 import com.imane.linkserviceapp.Classes.Service;
 import com.imane.linkserviceapp.Classes.User;
 import com.imane.linkserviceapp.Classes.API;
@@ -25,12 +27,20 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
 
 public class LoginActivity extends AppCompatActivity {
 
     Button btnInscription, btnSeConnecter ;
     EditText etEmail, etMdp ;
     private final Gson gson = new Gson();
+
+    Retrofit retrofit = ConfigAPI.getRetrofitClient();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,49 +63,48 @@ public class LoginActivity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "Veuillez entrer un mdp", Toast.LENGTH_LONG).show();
                 }
                 else{
-                    User user = new User();
+
                     final String email = etEmail.getText().toString();
                     final String mdp = etMdp.getText().toString();
                     String userId = "";
-
+                    User user = null;
                     try {
-                        String table =  "user";
-
-                        HashMap<String,String> login = user.signin(email, mdp);
-                        // System.out.println(login);
-                        HashMap<String, Object> userValue = new HashMap<>();
-
-                        userValue.put("table", "user");
-                        userValue.put("values", login);
-                        System.out.println(userValue);
-                        Gson gson = new Gson();
-                        String json = gson.toJson(userValue);
-
-                        API api = new API();
-                        userId = api.sendRequest(json, "connection");
+                        user = new User(email, API.passwordHash(mdp));
                     } catch (NoSuchAlgorithmException e) {
                         e.printStackTrace();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
                     }
 
-                    if(!userId.equals("") && !userId.equals("null")){
-                        User userConnected = getUserConnectedInfos(gson.fromJson(userId, User.class));
+                    UserAPI userAPI = retrofit.create(UserAPI.class);
+                    Call callUser = userAPI.connection(user);
 
-                        Log.i("user", userConnected.getName());
+                    callUser.enqueue(
+                        new Callback<List<User>>() {
+                            @Override
+                            public void onResponse(Call<List<User>> call, Response<List<User>> response) {
+                                Log.d("response", String.valueOf(response.code()));
+                                if(response.code()==200){
+                                    List<User> users = response.body();
 
-                        if(userConnected != null){
-                            Intent intent = new Intent(LoginActivity.this,HomeActivity.class);
-                            intent.putExtra("userConnected",userConnected);
-                            startActivity(intent);
-                            finish();
+
+                                    if(users != null && users.size() > 0){
+                                        User userConnected = users.get(0);
+
+                                        Intent intent = new Intent(LoginActivity.this,HomeActivity.class);
+                                        intent.putExtra("userConnected",userConnected);
+                                        startActivity(intent);
+                                        finish();
+                                    } else {
+                                        Toast.makeText(getApplicationContext(), "Cette combinaison est inconnue", Toast.LENGTH_LONG).show();
+                                    }
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(Call call, Throwable t) {
+
+                            }
                         }
-                    } else {
-                        Toast.makeText(getApplicationContext(), "Cette combinaison est inconnue", Toast.LENGTH_LONG).show();
-                    }
-
+                    );
                 }
             }
         });

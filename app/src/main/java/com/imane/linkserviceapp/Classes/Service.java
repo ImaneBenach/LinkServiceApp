@@ -231,6 +231,21 @@ public class Service implements Serializable {
         }
     }
 
+    public void signalement(int idUser, String description){
+        JSONObject jsonParamValues = new JSONObject();
+
+        try {
+            jsonParamValues.put("id_user_creator", Integer.toString(idUser));
+            jsonParamValues.put("description", description);
+            jsonParamValues.put("id_service",id);
+            jsonParamValues.put("statut","0");
+
+            sendToAPI(jsonParamValues,"ticket", "create");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
     private String sendToAPI(JSONObject values, String table, String action){
         JSONObject jsonParam = new JSONObject();
         try {
