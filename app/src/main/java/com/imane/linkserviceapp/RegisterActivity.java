@@ -36,6 +36,7 @@ public class RegisterActivity extends AppCompatActivity {
     private static final String TAG = "RegisterActivity";
 
     Button btnConnexion ;
+    Button btnSeConnecter ;
 
     EditText etEmail, etMdp, etNom, etPrenom, etBirth ;
 
@@ -50,6 +51,7 @@ public class RegisterActivity extends AppCompatActivity {
         etNom =(EditText) findViewById(R.id.et_nom);
         etPrenom = (EditText)findViewById(R.id.et_prenom) ;
         etBirth = findViewById(R.id.et_birth);
+        btnSeConnecter = findViewById(R.id.btn_connexion);
 
         etBirth.setShowSoftInputOnFocus(false);
 
@@ -107,7 +109,7 @@ public class RegisterActivity extends AppCompatActivity {
                         final String prenom = etPrenom.getText().toString();
                         final String birthdate = etBirth.getText().toString();
 
-                        HashMap<String, String> register = user.register(email, mdp, nom, prenom, birthdate, "admin");
+                        HashMap<String, String> register = User.register(email, mdp, nom, prenom, birthdate, "membre");
                         HashMap<String, Object> userValue = new HashMap<>();
 
                         userValue.put("table", "user");
@@ -117,7 +119,7 @@ public class RegisterActivity extends AppCompatActivity {
                         System.out.println(json);
 
                         API api = new API();
-                        String id = api.sendRequest(json, "create");
+                        String id = API.sendRequest(json, "create");
 
                     } catch (NoSuchAlgorithmException e) {
                         e.printStackTrace();
@@ -132,6 +134,14 @@ public class RegisterActivity extends AppCompatActivity {
                         finish();
 //                    }
                 }
+            }
+        });
+
+        btnSeConnecter.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(RegisterActivity.this, LoginActivity.class);
+                startActivity(i);
             }
         });
     }
