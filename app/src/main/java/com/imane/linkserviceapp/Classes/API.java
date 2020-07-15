@@ -23,40 +23,51 @@ import java.util.concurrent.CountDownLatch;
 
 public class API {
 
+    String urlAPI = "http://10.0.2.2:4000";
+
+
     public static String sendRequest(final String jsonData, final String action) throws IOException, InterruptedException {
         final String[] data = {null};
         final CountDownLatch latch = new CountDownLatch(1);
+        InputStream inputStream = null;
+
+
         Thread thread = new Thread(new Runnable() {
 
             @Override
             public void run() {
-                try {
-                    URL url = new URL("http://10.0.2.2:4000/" + action);
-                    HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-                    conn.setRequestMethod("POST");
-                    conn.setRequestProperty("Content-Type", "application/json;charset=UTF-8");
-                    conn.setRequestProperty("Accept", "application/json");
-                    conn.setDoOutput(true);
-                    conn.setDoInput(true);
+            try {
+                URL url = new URL("http://10.0.2.2:4000/" + action);
+                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                conn.setRequestMethod("POST");
+                conn.setRequestProperty("Content-Type", "application/json;charset=UTF-8");
+                conn.setRequestProperty("Accept", "application/json");
+                conn.setDoOutput(true);
+                conn.setDoInput(true);
 
-                    DataOutputStream os = new DataOutputStream(conn.getOutputStream());
-                    os.writeBytes(jsonData.toString());
+                DataOutputStream os = new DataOutputStream(conn.getOutputStream());
+                os.writeBytes(jsonData.toString());
 
-                    os.flush();
-                    os.close();
+                os.flush();
+                os.close();
 
-                    data[0] = readFullyAsString(conn.getInputStream(), "UTF-8");
+                System.out.println(conn.getInputStream());
 
-                    conn.disconnect();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                latch.countDown();
+                //data[0] = readFully(conn.getInputStream());
+
+                conn.disconnect();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            latch.countDown();
             }
 
         });
 
-        thread.start();
+
+
+
+        //thread.start();
         latch.await();
 
         return data[0];
