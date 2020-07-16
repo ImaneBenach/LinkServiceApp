@@ -31,8 +31,6 @@ public class TypeService {
     private String picture;
     private int active;
 
-
-
     public TypeService(int idType, String n, String d, String i, int a) {
         id = idType;
         name = n;
@@ -61,7 +59,7 @@ public class TypeService {
         Retrofit retrofit = ConfigAPI.getRetrofitClient();
         TypeAPI typeAPI = retrofit.create(TypeAPI.class);
         Call callType = typeAPI.getTypesActives(idType);
-/*
+
         callType.enqueue(
             new Callback<List<TypeService>>() {
                 @Override
@@ -70,7 +68,7 @@ public class TypeService {
                         List<TypeService> users = response.body();
                         if(users != null && users.size() > 0){
                             TypeService type = users.get(0);
-                            return type.getName();
+
                         }
                     }
                 }
@@ -81,7 +79,7 @@ public class TypeService {
                 }
             }
         );
-*/
+
 
 
         Gson gson = new Gson();

@@ -25,8 +25,6 @@ public class User implements Serializable {
     private String city;
     private String type;
 
-    Retrofit retrofit = ConfigAPI.getRetrofitClient();
-
     public User(int idUser){
         id = idUser;
     }
@@ -97,7 +95,7 @@ public class User implements Serializable {
     public boolean buyService(int cost){
         if(points - cost >= 0){
             points -= cost;
-
+            Retrofit retrofit = ConfigAPI.getRetrofitClient();
             UserAPI userAPI = retrofit.create(UserAPI.class);
             Call callType = userAPI.updateUser(id, this);
 

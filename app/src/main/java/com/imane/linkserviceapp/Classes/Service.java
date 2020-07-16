@@ -39,8 +39,6 @@ public class Service implements Serializable {
     private int id_creator;
     private User executorUser;
 
-    Retrofit retrofit = ConfigAPI.getRetrofitClient();
-
     public Service(int idService, String n, String desc, String da, String dl, int cost, int profit, String adress, String city, int pc, String access, int type, int creator){
         id = idService;
         name = n;
@@ -104,6 +102,7 @@ public class Service implements Serializable {
 
     public void delete(){
         deleteApply();
+        Retrofit retrofit = ConfigAPI.getRetrofitClient();
         ServiceAPI serviceAPI = retrofit.create(ServiceAPI.class);
         Call callType = serviceAPI.updateService(this);
 
@@ -123,6 +122,7 @@ public class Service implements Serializable {
     }
 
     public void apply(int userId) {
+        Retrofit retrofit = ConfigAPI.getRetrofitClient();
         Apply apply = new Apply(userId, id, 1);
         ApplyAPI applyAPI = retrofit.create(ApplyAPI.class);
         Call callType = applyAPI.setApply(apply);
@@ -173,6 +173,7 @@ public class Service implements Serializable {
     }
 
     public void validateVolunteer(int userId, List<User> listVolunteers){
+        Retrofit retrofit = ConfigAPI.getRetrofitClient();
         Apply apply = new Apply(userId, id, 2);
         ApplyAPI applyAPI = retrofit.create(ApplyAPI.class);
         Call callType = applyAPI.updateApply(apply);
@@ -199,6 +200,7 @@ public class Service implements Serializable {
         for (counter = 0; counter < listVolunteers.size(); counter++){
             int volunteerid = listVolunteers.get(counter).getId();
             if(volunteerid != userId){
+                Retrofit retrofit = ConfigAPI.getRetrofitClient();
                 Apply apply = new Apply(volunteerid, id, 0);
                 ApplyAPI applyAPI = retrofit.create(ApplyAPI.class);
                 Call callType = applyAPI.updateApply(apply);
@@ -219,6 +221,7 @@ public class Service implements Serializable {
     }
 
     public void deleteApply(){
+        Retrofit retrofit = ConfigAPI.getRetrofitClient();
         Apply apply = new Apply(executorUser.getId(), id, 0);
         ApplyAPI applyAPI = retrofit.create(ApplyAPI.class);
         Call callType = applyAPI.updateApply(apply);
@@ -240,6 +243,7 @@ public class Service implements Serializable {
         Apply apply = new Apply(executorUser.getId(), id, 2);
         apply.setNote(note);
         apply.setCommentaire(comment);
+        Retrofit retrofit = ConfigAPI.getRetrofitClient();
         ApplyAPI applyAPI = retrofit.create(ApplyAPI.class);
         Call callType = applyAPI.updateApply(apply);
 
@@ -261,7 +265,7 @@ public class Service implements Serializable {
     private void givePointToExecutor(){
         int executorNewAmountPoints = executorUser.getPoints() + profit;
         executorUser.setPoints(executorNewAmountPoints);
-
+        Retrofit retrofit = ConfigAPI.getRetrofitClient();
         UserAPI userAPI = retrofit.create(UserAPI.class);
         Call callType = userAPI.updateUser(executorUser.getId(), executorUser);
 

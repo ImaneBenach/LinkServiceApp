@@ -12,12 +12,12 @@ import com.google.gson.Gson;
 import com.imane.linkserviceapp.Classes.User;
 import com.imane.linkserviceapp.MesServices.MesServicesActivity;
 
-import org.json.JSONObject;
 
 public class HomeActivity extends AppCompatActivity {
 
     Button btnServices, btnMesServices, btnMessages, btnProfil ;
     User userConnected;
+    private final Gson gson = new Gson();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

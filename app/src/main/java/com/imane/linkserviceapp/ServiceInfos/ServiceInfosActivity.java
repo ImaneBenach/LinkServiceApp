@@ -19,6 +19,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.gson.Gson;
 import com.imane.linkserviceapp.API.ApplyAPI;
 import com.imane.linkserviceapp.API.ConfigAPI;
+import com.imane.linkserviceapp.API.TypeAPI;
 import com.imane.linkserviceapp.Classes.API;
 import com.imane.linkserviceapp.Classes.Apply;
 import com.imane.linkserviceapp.Classes.Service;
@@ -145,7 +146,7 @@ public class ServiceInfosActivity extends AppCompatActivity implements Serializa
         profitService.setText(Integer.toString(service.getProfit()));
         descriptionService.setText(service.getDescription());
         dateService.setText(service.getDate());
-        typeService.setText(TypeService.getNameTypeServiceById(service.getId_type()));
+        displayNameTypeService(typeService, service.getId_type());
     }
 
     private String getCreatorName(){
@@ -171,6 +172,31 @@ public class ServiceInfosActivity extends AppCompatActivity implements Serializa
             e.printStackTrace();
         }
         return null;
+    }
+
+    private void displayNameTypeService(TextView typeService, int idType){
+        Retrofit retrofit = ConfigAPI.getRetrofitClient();
+        TypeAPI typeAPI = retrofit.create(TypeAPI.class);
+        Call callType = typeAPI.getTypesActives(idType);
+
+        callType.enqueue(
+            new Callback<List<TypeService>>() {
+                @Override
+                public void onResponse(Call<List<TypeService>> call, Response<List<TypeService>> response) {
+                    if(response.code()==200){
+                        List<TypeService> users = response.body();
+                        if(users != null && users.size() > 0){
+                            TypeService type = users.get(0);
+                            typeService.setText(type.getName());
+                        }
+                    }
+                }
+
+                @Override
+                public void onFailure(Call call, Throwable t) {
+                }
+            }
+        );
     }
 
     private void displaySignalementPopup(View view){

@@ -17,11 +17,6 @@ import com.imane.linkserviceapp.API.UserAPI;
 import com.imane.linkserviceapp.Classes.User;
 import com.imane.linkserviceapp.Classes.API;
 
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
 
@@ -34,7 +29,6 @@ public class LoginActivity extends AppCompatActivity {
 
     Button btnInscription, btnSeConnecter ;
     EditText etEmail, etMdp ;
-    private final Gson gson = new Gson();
 
     Retrofit retrofit = ConfigAPI.getRetrofitClient();
 
@@ -82,7 +76,7 @@ public class LoginActivity extends AppCompatActivity {
                                         User userConnected = users.get(0);
 
                                         Intent intent = new Intent(LoginActivity.this,HomeActivity.class);
-                                        intent.putExtra("userConnected",userConnected);
+                                        intent.putExtra("userConnected", userConnected);
                                         startActivity(intent);
                                         finish();
                                     } else {
@@ -113,7 +107,7 @@ public class LoginActivity extends AppCompatActivity {
 
 
     }
-
+/*
     private User getUserConnectedInfos(User userId){
         JSONObject jsonParam = new JSONObject();
         JSONObject jsonParamValues = new JSONObject();
@@ -140,6 +134,6 @@ public class LoginActivity extends AppCompatActivity {
             return null;
         }
 
-    }
+    }*/
 }
 
