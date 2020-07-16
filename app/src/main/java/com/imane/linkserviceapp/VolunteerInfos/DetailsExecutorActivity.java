@@ -5,8 +5,10 @@ import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.imane.linkserviceapp.API.BadgeAPI;
 import com.imane.linkserviceapp.API.ConfigAPI;
 import com.imane.linkserviceapp.API.UserAPI;
+import com.imane.linkserviceapp.Classes.Badge;
 import com.imane.linkserviceapp.Classes.Service;
 import com.imane.linkserviceapp.Classes.User;
 import com.imane.linkserviceapp.R;
@@ -20,7 +22,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 
-public class DefailtsExecutorActivity extends AppCompatActivity {
+public class DetailsExecutorActivity extends AppCompatActivity {
 
     TextView tv_name;
     TextView tv_surname;
@@ -34,7 +36,6 @@ public class DefailtsExecutorActivity extends AppCompatActivity {
 
     Retrofit retrofit = ConfigAPI.getRetrofitClient();
 
-
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,7 +45,7 @@ public class DefailtsExecutorActivity extends AppCompatActivity {
 //        tv_surname = findViewById(R.id.executor_surname);
         iv_photo_profil = findViewById(R.id.executor_fdp);
         iv_bagde = findViewById(R.id.executor_badge_img);
-        tv_badge_name = findViewById(R.id.executor_badge);
+//        tv_badge_name = findViewById(R.id.executor_badge);
 
         VolunteerID = (int) getIntent().getSerializableExtra("volunteerID");
         userConnected = (User) getIntent().getSerializableExtra("userConnected");
@@ -53,10 +54,39 @@ public class DefailtsExecutorActivity extends AppCompatActivity {
         getVolunteer(VolunteerID);
         iv_photo_profil.setImageResource(R.drawable.photo_profil);
         iv_bagde.setImageResource(R.drawable.photo_badge);
+        getBadge(VolunteerID, service.getId());
+    }
+
+    public void display(Badge BestBadge){
+        tv_badge_name = findViewById(R.id.executor_badge);
+        tv_badge_name.setText(BestBadge.getName());
     }
 
     public void getBadge(int VolunteerID, int ServiceTypeID){
+        BadgeAPI badgeAPI = retrofit.create(BadgeAPI.class);
+        Call callBadge = badgeAPI.getBestBadge(VolunteerID, ServiceTypeID);
 
+        callBadge.enqueue(
+                new Callback<List<Badge>>() {
+                    @Override
+                    public void onResponse(Call<List<Badge>> call, Response<List<Badge>> response) {
+                        Log.d("Response code", String.valueOf(response.code()));
+                        if (response.code() == 200){
+                            List<Badge> badges = (List<Badge>) response.body();
+                            Log.d("Badge", String.valueOf(badges.get(0).getId()));
+
+                            if (badges != null){
+                                display(badges.get(0));
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<List<Badge>> call, Throwable t) {
+                        Log.d("Failure, code ", t.toString());
+                    }
+                }
+        );
     }
 
     public void displayVolunteerInfos(User volunteer){
@@ -69,7 +99,7 @@ public class DefailtsExecutorActivity extends AppCompatActivity {
 
     public void getVolunteer(int VolunteerID){
         UserAPI userAPI = retrofit.create(UserAPI.class);
-        Call callUser = userAPI.getOne(VolunteerID);
+        Call<List<User>> callUser = userAPI.getOne(VolunteerID);
 
         callUser.enqueue(
                 new Callback<List<User>>(){
