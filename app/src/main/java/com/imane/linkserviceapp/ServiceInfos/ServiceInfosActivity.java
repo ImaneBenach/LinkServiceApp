@@ -3,7 +3,6 @@ package com.imane.linkserviceapp.ServiceInfos;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -146,7 +145,7 @@ public class ServiceInfosActivity extends AppCompatActivity implements Serializa
         profitService.setText(Integer.toString(service.getProfit()));
         descriptionService.setText(service.getDescription());
         dateService.setText(service.getDate());
-        typeService.setText(TypeService.getNameById(service.getId_type()));
+        typeService.setText(TypeService.getNameTypeServiceById(service.getId_type()));
     }
 
     private String getCreatorName(){
