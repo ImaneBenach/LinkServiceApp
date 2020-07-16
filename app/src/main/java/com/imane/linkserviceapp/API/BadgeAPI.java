@@ -13,7 +13,7 @@ public interface BadgeAPI {
     @GET("/badge/own/{id_user}&{id_type}")
     Call<List<Badge>> getBestBadge(
             @Path("id_user") int id_user,
-            @Path("if_type") int id_type
+            @Path("id_type") int id_type
     );
 
 }

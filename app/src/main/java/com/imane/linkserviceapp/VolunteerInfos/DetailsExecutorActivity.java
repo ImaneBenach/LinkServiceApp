@@ -1,7 +1,9 @@
 package com.imane.linkserviceapp.VolunteerInfos;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -12,6 +14,7 @@ import com.imane.linkserviceapp.Classes.Badge;
 import com.imane.linkserviceapp.Classes.Service;
 import com.imane.linkserviceapp.Classes.User;
 import com.imane.linkserviceapp.R;
+import com.imane.linkserviceapp.serviceMenuActivity;
 
 import java.util.List;
 
@@ -41,11 +44,9 @@ public class DetailsExecutorActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_details_executor);
 
-//        tv_name = findViewById(R.id.executor_name);
-//        tv_surname = findViewById(R.id.executor_surname);
+        // IMAGES static pour le moment car pas possible de les récupérer sur un serveur
         iv_photo_profil = findViewById(R.id.executor_fdp);
         iv_bagde = findViewById(R.id.executor_badge_img);
-//        tv_badge_name = findViewById(R.id.executor_badge);
 
         VolunteerID = (int) getIntent().getSerializableExtra("volunteerID");
         userConnected = (User) getIntent().getSerializableExtra("userConnected");
@@ -54,12 +55,21 @@ public class DetailsExecutorActivity extends AppCompatActivity {
         getVolunteer(VolunteerID);
         iv_photo_profil.setImageResource(R.drawable.photo_profil);
         iv_bagde.setImageResource(R.drawable.photo_badge);
-        getBadge(VolunteerID, service.getId());
+        getBadge(VolunteerID, service.getId_type());
+//        Log.d("service", service.getName());
+//        Log.d("service id", String.valueOf(service.getId()));
+
     }
+
 
     public void display(Badge BestBadge){
         tv_badge_name = findViewById(R.id.executor_badge);
         tv_badge_name.setText(BestBadge.getName());
+    }
+
+    public void displayNoBadge(){
+        tv_badge_name = findViewById(R.id.executor_badge);
+        tv_badge_name.setText("Pas de badge pour ce type de service ");
     }
 
     public void getBadge(int VolunteerID, int ServiceTypeID){
@@ -73,10 +83,11 @@ public class DetailsExecutorActivity extends AppCompatActivity {
                         Log.d("Response code", String.valueOf(response.code()));
                         if (response.code() == 200){
                             List<Badge> badges = (List<Badge>) response.body();
-                            Log.d("Badge", String.valueOf(badges.get(0).getId()));
 
-                            if (badges != null){
+                            if (badges != null && badges.size() > 0){
                                 display(badges.get(0));
+                            }else {
+                                displayNoBadge();
                             }
                         }
                     }
@@ -84,6 +95,7 @@ public class DetailsExecutorActivity extends AppCompatActivity {
                     @Override
                     public void onFailure(Call<List<Badge>> call, Throwable t) {
                         Log.d("Failure, code ", t.toString());
+                        displayNoBadge();
                     }
                 }
         );
@@ -112,7 +124,7 @@ public class DetailsExecutorActivity extends AppCompatActivity {
                             Log.d("Volunter", volunteer.get(0).getName());
 
                             if (volunteer != null){
-                                Log.d("Volunteer ID : ", String.valueOf(volunteer.get(0).getId()));
+                                Log.d("Volunteer ID", String.valueOf(volunteer.get(0).getId()));
                                 displayVolunteerInfos(volunteer.get(0));
                             }
                         }
@@ -120,7 +132,7 @@ public class DetailsExecutorActivity extends AppCompatActivity {
 
                     @Override
                     public void onFailure(Call<List<User>> call, Throwable t) {
-                        Log.d("Failure, code : ", t.toString());
+                        Log.d("Failure, code", t.toString());
                     }
                 }
         );
