@@ -50,12 +50,13 @@ public class ServicesListActivity extends AppCompatActivity {
         String ServicesList = "";
         int counter;
 
-        Log.d("ICI","CA MARCHE PAS");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_services);
 
         userConnected = (User) getIntent().getSerializableExtra("userConnected");
         String idTypeService = getIntent().getStringExtra("typeService");
+
+
 
         try {
             jsonParamValues.put("where"," WHERE id_type="+idTypeService);

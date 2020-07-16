@@ -15,6 +15,8 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.gson.Gson;
+import com.imane.linkserviceapp.API.ConfigAPI;
+import com.imane.linkserviceapp.API.TypeAPI;
 import com.imane.linkserviceapp.Classes.Service;
 import com.imane.linkserviceapp.Classes.TypeService;
 import com.imane.linkserviceapp.Classes.User;
@@ -24,6 +26,12 @@ import com.imane.linkserviceapp.VolunteerInfos.DefailtsExecutorActivity;
 import com.imane.linkserviceapp.VolunteersList.VolunteersListActivity;
 
 import java.io.Serializable;
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
 
 public class ServiceInfosActivityCreator extends AppCompatActivity implements Serializable {
     Service service;
@@ -132,7 +140,32 @@ public class ServiceInfosActivityCreator extends AppCompatActivity implements Se
         profitService.setText(Integer.toString(service.getProfit()));
         descriptionService.setText(service.getDescription());
         dateService.setText(service.getDate());
-        typeService.setText(TypeService.getNameTypeServiceById(service.getId_type()));
+        displayNameTypeService(typeService, service.getId_type());
+    }
+
+    private void displayNameTypeService(TextView typeService, int idType){
+        Retrofit retrofit = ConfigAPI.getRetrofitClient();
+        TypeAPI typeAPI = retrofit.create(TypeAPI.class);
+        Call callType = typeAPI.getTypesActives(idType);
+
+        callType.enqueue(
+                new Callback<List<TypeService>>() {
+                    @Override
+                    public void onResponse(Call<List<TypeService>> call, Response<List<TypeService>> response) {
+                        if(response.code()==200){
+                            List<TypeService> users = response.body();
+                            if(users != null && users.size() > 0){
+                                TypeService type = users.get(0);
+                                typeService.setText(type.getName());
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call call, Throwable t) {
+                    }
+                }
+        );
     }
 
     private void displayDeletePopup(View view){
