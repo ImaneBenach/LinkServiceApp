@@ -18,6 +18,7 @@ import com.imane.linkserviceapp.Classes.Service;
 import com.imane.linkserviceapp.Classes.User;
 import com.imane.linkserviceapp.R;
 import com.imane.linkserviceapp.ServiceInfos.ServiceInfosActivityCreator;
+import com.imane.linkserviceapp.VolunteerInfos.DetailsExecutorActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,6 +50,17 @@ public class VolunteerListAdapter extends RecyclerView.Adapter<VolunteerListAdap
         holder.v_name.setText(Users.get(position).getName());
         //holder.v_image.setImageResource(Users.get(position).getImage());
         //holder.v_desc.setText(Users.get(position).getDescription());
+
+        holder.btnUserDetails.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, DetailsExecutorActivity.class);
+                intent.putExtra("volunteerID", Users.get(position).getId());
+                intent.putExtra("userConnected", userConnected);
+                intent.putExtra("service", service);
+                context.startActivity(intent);
+            }
+        });
 
         holder.btnValidateVolunteer.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -103,6 +115,7 @@ public class VolunteerListAdapter extends RecyclerView.Adapter<VolunteerListAdap
         TextView v_name;
         //TextView v_desc;
         Button btnValidateVolunteer;
+        Button btnUserDetails;
         View itemView1;
 
         Holderview(View itemview){
@@ -111,6 +124,7 @@ public class VolunteerListAdapter extends RecyclerView.Adapter<VolunteerListAdap
             v_name = (TextView) itemview.findViewById(R.id.volunteer_name);
             //v_desc = (TextView) itemview.findViewById(R.id.desc);
             btnValidateVolunteer = (Button) itemview.findViewById(R.id.btnValidateVolunteer);
+            btnUserDetails = (Button) itemview.findViewById(R.id.btnUserDetails);
             itemView1 = itemview;
         }
     }

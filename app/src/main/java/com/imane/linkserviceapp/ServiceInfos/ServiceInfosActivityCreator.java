@@ -22,7 +22,7 @@ import com.imane.linkserviceapp.Classes.TypeService;
 import com.imane.linkserviceapp.Classes.User;
 import com.imane.linkserviceapp.MesServices.MesServicesActivity;
 import com.imane.linkserviceapp.R;
-import com.imane.linkserviceapp.VolunteerInfos.DefailtsExecutorActivity;
+import com.imane.linkserviceapp.VolunteerInfos.DetailsExecutorActivity;
 import com.imane.linkserviceapp.VolunteersList.VolunteersListActivity;
 
 import java.io.Serializable;
@@ -92,7 +92,7 @@ public class ServiceInfosActivityCreator extends AppCompatActivity implements Se
             btn_details_executor.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(ServiceInfosActivityCreator.this, DefailtsExecutorActivity.class);
+                    Intent intent = new Intent(ServiceInfosActivityCreator.this, DetailsExecutorActivity.class);
                     intent.putExtra("volunteerID", service.getExecutorUser().getId());
                     intent.putExtra("userConnected", userConnected);
                     intent.putExtra("service", service);
