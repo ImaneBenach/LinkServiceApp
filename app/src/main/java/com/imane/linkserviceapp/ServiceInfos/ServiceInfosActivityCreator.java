@@ -20,6 +20,7 @@ import com.imane.linkserviceapp.Classes.TypeService;
 import com.imane.linkserviceapp.Classes.User;
 import com.imane.linkserviceapp.MesServices.MesServicesActivity;
 import com.imane.linkserviceapp.R;
+import com.imane.linkserviceapp.VolunteerInfos.DefailtsExecutorActivity;
 import com.imane.linkserviceapp.VolunteersList.VolunteersListActivity;
 
 import java.io.Serializable;
@@ -43,13 +44,13 @@ public class ServiceInfosActivityCreator extends AppCompatActivity implements Se
         final Button buttonEndService = findViewById(R.id.buttonEndService);
         final Button buttonDeleteService = findViewById(R.id.buttonDeleteService);
         final Button btnVolunteers = findViewById(R.id.buttonVolunteers);
-        final Button btnsendMessage = findViewById(R.id.btnsendMessage);
+        final Button btn_details_executor = findViewById(R.id.btn_details_executor);
         final LinearLayout VolunteerInfos = findViewById(R.id.volunteer_infos);
 
         service.setExecutorIfExist();
 
         if(service.getExecutorUser() == null){
-            btnsendMessage.setVisibility(View.INVISIBLE);
+            btn_details_executor.setVisibility(View.INVISIBLE);
             VolunteerInfos.setVisibility(View.INVISIBLE);
             buttonDeleteService.setVisibility(View.VISIBLE);
             buttonDeleteService.setOnClickListener(new View.OnClickListener() {
@@ -74,11 +75,22 @@ public class ServiceInfosActivityCreator extends AppCompatActivity implements Se
             buttonDeleteService.setVisibility(View.INVISIBLE);
             btnVolunteers.setVisibility(View.INVISIBLE);
 
-            btnsendMessage.setVisibility(View.VISIBLE);
+            btn_details_executor.setVisibility(View.VISIBLE);
             VolunteerInfos.setVisibility(View.VISIBLE);
 
             final TextView volunteer_name = findViewById(R.id.volunteer_name);
             volunteer_name.setText(service.getExecutorUser().getName());
+
+            btn_details_executor.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(ServiceInfosActivityCreator.this, DefailtsExecutorActivity.class);
+                    intent.putExtra("volunteerID", service.getExecutorUser().getId());
+                    intent.putExtra("userConnected", userConnected);
+                    intent.putExtra("service", service);
+                    startActivity(intent);
+                }
+            });
 
 
             buttonEndService.setVisibility(View.VISIBLE);
