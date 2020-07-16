@@ -1,18 +1,17 @@
 package com.imane.linkserviceapp.Classes;
 
-
-import android.util.Log;
-
-import com.google.gson.Gson;
-import com.imane.linkserviceapp.Classes.API;
-
-import org.json.JSONException;
-import org.json.JSONObject;
+import com.imane.linkserviceapp.API.ConfigAPI;
+import com.imane.linkserviceapp.API.UserAPI;
 
 import java.io.IOException;
 import java.io.Serializable;
 import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
 
 public class User implements Serializable {
     private  int id;
@@ -25,6 +24,8 @@ public class User implements Serializable {
     private String adress;
     private String city;
     private String type;
+
+    Retrofit retrofit = ConfigAPI.getRetrofitClient();
 
     public User(int idUser){
         id = idUser;
@@ -90,32 +91,27 @@ public class User implements Serializable {
         inputValues.put("points", "10");
         inputValues.put("category", "course");
         inputValues.put("type",type);
-       // updateInDatabase(inputValues, "create");
         return inputValues;
     }
 
     public boolean buyService(int cost){
         if(points - cost >= 0){
-            setPoints(points-cost);
+            points -= cost;
 
-            JSONObject jsonParam = new JSONObject();
-            JSONObject jsonParamValues = new JSONObject();
+            UserAPI userAPI = retrofit.create(UserAPI.class);
+            Call callType = userAPI.updateUser(id, this);
 
-            try {
-                jsonParamValues.put("id", id);
-                jsonParamValues.put("points", points);
+            callType.enqueue(
+                new Callback<Void>() {
+                    @Override
+                    public void onResponse(Call<Void> call, Response<Void> response) {
+                    }
 
-                jsonParam.put("table", "user");
-                jsonParam.put("values", jsonParamValues);
-                Log.d("JSONPARAM",jsonParam.toString());
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-            try {
-                API.sendRequest(jsonParam.toString(), "update");
-            } catch (IOException | InterruptedException e) {
-                e.printStackTrace();
-            }
+                    @Override
+                    public void onFailure(Call call, Throwable t) {
+                    }
+                }
+            );
 
             return true;
         }

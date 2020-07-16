@@ -14,7 +14,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.SearchView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.imane.linkserviceapp.API.ConfigAPI;
+import com.imane.linkserviceapp.API.TypeAPI;
+import com.imane.linkserviceapp.API.UserAPI;
 import com.imane.linkserviceapp.Classes.API;
 import com.imane.linkserviceapp.Classes.TypeService;
 
@@ -29,20 +33,26 @@ import java.util.List;
 import com.google.gson.Gson;
 import com.imane.linkserviceapp.Classes.User;
 import com.imane.linkserviceapp.HomeActivity;
+import com.imane.linkserviceapp.LoginActivity;
 import com.imane.linkserviceapp.R;
 import com.imane.linkserviceapp.serviceMenuActivity;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
 
-public class ServicesActivity extends AppCompatActivity {
+
+public class TypeServicesActivity extends AppCompatActivity {
 
     RecyclerView listServices;
     List<TypeService> typeServices = new ArrayList<>();
-    ServicesAdapter adapter;
+    TypeServicesAdapter adapter;
     SearchView searchView;
     User userConnected;
 
     private final Gson gson = new Gson();
-
+    Retrofit retrofit = ConfigAPI.getRetrofitClient();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,32 +65,30 @@ public class ServicesActivity extends AppCompatActivity {
         setContentView(R.layout.activity_services);
         userConnected = (User) getIntent().getSerializableExtra("userConnected");
 
+        TypeAPI typeAPI = retrofit.create(TypeAPI.class);
+        Call callType = typeAPI.getTypesActives();
 
-        try {
-            jsonParam.put("table", "type_service");
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        try {
-            typeServicesListAsString = API.sendRequest(jsonParam.toString(), "readAll");
-        } catch (IOException | InterruptedException e) {
-            e.printStackTrace();
-        }
+        callType.enqueue(
+            new Callback<List<TypeService>>() {
+                @Override
+                public void onResponse(Call<List<TypeService>> call, Response<List<TypeService>> response) {
+                    Log.d("response", String.valueOf(response.code()));
+                    if(response.code()==200){
+                        List<TypeService> types = response.body();
+                        if(types != null && types.size() > 0){
+                            typeServices = types;
+                            adapter = new TypeServicesAdapter(typeServices, TypeServicesActivity.this, userConnected);
+                            listServices.setAdapter(adapter);
+                        }
+                    }
+                }
 
+                @Override
+                public void onFailure(Call call, Throwable t) {
 
-        if (!typeServicesListAsString.equals("")) {
-            if (typeServicesListAsString.startsWith("i", 2)) {
-                typeData.put("0", gson.fromJson(typeServicesListAsString, TypeService.class));
-            } else {
-                typeData = API.decodeResponseMultipleAsTypeService(typeServicesListAsString);
+                }
             }
-
-            for (counter = 0; counter < typeData.size(); counter++){
-                TypeService type = typeData.get(Integer.toString(counter));
-                typeServices.add(type);
-            }
-
-        }
+        );
 
         assert getSupportActionBar() != null;   //null check
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -89,8 +97,6 @@ public class ServicesActivity extends AppCompatActivity {
         listServices.setHasFixedSize(true);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         listServices.setLayoutManager(linearLayoutManager);
-        adapter = new ServicesAdapter(typeServices, ServicesActivity.this, userConnected);
-        listServices.setAdapter(adapter);
     }
 
     @Override

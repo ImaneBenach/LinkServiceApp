@@ -2,7 +2,6 @@ package com.imane.linkserviceapp.TypesService;
 
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,13 +20,13 @@ import com.imane.linkserviceapp.ServicesList.ServicesListActivity;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ServicesAdapter extends RecyclerView.Adapter<ServicesAdapter.Holderview> {
+public class TypeServicesAdapter extends RecyclerView.Adapter<TypeServicesAdapter.Holderview> {
 
     private List<TypeService> typeServices;
     private Context context ;
     private User userConnected;
 
-    public ServicesAdapter(List<TypeService> typeServices, Context context, User user) {
+    public TypeServicesAdapter(List<TypeService> typeServices, Context context, User user) {
         this.userConnected = user;
         this.typeServices = typeServices;
         this.context = context;

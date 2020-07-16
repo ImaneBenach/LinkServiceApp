@@ -13,7 +13,7 @@
         android:usesCleartextTraffic="true">
         <activity android:name=".MesServices.MesServicesActivity"></activity>
         <activity android:name=".JustificatifsActivity" />
-        <activity android:name=".TypesService.ServicesActivity" />
+        <activity android:name=".TypesService.TypeServicesActivity" />
         <activity android:name=".ServicesList.ServicesListActivity" />
         <activity android:name=".ServiceInfos.ServiceInfosActivity" />
         <activity android:name=".ServiceInfos.ServiceInfosActivityCreator" />

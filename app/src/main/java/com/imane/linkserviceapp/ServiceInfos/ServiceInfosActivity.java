@@ -2,7 +2,6 @@ package com.imane.linkserviceapp.ServiceInfos;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
@@ -10,47 +9,44 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
-import android.widget.SearchView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonObject;
+import com.imane.linkserviceapp.API.ApplyAPI;
+import com.imane.linkserviceapp.API.ConfigAPI;
 import com.imane.linkserviceapp.Classes.API;
+import com.imane.linkserviceapp.Classes.Apply;
 import com.imane.linkserviceapp.Classes.Service;
 import com.imane.linkserviceapp.Classes.TypeService;
 import com.imane.linkserviceapp.Classes.User;
-import com.imane.linkserviceapp.HomeActivity;
 import com.imane.linkserviceapp.MesServices.MesServicesActivity;
 import com.imane.linkserviceapp.R;
 import com.imane.linkserviceapp.ServicesList.ServicesListActivity;
-import com.imane.linkserviceapp.ServicesList.ServicesListAdapter;
-import com.imane.linkserviceapp.TypesService.ServicesActivity;
-import com.imane.linkserviceapp.serviceMenuActivity;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
 import java.io.Serializable;
-import java.util.HashMap;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
 
 public class ServiceInfosActivity extends AppCompatActivity implements Serializable {
     Service service;
     User userConnected;
     private final Gson gson = new Gson();
     String originActivity;
-
+    Retrofit retrofit = ConfigAPI.getRetrofitClient();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,13 +65,30 @@ public class ServiceInfosActivity extends AppCompatActivity implements Serializa
 
         final Button btnPostulate = findViewById(R.id.buttonPostuler);
 
-        btnPostulate.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                service.apply(userConnected.getId());
-                Log.i("click on postulate", service.getName());
-            }
-        });
+        ApplyAPI applyAPI = retrofit.create(ApplyAPI.class);
+        Call callType = applyAPI.existApply(service.getId(), userConnected.getId());
+        callType.enqueue(
+                new Callback<List<Apply>>() {
+                    @Override
+                    public void onResponse(Call<List<Apply>> call, Response<List<Apply>> response) {
+                        List<Apply> applies = response.body();
+                        if(applies == null || applies.size() == 0){
+                            btnPostulate.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    service.apply(userConnected.getId());
+                                }
+                            });
+                        } else {
+                            btnPostulate.setVisibility(View.INVISIBLE);
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call call, Throwable t) {
+                    }
+                }
+        );
 
         assert getSupportActionBar() != null;   //null check
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -198,12 +211,10 @@ public class ServiceInfosActivity extends AppCompatActivity implements Serializa
     }
 
     private void checkIfCreatorIsConnectedUser(User userCreator){
-
         if(userCreator.getId() == userConnected.getId()){
             final Button btnPostulate = findViewById(R.id.buttonPostuler);
             btnPostulate.setVisibility(View.INVISIBLE);
         }
-
     }
 
 }

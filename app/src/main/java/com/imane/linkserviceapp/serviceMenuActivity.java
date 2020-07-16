@@ -5,16 +5,11 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.gson.Gson;
-import com.imane.linkserviceapp.Classes.Service;
 import com.imane.linkserviceapp.Classes.User;
-import com.imane.linkserviceapp.MesServices.MesServicesActivity;
-import com.imane.linkserviceapp.ServicesList.ServicesListActivity;
-import com.imane.linkserviceapp.TypesService.ServicesActivity;
+import com.imane.linkserviceapp.TypesService.TypeServicesActivity;
 
 import java.io.Serializable;
 
@@ -22,7 +17,6 @@ public class serviceMenuActivity extends AppCompatActivity implements Serializab
 
     Button btnParticipe, btnPropose;
     User userConnected;
-    private final Gson gson = new Gson();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,7 +31,7 @@ public class serviceMenuActivity extends AppCompatActivity implements Serializab
         btnParticipe.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(serviceMenuActivity.this, ServicesActivity.class);
+                Intent intent = new Intent(serviceMenuActivity.this, TypeServicesActivity.class);
                 intent.putExtra("userConnected", userConnected);
                 startActivity(intent);
                 finish();
