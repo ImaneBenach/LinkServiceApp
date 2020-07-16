@@ -62,7 +62,6 @@ public class LoginActivity extends AppCompatActivity {
 
                     final String email = etEmail.getText().toString();
                     final String mdp = etMdp.getText().toString();
-                    String userId = "";
                     User user = null;
                     try {
                         user = new User(email, API.passwordHash(mdp));
@@ -77,11 +76,8 @@ public class LoginActivity extends AppCompatActivity {
                         new Callback<List<User>>() {
                             @Override
                             public void onResponse(Call<List<User>> call, Response<List<User>> response) {
-                                Log.d("response", String.valueOf(response.code()));
                                 if(response.code()==200){
                                     List<User> users = response.body();
-
-
                                     if(users != null && users.size() > 0){
                                         User userConnected = users.get(0);
 

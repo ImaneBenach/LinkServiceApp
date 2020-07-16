@@ -9,36 +9,23 @@ import android.view.View;
 import android.widget.Button;
 
 import com.google.gson.Gson;
-import com.imane.linkserviceapp.Classes.API;
-import com.imane.linkserviceapp.Classes.Service;
 import com.imane.linkserviceapp.Classes.User;
 import com.imane.linkserviceapp.MesServices.MesServicesActivity;
-import com.imane.linkserviceapp.TypesService.ServicesActivity;
 
-import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.io.IOException;
 
 public class HomeActivity extends AppCompatActivity {
 
     Button btnServices, btnMesServices, btnMessages, btnProfil ;
     User userConnected;
-    private final Gson gson = new Gson();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        JSONObject jsonParam = new JSONObject();
-        JSONObject jsonParamValues = new JSONObject();
-        String UserData = "";
-
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
         userConnected = (User) getIntent().getSerializableExtra("userConnected");
-
-        Log.i("USER CONNECTED", userConnected.getName());
 
         btnServices = (Button) findViewById(R.id.btnServices);
         btnMesServices = (Button) findViewById(R.id.btnMesServices);

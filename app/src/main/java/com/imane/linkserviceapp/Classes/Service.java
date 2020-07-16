@@ -1,10 +1,12 @@
 package com.imane.linkserviceapp.Classes;
 
-import android.sax.ElementListener;
 import android.util.Log;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonObject;
+import com.imane.linkserviceapp.API.ApplyAPI;
+import com.imane.linkserviceapp.API.ConfigAPI;
+import com.imane.linkserviceapp.API.ServiceAPI;
+import com.imane.linkserviceapp.API.UserAPI;
 import com.imane.linkserviceapp.R;
 
 import org.json.JSONException;
@@ -12,10 +14,14 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.io.Serializable;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
 
 public class Service implements Serializable {
     private int id;
@@ -33,6 +39,7 @@ public class Service implements Serializable {
     private int id_creator;
     private User executorUser;
 
+    Retrofit retrofit = ConfigAPI.getRetrofitClient();
 
     public Service(int idService, String n, String desc, String da, String dl, int cost, int profit, String adress, String city, int pc, String access, int type, int creator){
         id = idService;
@@ -96,32 +103,42 @@ public class Service implements Serializable {
     }
 
     public void delete(){
-        JSONObject jsonParamValues = new JSONObject();
-
         deleteApply();
+        ServiceAPI serviceAPI = retrofit.create(ServiceAPI.class);
+        Call callType = serviceAPI.updateService(this);
 
-        try {
-            jsonParamValues.put("id", id);
-            jsonParamValues.put("Statut",0);
+        callType.enqueue(
+                new Callback<Void>() {
+                    @Override
+                    public void onResponse(Call<Void> call, Response<Void> response) {
+                    }
 
-            sendToAPI(jsonParamValues, "service", "update");
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+                    @Override
+                    public void onFailure(Call call, Throwable t) {
+
+                    }
+                }
+        );
+
     }
 
     public void apply(int userId) {
-        JSONObject jsonParamValues = new JSONObject();
+        Apply apply = new Apply(userId, id, 1);
+        ApplyAPI applyAPI = retrofit.create(ApplyAPI.class);
+        Call callType = applyAPI.setApply(apply);
 
-        try {
-            jsonParamValues.put("id_service", id);
-            jsonParamValues.put("id_user", userId);
-            jsonParamValues.put("execute", 1);
+        callType.enqueue(
+                new Callback<Void>() {
+                    @Override
+                    public void onResponse(Call<Void> call, Response<Void> response) {
+                    }
 
-            sendToAPI(jsonParamValues, "apply", "create");
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+                    @Override
+                    public void onFailure(Call call, Throwable t) {
+
+                    }
+                }
+        );
     }
 
     public List<User> getVolunteers(){
@@ -156,79 +173,109 @@ public class Service implements Serializable {
     }
 
     public void validateVolunteer(int userId, List<User> listVolunteers){
-        JSONObject jsonParamValues = new JSONObject();
+        Apply apply = new Apply(userId, id, 2);
+        ApplyAPI applyAPI = retrofit.create(ApplyAPI.class);
+        Call callType = applyAPI.updateApply(apply);
 
-        try {
-            jsonParamValues.put("id_service", id);
-            jsonParamValues.put("id_user", userId);
-            jsonParamValues.put("execute", 2);
+        callType.enqueue(
+            new Callback<Void>() {
+                @Override
+                public void onResponse(Call<Void> call, Response<Void> response) {
+                    if(response.code() == 200){
+                        unvalidateOtherVolunteers(userId, listVolunteers);
+                    }
+                }
 
-            sendToAPI(jsonParamValues, "apply", "update");
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        unvalidateOtherVolunteers(userId, listVolunteers);
+                @Override
+                public void onFailure(Call call, Throwable t) {
+                }
+            }
+        );
+
     }
 
     private void unvalidateOtherVolunteers(int userId, List<User> listVolunteers){
         int counter;
-
         for (counter = 0; counter < listVolunteers.size(); counter++){
-            JSONObject jsonParamValues = new JSONObject();
-            if(listVolunteers.get(counter).getId() != userId){
-                try {
-                    jsonParamValues.put("id_service", id);
-                    jsonParamValues.put("id_user", listVolunteers.get(counter).getId());
-                    jsonParamValues.put("execute", 0);
+            int volunteerid = listVolunteers.get(counter).getId();
+            if(volunteerid != userId){
+                Apply apply = new Apply(volunteerid, id, 0);
+                ApplyAPI applyAPI = retrofit.create(ApplyAPI.class);
+                Call callType = applyAPI.updateApply(apply);
 
-                    sendToAPI(jsonParamValues, "apply", "update");
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
+                callType.enqueue(
+                    new Callback<Void>() {
+                        @Override
+                        public void onResponse(Call<Void> call, Response<Void> response) {
+                        }
+
+                        @Override
+                        public void onFailure(Call call, Throwable t) {
+                        }
+                    }
+                );
             }
         }
     }
 
     public void deleteApply(){
-        JSONObject jsonParamValues = new JSONObject();
+        Apply apply = new Apply(executorUser.getId(), id, 0);
+        ApplyAPI applyAPI = retrofit.create(ApplyAPI.class);
+        Call callType = applyAPI.updateApply(apply);
 
-        try {
-            jsonParamValues.put("id_service", id);
-            jsonParamValues.put("execute",0);
+        callType.enqueue(
+                new Callback<Void>() {
+                    @Override
+                    public void onResponse(Call<Void> call, Response<Void> response) {
+                    }
 
-            sendToAPI(jsonParamValues, "apply", "deleteWithFilter");
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+                    @Override
+                    public void onFailure(Call call, Throwable t) {
+                    }
+                }
+        );
     }
 
     public void setEvaluation(int note, String comment){
-        JSONObject jsonParamValues = new JSONObject();
+        Apply apply = new Apply(executorUser.getId(), id, 2);
+        apply.setNote(note);
+        apply.setCommentaire(comment);
+        ApplyAPI applyAPI = retrofit.create(ApplyAPI.class);
+        Call callType = applyAPI.updateApply(apply);
 
-        try {
-            jsonParamValues.put("id_service", id);
-            jsonParamValues.put("id_user", executorUser.getId());
-            jsonParamValues.put("note",Integer.toString(note));
-            jsonParamValues.put("commentaire", comment);
+        callType.enqueue(
+                new Callback<Void>() {
+                    @Override
+                    public void onResponse(Call<Void> call, Response<Void> response) {
+                    }
 
-            sendToAPI(jsonParamValues, "apply", "update");
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+                    @Override
+                    public void onFailure(Call call, Throwable t) {
+                    }
+                }
+        );
+
         givePointToExecutor();
     }
 
     private void givePointToExecutor(){
-        JSONObject jsonParamValues = new JSONObject();
+        int executorNewAmountPoints = executorUser.getPoints() + profit;
+        executorUser.setPoints(executorNewAmountPoints);
 
-        try {
-            jsonParamValues.put("id", executorUser.getId());
-            jsonParamValues.put("points", executorUser.getPoints()+profit);
+        UserAPI userAPI = retrofit.create(UserAPI.class);
+        Call callType = userAPI.updateUser(executorUser.getId(), executorUser);
 
-            sendToAPI(jsonParamValues,"user", "update");
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+        callType.enqueue(
+            new Callback<Void>() {
+                @Override
+                public void onResponse(Call<Void> call, Response<Void> response) {
+                }
+
+                @Override
+                public void onFailure(Call call, Throwable t) {
+                }
+            }
+        );
     }
 
     public void signalement(int idUser, String description){

@@ -132,7 +132,7 @@ public class ServiceInfosActivityCreator extends AppCompatActivity implements Se
         profitService.setText(Integer.toString(service.getProfit()));
         descriptionService.setText(service.getDescription());
         dateService.setText(service.getDate());
-        typeService.setText(TypeService.getNameById(service.getId_type()));
+        typeService.setText(TypeService.getNameTypeServiceById(service.getId_type()));
     }
 
     private void displayDeletePopup(View view){

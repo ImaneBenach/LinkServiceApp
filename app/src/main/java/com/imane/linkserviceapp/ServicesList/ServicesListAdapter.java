@@ -2,7 +2,6 @@ package com.imane.linkserviceapp.ServicesList;
 
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,12 +13,9 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.imane.linkserviceapp.Classes.Service;
-import com.imane.linkserviceapp.Classes.TypeService;
 import com.imane.linkserviceapp.Classes.User;
 import com.imane.linkserviceapp.R;
 import com.imane.linkserviceapp.ServiceInfos.ServiceInfosActivity;
-import com.imane.linkserviceapp.Services;
-import com.imane.linkserviceapp.TypesService.ServicesAdapter;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -18,12 +18,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.gson.Gson;
 import com.imane.linkserviceapp.Classes.API;
 import com.imane.linkserviceapp.Classes.Service;
-import com.imane.linkserviceapp.Classes.TypeService;
 import com.imane.linkserviceapp.Classes.User;
-import com.imane.linkserviceapp.HomeActivity;
 import com.imane.linkserviceapp.R;
-import com.imane.linkserviceapp.TypesService.ServicesActivity;
-import com.imane.linkserviceapp.TypesService.ServicesAdapter;
+import com.imane.linkserviceapp.TypesService.TypeServicesActivity;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -164,7 +161,7 @@ public class ServicesListActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case android.R.id.home:
                 // app icon in action bar clicked; go home
-                Intent intent = new Intent(this, ServicesActivity.class);
+                Intent intent = new Intent(this, TypeServicesActivity.class);
                 intent.putExtra("userConnected", userConnected);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);

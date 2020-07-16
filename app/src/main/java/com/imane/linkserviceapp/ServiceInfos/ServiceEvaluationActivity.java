@@ -28,7 +28,6 @@ public class ServiceEvaluationActivity extends AppCompatActivity implements Seri
 
     Service service;
     User userConnected;
-    private final Gson gson = new Gson();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,7 +36,6 @@ public class ServiceEvaluationActivity extends AppCompatActivity implements Seri
         setContentView(R.layout.activity_service_evaluation);
 
         userConnected = (User) getIntent().getSerializableExtra("userConnected");
-
         service = (Service) getIntent().getSerializableExtra("Service");
 
         Button btnEvaluationValidation = findViewById(R.id.btnEvaluationValidation);
@@ -96,11 +94,10 @@ public class ServiceEvaluationActivity extends AppCompatActivity implements Seri
         // create the popup window
         int width = LinearLayout.LayoutParams.WRAP_CONTENT;
         int height = LinearLayout.LayoutParams.WRAP_CONTENT;
-        boolean focusable = true; // lets taps outside the popup also dismiss it
+        boolean focusable = true; // tap outside = dissmiss
         final PopupWindow popupWindow = new PopupWindow(popupView, width, height, focusable);
 
         // show the popup window
-        // which view you pass in doesn't matter, it is only used for the window tolken
         popupWindow.showAtLocation(view, Gravity.CENTER, 0, 0);
 
 
