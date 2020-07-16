@@ -13,12 +13,16 @@ import retrofit2.http.POST;
 import retrofit2.http.Path;
 
 public interface ServiceAPI {
-    @POST("/service")
-    Call<Void> setService(@Body Service apply);
+    @POST("/services")
+    Call<Void> setService(@Body Service service);
 
     @PATCH("/service")
-    Call<Void> updateService(@Body Service apply);
+    Call<Void> updateService(@Body Service service);
 
     @GET("/services/statut/{statutService}")
     Call<List<Service>> getServicesByStatut(@Path("statutService") int statut);
+
+    @GET("/services/typeService/{statutService}")
+    Call<List<Service>> getServicesByType(@Path("statutService") int statut);
+
 }

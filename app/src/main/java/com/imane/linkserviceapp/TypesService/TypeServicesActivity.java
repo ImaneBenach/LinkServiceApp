@@ -7,33 +7,21 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.SearchView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.imane.linkserviceapp.API.ConfigAPI;
 import com.imane.linkserviceapp.API.TypeAPI;
-import com.imane.linkserviceapp.API.UserAPI;
-import com.imane.linkserviceapp.Classes.API;
 import com.imane.linkserviceapp.Classes.TypeService;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
-import com.google.gson.Gson;
 import com.imane.linkserviceapp.Classes.User;
-import com.imane.linkserviceapp.HomeActivity;
-import com.imane.linkserviceapp.LoginActivity;
 import com.imane.linkserviceapp.R;
 import com.imane.linkserviceapp.serviceMenuActivity;
 
@@ -51,15 +39,10 @@ public class TypeServicesActivity extends AppCompatActivity {
     SearchView searchView;
     User userConnected;
 
-    private final Gson gson = new Gson();
     Retrofit retrofit = ConfigAPI.getRetrofitClient();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        HashMap<String, TypeService> typeData = new HashMap<>();
-        JSONObject jsonParam = new JSONObject();
-        String typeServicesListAsString = "";
-        int counter;
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_services);
@@ -72,7 +55,6 @@ public class TypeServicesActivity extends AppCompatActivity {
             new Callback<List<TypeService>>() {
                 @Override
                 public void onResponse(Call<List<TypeService>> call, Response<List<TypeService>> response) {
-                    Log.d("response", String.valueOf(response.code()));
                     if(response.code()==200){
                         List<TypeService> types = response.body();
                         if(types != null && types.size() > 0){

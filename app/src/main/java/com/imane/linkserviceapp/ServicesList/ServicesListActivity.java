@@ -16,8 +16,12 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.gson.Gson;
+import com.imane.linkserviceapp.API.ConfigAPI;
+import com.imane.linkserviceapp.API.ServiceAPI;
+import com.imane.linkserviceapp.API.TypeAPI;
 import com.imane.linkserviceapp.Classes.API;
 import com.imane.linkserviceapp.Classes.Service;
+import com.imane.linkserviceapp.Classes.TypeService;
 import com.imane.linkserviceapp.Classes.User;
 import com.imane.linkserviceapp.R;
 import com.imane.linkserviceapp.TypesService.TypeServicesActivity;
@@ -29,6 +33,11 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
 
 public class ServicesListActivity extends AppCompatActivity {
 
@@ -54,39 +63,31 @@ public class ServicesListActivity extends AppCompatActivity {
         setContentView(R.layout.activity_services);
 
         userConnected = (User) getIntent().getSerializableExtra("userConnected");
-        String idTypeService = getIntent().getStringExtra("typeService");
+        int idTypeService = getIntent().getIntExtra("typeService", 0);
 
+        Retrofit retrofit = ConfigAPI.getRetrofitClient();
+        ServiceAPI serviceAPI = retrofit.create(ServiceAPI.class);
+        Call callType = serviceAPI.getServicesByType(idTypeService);
 
+        callType.enqueue(
+                new Callback<List<Service>>() {
+                    @Override
+                    public void onResponse(Call<List<Service>> call, Response<List<Service>> response) {
+                        if(response.code()==200){
+                            List<Service> services = response.body();
+                            if(services != null && services.size() > 0){
 
-        try {
-            jsonParamValues.put("where"," WHERE id_type="+idTypeService);
+                                adapter = new ServicesListAdapter(services, ServicesListActivity.this, userConnected);
+                                listServices.setAdapter(adapter);
+                            }
+                        }
+                    }
 
-            jsonParam.put("table", "service");
-            jsonParam.put("values",jsonParamValues);
-
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        try {
-            ServicesList = API.sendRequest(jsonParam.toString(), "readWithFilter");
-        } catch (IOException | InterruptedException e) {
-            e.printStackTrace();
-        }
-
-
-        if (!ServicesList.equals("null")) {
-            if (ServicesList.startsWith("i", 2)) {
-                ServicesData.put("0", gson.fromJson(ServicesList, Service.class));
-            } else {
-                ServicesData = API.decodeResponseMultipleAsService(ServicesList);
-            }
-
-            for (counter = 0; counter < ServicesData.size(); counter++){
-                Service type = ServicesData.get(Integer.toString(counter));
-                Services.add(type);
-            }
-
-        }
+                    @Override
+                    public void onFailure(Call call, Throwable t) {
+                    }
+                }
+        );
 
         assert getSupportActionBar() != null;   //null check
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -95,8 +96,6 @@ public class ServicesListActivity extends AppCompatActivity {
         listServices.setHasFixedSize(true);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         listServices.setLayoutManager(linearLayoutManager);
-        adapter = new ServicesListAdapter(Services, ServicesListActivity.this, userConnected);
-        listServices.setAdapter(adapter);
     }
 
     @Override

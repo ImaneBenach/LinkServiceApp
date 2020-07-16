@@ -5,9 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.icu.util.VersionInfo;
 import android.os.Bundle;
-import android.provider.CalendarContract;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -27,22 +25,30 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.gson.Gson;
+import com.imane.linkserviceapp.API.ServiceAPI;
 import com.imane.linkserviceapp.Classes.API;
 import com.imane.linkserviceapp.Classes.Service;
 import com.imane.linkserviceapp.Classes.TypeService;
 import com.imane.linkserviceapp.Classes.User;
-import com.imane.linkserviceapp.ServiceInfos.ServiceEvaluationActivity;
-import com.imane.linkserviceapp.ServicesList.ServicesListActivity;
+import com.imane.linkserviceapp.ServiceInfos.ServiceInfosActivityCreator;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.lang.reflect.Array;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
+import static com.imane.linkserviceapp.API.ConfigAPI.retrofit;
 
 public class CreateServiceActivity extends AppCompatActivity {
 
@@ -55,6 +61,9 @@ public class CreateServiceActivity extends AppCompatActivity {
 
     User userConnected;
     ArrayList<TypeService> typeServices;
+
+    Date selectedDate;
+    Date selectedDeadline;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,10 +96,21 @@ public class CreateServiceActivity extends AppCompatActivity {
         dateSetListener = new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker datePicker, int year, int month, int day) {
+                SimpleDateFormat formater = null;
+                Date date = null;
+                String dateDisplay;
                 month = month + 1;
 
-                String date = year + "-" + month + "-" + day;
-                etDate.setText(date);
+                formater = new SimpleDateFormat("dd-MM-yyyy");
+                try {
+                    date = formater.parse(day + "-" + month + "-" + year);
+                    selectedDate = date;
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                formater = new SimpleDateFormat("dd/MM/yyyy");
+
+                etDate.setText(formater.format(date));
             }
         };
 
@@ -117,10 +137,21 @@ public class CreateServiceActivity extends AppCompatActivity {
         deadlineSetListener = new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker datePicker, int year, int month, int day) {
+                SimpleDateFormat formater = null;
+                Date date = null;
+                String dateDisplay;
                 month = month + 1;
 
-                String date = year + "-" + month + "-" + day;
-                etDeadLine.setText(date);
+                formater = new SimpleDateFormat("dd-MM-yyyy");
+                try {
+                    date = formater.parse(day + "-" + month + "-" + year);
+                    selectedDeadline = date;
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                formater = new SimpleDateFormat("dd/MM/yyyy");
+
+                etDeadLine.setText(formater.format(date));
             }
         };
 
@@ -182,8 +213,6 @@ public class CreateServiceActivity extends AppCompatActivity {
     }
 
     private void submitFormCreate(View view) {
-        JSONObject jsonParam = new JSONObject();
-        JSONObject jsonParamValues = new JSONObject();
 
         newServiceTypeService = findViewById(R.id.newServiceTypeService);
         newServiceName = findViewById(R.id.newServiceName);
@@ -202,33 +231,48 @@ public class CreateServiceActivity extends AppCompatActivity {
 
         if (checkFieldTextEdit(newServiceName) && checkFieldTextEdit(newServiceDescription) && checkFieldTextEdit(etDate) && checkFieldTextEdit(etDeadLine)) {
 
-            if(userConnected.buyService(1)){
-                try {
-                    jsonParamValues.put("name", newServiceName.getText());
-                    jsonParamValues.put("description", newServiceDescription.getText());
-                    jsonParamValues.put("id_type", idTypeService);
-                    jsonParamValues.put("date", etDate.getText());
-                    jsonParamValues.put("deadline", etDeadLine.getText());
-                    jsonParamValues.put("cost", 1);
-                    jsonParamValues.put("profit", 1);
-                    jsonParamValues.put("access", "general");
-                    jsonParamValues.put("id_creator", userConnected.getId());
+            if(selectedDate.after(selectedDeadline)){
+                if (userConnected.buyService(1)) {
+                    String name = newServiceName.getText().toString();
+                    String description = newServiceDescription.getText().toString();
 
-                    jsonParam.put("table", "service");
-                    jsonParam.put("values", jsonParamValues);
+                    DateFormat formater = new SimpleDateFormat("yyyy-MM-dd");
+                    String date = formater.format(selectedDate);
+                    String deadline = formater.format(selectedDeadline);
 
-                } catch (JSONException e) {
-                    e.printStackTrace();
+                    Log.d("DATE", date);
+
+                    Service newService = new Service(0, name, description, date, deadline, 1, 1, userConnected.getAdress(), userConnected.getCity(), 0, "", idTypeService, userConnected.getId(), 1);
+                    Log.d("DATE", newService.getDate());
+                    ServiceAPI serviceAPI = retrofit.create(ServiceAPI.class);
+                    Call callService = serviceAPI.setService(newService);
+
+                    callService.enqueue(
+                            new Callback() {
+                                @Override
+                                public void onResponse(Call call, Response response) {
+                                    if (response.code() == 200) {
+                                        Intent intent = new Intent(view.getContext(), ServiceInfosActivityCreator.class);
+                                        intent.putExtra("userConnected", userConnected);
+                                        intent.putExtra("Service", newService);
+                                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                        startActivity(intent);
+                                    }
+                                }
+
+                                @Override
+                                public void onFailure(Call call, Throwable t) {
+                                    //Toast.makeText(,"Erreur lors de la création du service, Réessayez plus tard ", Toast.LENGTH_LONG).show();
+                                }
+                            }
+                    );
+                } else {
+                    displayPopUpError(view);
                 }
-                try {
-                    API.sendRequest(jsonParam.toString(), "create");
-                    displayPopUpServiceCreated(view);
-                } catch (IOException | InterruptedException e) {
-                    e.printStackTrace();
-                }
-
             } else {
-                displayPopUpError(view);
+                etDate.setBackgroundResource(R.drawable.field_border_error);
+                etDeadLine.setBackgroundResource(R.drawable.field_border_error);
+                //Toast.makeText(context,"La date limite doit se situer avant la date du service !", Toast.LENGTH_LONG).show();
             }
         }
     }
@@ -289,44 +333,12 @@ public class CreateServiceActivity extends AppCompatActivity {
 
     }
 
-    private void displayPopUpError(View view){
-
-            // inflate the layout of the popup window
-            LayoutInflater inflater = (LayoutInflater)
-                    getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            View popupView = inflater.inflate(R.layout.popup_error_creation_service, null);
-
-            // create the popup window
-            int width = LinearLayout.LayoutParams.WRAP_CONTENT;
-            int height = LinearLayout.LayoutParams.WRAP_CONTENT;
-            boolean focusable = true; // lets taps outside the popup also dismiss it
-            final PopupWindow popupWindow = new PopupWindow(popupView, width, height, focusable);
-
-            // show the popup window
-            // which view you pass in doesn't matter, it is only used for the window tolken
-            popupWindow.showAtLocation(view, Gravity.CENTER, 0, 0);
-
-            Button btnCancel = popupView.findViewById(R.id.btn_cancel);
-
-            btnCancel.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    popupWindow.dismiss();
-                    Intent intent = new Intent(view.getContext(), HomeActivity.class);
-                    intent.putExtra("userConnected", userConnected);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    startActivity(intent);
-
-                }
-            });
-    }
-
-    private void displayPopUpServiceCreated(View view){
+    private void displayPopUpError(View view) {
 
         // inflate the layout of the popup window
         LayoutInflater inflater = (LayoutInflater)
                 getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View popupView = inflater.inflate(R.layout.popup_service_created, null);
+        View popupView = inflater.inflate(R.layout.popup_error_creation_service, null);
 
         // create the popup window
         int width = LinearLayout.LayoutParams.WRAP_CONTENT;
@@ -348,6 +360,7 @@ public class CreateServiceActivity extends AppCompatActivity {
                 intent.putExtra("userConnected", userConnected);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
+
             }
         });
     }
