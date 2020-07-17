@@ -139,7 +139,6 @@ public class CreateServiceActivity extends AppCompatActivity {
             public void onDateSet(DatePicker datePicker, int year, int month, int day) {
                 SimpleDateFormat formater = null;
                 Date date = null;
-                String dateDisplay;
                 month = month + 1;
 
                 formater = new SimpleDateFormat("dd-MM-yyyy");
@@ -262,7 +261,7 @@ public class CreateServiceActivity extends AppCompatActivity {
 
                                 @Override
                                 public void onFailure(Call call, Throwable t) {
-                                    //Toast.makeText(,"Erreur lors de la création du service, Réessayez plus tard ", Toast.LENGTH_LONG).show();
+                                    Toast.makeText(getApplicationContext(),"Erreur lors de la création du service, Réessayez plus tard ", Toast.LENGTH_LONG).show();
                                 }
                             }
                     );
@@ -272,7 +271,7 @@ public class CreateServiceActivity extends AppCompatActivity {
             } else {
                 etDate.setBackgroundResource(R.drawable.field_border_error);
                 etDeadLine.setBackgroundResource(R.drawable.field_border_error);
-                //Toast.makeText(context,"La date limite doit se situer avant la date du service !", Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(),"La date limite doit se situer avant la date du service !", Toast.LENGTH_LONG).show();
             }
         }
     }
