@@ -15,11 +15,9 @@ import android.widget.SeekBar;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.gson.Gson;
 import com.imane.linkserviceapp.Classes.Service;
 import com.imane.linkserviceapp.Classes.User;
 import com.imane.linkserviceapp.MesServices.MesServicesActivity;
-import com.imane.linkserviceapp.MessagesActivity;
 import com.imane.linkserviceapp.R;
 
 import java.io.Serializable;

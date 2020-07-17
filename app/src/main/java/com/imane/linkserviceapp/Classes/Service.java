@@ -1,7 +1,5 @@
 package com.imane.linkserviceapp.Classes;
 
-import android.util.Log;
-
 import com.google.gson.Gson;
 import com.imane.linkserviceapp.API.ApplyAPI;
 import com.imane.linkserviceapp.API.ConfigAPI;
@@ -37,9 +35,10 @@ public class Service implements Serializable {
     private String access;
     private int id_type;
     private int id_creator;
+    private int Statut;
     private User executorUser;
 
-    public Service(int idService, String n, String desc, String da, String dl, int cost, int profit, String adress, String city, int pc, String access, int type, int creator){
+    public Service(int idService, String n, String desc, String da, String dl, int cost, int profit, String adress, String city, int pc, String access, int type, int creator, int statut){
         id = idService;
         name = n;
         description = desc;
@@ -53,6 +52,7 @@ public class Service implements Serializable {
         this.access = access;
         id_type = type;
         id_creator = creator;
+        Statut = statut;
     }
 
     public int getId() { return id; }

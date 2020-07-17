@@ -118,6 +118,7 @@ public class User implements Serializable {
     public boolean buyService(int cost){
         if(points - cost >= 0){
             points -= cost;
+            birthdate = birthdate.substring(0,10);
             Retrofit retrofit = ConfigAPI.getRetrofitClient();
             UserAPI userAPI = retrofit.create(UserAPI.class);
             Call callType = userAPI.updateUser(id, this);
