@@ -1,33 +1,36 @@
 package com.imane.linkserviceapp;
 
 import androidx.appcompat.app.AppCompatActivity;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
 
+import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.os.Build;
 import android.os.Bundle;
-import android.text.InputType;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.gson.Gson;
+import com.imane.linkserviceapp.API.ConfigAPI;
+import com.imane.linkserviceapp.API.UserAPI;
 import com.imane.linkserviceapp.Classes.API;
 import com.imane.linkserviceapp.Classes.User;
 
-import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.HashMap;
+import java.util.Date;
+import java.util.List;
 
 public class RegisterActivity extends AppCompatActivity {
 
@@ -38,7 +41,19 @@ public class RegisterActivity extends AppCompatActivity {
     Button btnConnexion ;
     Button btnSeConnecter ;
 
-    EditText etEmail, etMdp, etNom, etPrenom, etBirth ;
+    EditText etEmail, etMdp, etNom, etPrenom, etBirth, etAddress, etCity, etCp ;
+    Retrofit retrofit = ConfigAPI.getRetrofitClient();
+
+    private String email;
+    private String nom;
+    private String prenom;
+    private String pwd;
+    private String hash_pwd;
+    private String birthdate;
+    private String address;
+    private String city;
+    private String cp;
+
 
 
     @Override
@@ -52,6 +67,9 @@ public class RegisterActivity extends AppCompatActivity {
         etPrenom = (EditText)findViewById(R.id.et_prenom) ;
         etBirth = findViewById(R.id.et_birth);
         btnSeConnecter = findViewById(R.id.btn_connexion);
+        etAddress = findViewById(R.id.et_address);
+        etCity = findViewById(R.id.et_city);
+        etCp = findViewById(R.id.et_cp);
 
         etBirth.setShowSoftInputOnFocus(false);
 
@@ -80,8 +98,16 @@ public class RegisterActivity extends AppCompatActivity {
                 month = month + 1;
                 Log.d(TAG, "onDateSet: yyyy-mm-dd: " + year + "-" + month + "-" + day);
 
-                String date = year + "-" + month + "-" + day;
-                etBirth.setText(date);
+                SimpleDateFormat formater = null;
+                Date date = null;
+                formater = new SimpleDateFormat("dd/MM/yyyy");
+                try {
+                    date = formater.parse(day + "/" + month + "/" + year);
+                    etBirth.setText(formater.format(date));
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+
             }
         };
 
@@ -99,40 +125,74 @@ public class RegisterActivity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "Veuillez entrer un prenom", Toast.LENGTH_LONG).show();
                 } else if (TextUtils.isEmpty(etBirth.getText())) {
                     Toast.makeText(getApplicationContext(), "Veuillez entrer une date d'anniversaire", Toast.LENGTH_LONG).show();
+                } else if (TextUtils.isEmpty(etAddress.getText())) {
+                    Toast.makeText(getApplicationContext(), "Veuillez entrer une adresse", Toast.LENGTH_LONG).show();
+                } else if (TextUtils.isEmpty(etCity.getText())) {
+                    Toast.makeText(getApplicationContext(), "Veuillez entrer une ville", Toast.LENGTH_LONG).show();
+                } else if (TextUtils.isEmpty(etCp.getText()) && etCp.getText().toString().length() != 5 ) {
+                    Toast.makeText(getApplicationContext(), "Veuillez entrer un code postal valide", Toast.LENGTH_LONG).show();
                 } else {
-                    User user = new User();
+
+                    email = etEmail.getText().toString();
+                    pwd = etMdp.getText().toString();
+                    nom = etNom.getText().toString();
+                    prenom = etPrenom.getText().toString();
+                    address = etAddress.getText().toString();
+                    city = etCity.getText().toString();
+                    cp = etCp.getText().toString();
+
+                    Date inputDate = null;
+
+                    SimpleDateFormat input = new SimpleDateFormat("dd/MM/yyyy");
                     try {
-                        String table = "user";
-                        final String email = etEmail.getText().toString();
-                        final String mdp = etMdp.getText().toString();
-                        final String nom = etNom.getText().toString();
-                        final String prenom = etPrenom.getText().toString();
-                        final String birthdate = etBirth.getText().toString();
-
-                        HashMap<String, String> register = User.register(email, mdp, nom, prenom, birthdate, "membre");
-                        HashMap<String, Object> userValue = new HashMap<>();
-
-                        userValue.put("table", "user");
-                        userValue.put("values", register);
-                        Gson gson = new Gson();
-                        String json = gson.toJson(userValue);
-                        System.out.println(json);
-
-                        API api = new API();
-                        String id = API.sendRequest(json, "create");
-
-                    } catch (NoSuchAlgorithmException e) {
-                        e.printStackTrace();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    } catch (InterruptedException e) {
+                        inputDate = input.parse(etBirth.getText().toString());
+                    } catch (ParseException e) {
                         e.printStackTrace();
                     }
 
-                        Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
-                        startActivity(intent);
-                        finish();
-//                    }
+                    if (inputDate != null){
+                        SimpleDateFormat output = new SimpleDateFormat("yyyy-MM-dd");
+                        birthdate = output.format(inputDate);
+                    }
+
+                    if (birthdate.length() == 0){
+                        Toast.makeText(getApplicationContext(), "Nous avons un problème technique, réessayer ultérieurement", Toast.LENGTH_LONG).show();
+                    }else{
+                        //Hash password
+                        hash_pwd = null;
+                        try {
+                            hash_pwd = API.passwordHash(pwd);
+                        } catch (NoSuchAlgorithmException e) {
+                            e.printStackTrace();
+                        }
+
+                        // Check mail exist :
+                        UserAPI userAPI = retrofit.create(UserAPI.class);
+                        Call<List<User>> callUserEmail = userAPI.getByMail(email);
+                        callUserEmail.enqueue(
+                                new Callback<List<User>>() {
+                                    @SuppressLint("LongLogTag")
+                                    @Override
+                                    public void onResponse(Call<List<User>> call, Response<List<User>> response) {
+                                        Log.d("Reponse getusermail code", String.valueOf(response.code()));
+                                        if (response.code() == 200){
+                                            List<User> usersEmail = (List<User>) response.body();
+                                            if (usersEmail.size() == 0){
+                                                // create user and redirection
+                                                insertUser();
+                                            }else{
+                                                Toast.makeText(getApplicationContext(), "Email adress already use", Toast.LENGTH_LONG).show();
+                                            }
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onFailure(Call<List<User>> call, Throwable t) {
+                                        Log.d("Failure, code", t.toString());
+                                    }
+                                }
+                        );
+                    }
                 }
             }
         });
@@ -144,6 +204,45 @@ public class RegisterActivity extends AppCompatActivity {
                 startActivity(i);
             }
         });
+    }
+
+    public void insertUser(){
+        User userToregister = new User(
+                this.email,
+                this.hash_pwd,
+                this.nom,
+                this.prenom,
+                this.birthdate,
+                10,
+                this.address,
+                this.city,
+                this.cp,
+                "membre"
+        );
+
+        // Call api to insert new user
+        UserAPI userAPI = retrofit.create(UserAPI.class);
+        Call<Void> callUserInsert = userAPI.create(userToregister);
+        callUserInsert.enqueue(
+                new Callback<Void>() {
+                    @Override
+                    public void onResponse(Call<Void> call, Response<Void> response) {
+                        Log.d("Reponse code", String.valueOf(response.code()));
+                        if (response.code() == 200){
+                            Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
+                            startActivity(intent);
+                            finish();
+                        }else if (response.code() == 400){
+                            Toast.makeText(getApplicationContext(), "Nous avons un problème technique, réessayer ultérieurement", Toast.LENGTH_LONG).show();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<Void> call, Throwable t) {
+                        Log.d("Failure, code", t.toString());
+                    }
+                }
+        );
     }
 
 }

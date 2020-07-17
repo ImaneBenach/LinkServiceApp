@@ -23,6 +23,7 @@ public class User implements Serializable {
     private int points;
     private String adress;
     private String city;
+    private String postcode;
     private String type;
 
     public User(int idUser){
@@ -36,6 +37,28 @@ public class User implements Serializable {
 
     public User(){
 
+    }
+
+    public User(String email, String password, String name, String surname, String birthdate, String type) {
+        this.email = email;
+        this.password = password;
+        this.name = name;
+        this.surname = surname;
+        this.birthdate = birthdate;
+        this.type = type;
+    }
+
+    public User(String email, String password, String name, String surname, String birthdate, int points, String adress, String city, String postcode, String type) {
+        this.email = email;
+        this.password = password;
+        this.name = name;
+        this.surname = surname;
+        this.birthdate = birthdate;
+        this.points = points;
+        this.adress = adress;
+        this.city = city;
+        this.postcode = postcode;
+        this.type = type;
     }
 
     public User(int idUser, String e, String n, String s, String b, int p, String a, String c, String t){
