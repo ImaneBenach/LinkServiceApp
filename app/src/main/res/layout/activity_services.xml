@@ -4,9 +4,24 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".TypesService.TypeServicesActivity">
+    tools:context=".ServicesList.ServicesListActivity"
+    >
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="Services"
+        android:textSize="30sp"
+        android:textColor="@color/cardview_dark_background"
+        android:background="@color/colorTab"
+        android:fontFamily="sans-serif-condensed-medium"
+        android:gravity="center"
+        tools:ignore="MissingConstraints">
+    </TextView>
 
     <androidx.recyclerview.widget.RecyclerView
+        android:paddingTop="40dp"
         android:id="@+id/listshow"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

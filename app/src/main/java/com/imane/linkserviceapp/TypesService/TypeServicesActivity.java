@@ -45,7 +45,7 @@ public class TypeServicesActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_services);
+        setContentView(R.layout.activity_types_services);
         userConnected = (User) getIntent().getSerializableExtra("userConnected");
 
         TypeAPI typeAPI = retrofit.create(TypeAPI.class);

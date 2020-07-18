@@ -44,6 +44,7 @@ public class TypeServicesAdapter extends RecyclerView.Adapter<TypeServicesAdapte
     public void onBindViewHolder(@NonNull Holderview holder, final int position) {
         holder.v_name.setText(typeServices.get(position).getName());
         holder.v_image.setImageResource(typeServices.get(position).getImage());
+        holder.v_desc.setVisibility(View.INVISIBLE);
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -73,11 +74,13 @@ public class TypeServicesAdapter extends RecyclerView.Adapter<TypeServicesAdapte
     class Holderview extends RecyclerView.ViewHolder {
         ImageView v_image ;
         TextView v_name ;
+        TextView v_desc;
 
         Holderview(View itemview){
             super(itemview);
             v_image = (ImageView) itemview.findViewById(R.id.service_image);
             v_name = (TextView) itemview.findViewById(R.id.service_title);
+            v_desc = (TextView) itemview.findViewById(R.id.desc);
         }
     }
 }

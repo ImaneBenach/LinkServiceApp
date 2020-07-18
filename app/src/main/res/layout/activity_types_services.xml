@@ -4,14 +4,30 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ServicesList.ServicesListActivity">
+    tools:context=".TypesService.TypeServicesActivity"
+    >
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="Type de service"
+        android:textSize="30sp"
+        android:textColor="@color/cardview_dark_background"
+        android:background="@color/colorTab"
+        android:fontFamily="sans-serif-condensed-medium"
+        android:gravity="center"
+        tools:ignore="MissingConstraints">
+    </TextView>
 
     <androidx.recyclerview.widget.RecyclerView
+        android:paddingTop="40dp"
         android:id="@+id/listshow"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:fadeScrollbars="true"></androidx.recyclerview.widget.RecyclerView>
+        android:fadeScrollbars="true">
+
+    </androidx.recyclerview.widget.RecyclerView>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
