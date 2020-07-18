@@ -1,6 +1,7 @@
 package com.imane.linkserviceapp.API;
 
 import com.imane.linkserviceapp.Classes.Apply;
+import com.imane.linkserviceapp.Classes.Note;
 
 import java.util.List;
 
@@ -20,4 +21,10 @@ public interface ApplyAPI {
 
     @GET("/apply/service/user/{id_service}&{id_user}")
     Call<List<Apply>> existApply(@Path("id_service") int idService, @Path("id_user") int idUser);
+
+    @GET("/apply/note/{id_user}&{id_type}")
+    Call<List<Note>> getNoteUserByService(
+            @Path("id_user") int id_user,
+            @Path("id_type") int id_type
+    );
 }

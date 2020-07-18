@@ -55,6 +55,10 @@ public class Service implements Serializable {
         Statut = statut;
     }
 
+    public void normalizeBirthdate(){
+        executorUser.setBirthdate(executorUser.getBirthdate().substring(0,10));
+    }
+
     public int getId() { return id; }
 
     public String getName() { return name; }
@@ -94,6 +98,7 @@ public class Service implements Serializable {
         if (executor != null && !executor.equals("null")) {
             if (executor.startsWith("i", 2)) {
                 executorUser = gson.fromJson(executor, User.class);
+                executorUser.setBirthdate(executorUser.getBirthdate().substring(0, 10));
             }
         } else {
             executorUser = null;
@@ -262,7 +267,7 @@ public class Service implements Serializable {
         givePointToExecutor();
     }
 
-    private void givePointToExecutor(){
+    public void givePointToExecutor(){
         int executorNewAmountPoints = executorUser.getPoints() + profit;
         executorUser.setPoints(executorNewAmountPoints);
         Retrofit retrofit = ConfigAPI.getRetrofitClient();

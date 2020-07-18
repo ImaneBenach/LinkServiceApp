@@ -16,4 +16,15 @@ public interface BadgeAPI {
             @Path("id_type") int id_type
     );
 
+    @GET("/badge/{id_user}&{id_type_service}")
+    Call<List<Badge>> getBagdeByUserAndService(
+            @Path("id_user") int id_user,
+            @Path("id_type_service") int id_type_service
+    );
+
+    @GET("/badge/{id_type_service}")
+    Call<List<Badge>> getAllBadgeByService(
+            @Path("id_type_service") int id_type_service
+    );
+
 }

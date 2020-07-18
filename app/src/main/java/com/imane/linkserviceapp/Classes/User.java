@@ -53,7 +53,7 @@ public class User implements Serializable {
         this.password = password;
         this.name = name;
         this.surname = surname;
-        this.birthdate = birthdate;
+        this.birthdate = birthdate.substring(0,10);;
         this.points = points;
         this.adress = adress;
         this.city = city;
@@ -92,6 +92,10 @@ public class User implements Serializable {
     public String getEmail() { return email; }
 
     public String getBirthdate() { return birthdate; }
+
+    public void setBirthdate(String birthdate) {
+        this.birthdate = birthdate;
+    }
 
     public String getAdress() { return adress; }
 
