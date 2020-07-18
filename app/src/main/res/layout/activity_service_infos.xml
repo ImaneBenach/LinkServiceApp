@@ -15,7 +15,9 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/appbar_padding"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"></ImageView>
+        app:layout_constraintTop_toTopOf="parent">
+
+    </ImageView>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -96,13 +98,17 @@
         </TextView>
 
         <Button
+            android:layout_marginTop="10dp"
             android:id="@+id/buttonPostuler"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            style="@style/ButtonPostuler"
-            android:text="Postuler au service">
-
+            android:text="Postuler au service"
+            android:background="@drawable/field_border_error"
+            android:textColor="@color/colorWhite"
+            android:padding="5dp"
+            >
         </Button>
+
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

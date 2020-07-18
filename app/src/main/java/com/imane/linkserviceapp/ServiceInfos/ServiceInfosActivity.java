@@ -117,7 +117,7 @@ public class ServiceInfosActivity extends AppCompatActivity implements Serializa
             case android.R.id.home:
                 if(originActivity.equals("ServiceList")){
                     Intent intent = new Intent(this, ServicesListActivity.class);
-                    intent.putExtra("typeService",Integer.toString(service.getId_type()));
+                    intent.putExtra("typeService", service.getId_type());
                     intent.putExtra("userConnected", userConnected);
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     startActivity(intent);
