@@ -3,6 +3,7 @@ package com.imane.linkserviceapp.ServiceInfos;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -19,6 +20,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.gson.Gson;
 import com.imane.linkserviceapp.API.ApplyAPI;
 import com.imane.linkserviceapp.API.ConfigAPI;
+import com.imane.linkserviceapp.API.ServiceAPI;
 import com.imane.linkserviceapp.API.TypeAPI;
 import com.imane.linkserviceapp.Classes.API;
 import com.imane.linkserviceapp.Classes.Apply;
@@ -242,6 +244,34 @@ public class ServiceInfosActivity extends AppCompatActivity implements Serializa
         if(userCreator.getId() == userConnected.getId()){
             final Button btnPostulate = findViewById(R.id.buttonPostuler);
             btnPostulate.setVisibility(View.INVISIBLE);
+        }else{
+
+            ServiceAPI serviceAPI = retrofit.create(ServiceAPI.class);
+            Call<List<Apply>> callApply = serviceAPI.getExecutor(service.getId());
+
+            callApply.enqueue(
+                    new Callback<List<Apply>>() {
+                        @Override
+                        public void onResponse(Call<List<Apply>> call, Response<List<Apply>> response) {
+                            Log.d("GetExecutor code", String.valueOf(response.code()));
+                            if (response.code() == 200){
+                                List<Apply> executorList = (List<Apply>) response.body();
+                                if (executorList != null && executorList.size() > 0){
+                                    // change btn cancel participation
+                                    final Button btnPostulate = findViewById(R.id.buttonPostuler);
+                                    btnPostulate.setVisibility(View.INVISIBLE);
+                                }
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<List<Apply>> call, Throwable t) {
+                            Log.d("Failure code ", String.valueOf(t));
+                        }
+                    }
+            );
+
+
         }
     }
 

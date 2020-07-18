@@ -46,19 +46,13 @@ public class ServicesListActivity extends AppCompatActivity {
     ServicesListAdapter adapter;
     SearchView searchView;
     User userConnected;
+    TextView tv_title;
 
     private final Gson gson = new Gson();
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        HashMap<String, Service> ServicesData = new HashMap<>();
-        JSONObject jsonParam = new JSONObject();
-        JSONObject jsonParamValues = new JSONObject();
-
-        String ServicesList = "";
-        int counter;
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_services);
 
@@ -67,7 +61,7 @@ public class ServicesListActivity extends AppCompatActivity {
 
         Retrofit retrofit = ConfigAPI.getRetrofitClient();
         ServiceAPI serviceAPI = retrofit.create(ServiceAPI.class);
-        Call callType = serviceAPI.getServicesByType(idTypeService);
+        Call callType = serviceAPI.getServiceActif(idTypeService, 1);
 
         callType.enqueue(
                 new Callback<List<Service>>() {
@@ -79,6 +73,9 @@ public class ServicesListActivity extends AppCompatActivity {
 
                                 adapter = new ServicesListAdapter(services, ServicesListActivity.this, userConnected);
                                 listServices.setAdapter(adapter);
+                            }else{
+                                tv_title = findViewById(R.id.service_title);
+                                tv_title.setText(tv_title.getText() + " : Pas de services disponible");
                             }
                         }
                     }

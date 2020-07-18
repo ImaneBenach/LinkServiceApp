@@ -28,4 +28,7 @@ public interface ServiceAPI {
     @GET("/service/executor/{id_service}")
     Call<List<Apply>> getExecutor(@Path("id_service") int id_service);
 
+    @GET("/services/actif/{id_type}&{statut}")
+    Call<List<Service>> getServiceActif(@Path("id_type") int id_type, @Path("statut") int statut);
+
 }
