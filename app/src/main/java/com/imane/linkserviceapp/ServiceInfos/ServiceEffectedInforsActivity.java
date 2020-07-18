@@ -3,6 +3,7 @@ package com.imane.linkserviceapp.ServiceInfos;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -14,11 +15,10 @@ import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import com.google.gson.Gson;
 import com.imane.linkserviceapp.API.ApplyAPI;
 import com.imane.linkserviceapp.API.ConfigAPI;
+import com.imane.linkserviceapp.API.ServiceAPI;
 import com.imane.linkserviceapp.API.TypeAPI;
 import com.imane.linkserviceapp.Classes.API;
 import com.imane.linkserviceapp.Classes.Apply;
@@ -27,7 +27,6 @@ import com.imane.linkserviceapp.Classes.TypeService;
 import com.imane.linkserviceapp.Classes.User;
 import com.imane.linkserviceapp.MesServices.MesServicesActivity;
 import com.imane.linkserviceapp.R;
-import com.imane.linkserviceapp.ServicesList.ServicesListActivity;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -36,12 +35,14 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.util.List;
 
+import androidx.appcompat.app.AppCompatActivity;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 
-public class ServiceInfosActivity extends AppCompatActivity implements Serializable {
+
+public class ServiceEffectedInforsActivity extends AppCompatActivity implements Serializable {
     Service service;
     User userConnected;
     private final Gson gson = new Gson();
@@ -82,7 +83,7 @@ public class ServiceInfosActivity extends AppCompatActivity implements Serializa
 
                                 }
                             });
-                        } else {
+                        }else if (applies.get(0).getExecute() == 0){
                             btnPostulate.setVisibility(View.INVISIBLE);
                         }
                     }
@@ -118,18 +119,10 @@ public class ServiceInfosActivity extends AppCompatActivity implements Serializa
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                if(originActivity.equals("ServiceList")){
-                    Intent intent = new Intent(this, ServicesListActivity.class);
-                    intent.putExtra("typeService", service.getId_type());
-                    intent.putExtra("userConnected", userConnected);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    startActivity(intent);
-                } else if (originActivity.equals("MesServicesActivity")){
-                    Intent intent = new Intent(this, MesServicesActivity.class);
-                    intent.putExtra("userConnected", userConnected);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    startActivity(intent);
-                }
+                Intent intent = new Intent(this, MesServicesActivity.class);
+                intent.putExtra("userConnected", userConnected);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -168,7 +161,7 @@ public class ServiceInfosActivity extends AppCompatActivity implements Serializa
         try {
             userCreator = gson.fromJson(API.sendRequest(jsonParam.toString(), "readWithFilter"),User.class);
 
-            checkIfCreatorIsConnectedUser(userCreator);
+            checkButton(userCreator);
 
             return userCreator.getName() + " " + userCreator.getSurname();
         } catch (IOException | InterruptedException e) {
@@ -183,22 +176,22 @@ public class ServiceInfosActivity extends AppCompatActivity implements Serializa
         Call callType = typeAPI.getTypesActives(idType);
 
         callType.enqueue(
-            new Callback<List<TypeService>>() {
-                @Override
-                public void onResponse(Call<List<TypeService>> call, Response<List<TypeService>> response) {
-                    if(response.code()==200){
-                        List<TypeService> users = response.body();
-                        if(users != null && users.size() > 0){
-                            TypeService type = users.get(0);
-                            typeService.setText(type.getName());
+                new Callback<List<TypeService>>() {
+                    @Override
+                    public void onResponse(Call<List<TypeService>> call, Response<List<TypeService>> response) {
+                        if(response.code()==200){
+                            List<TypeService> users = response.body();
+                            if(users != null && users.size() > 0){
+                                TypeService type = users.get(0);
+                                typeService.setText(type.getName());
+                            }
                         }
                     }
-                }
 
-                @Override
-                public void onFailure(Call call, Throwable t) {
+                    @Override
+                    public void onFailure(Call call, Throwable t) {
+                    }
                 }
-            }
         );
     }
 
@@ -238,10 +231,69 @@ public class ServiceInfosActivity extends AppCompatActivity implements Serializa
         });
     }
 
-    private void checkIfCreatorIsConnectedUser(User userCreator){
+    private void checkButton(User userCreator){
         if(userCreator.getId() == userConnected.getId()){
             final Button btnPostulate = findViewById(R.id.buttonPostuler);
             btnPostulate.setVisibility(View.INVISIBLE);
+        }else{
+
+            ServiceAPI serviceAPI = retrofit.create(ServiceAPI.class);
+            Call<List<Apply>> callApply = serviceAPI.getExecutor(service.getId());
+
+            callApply.enqueue(
+                    new Callback<List<Apply>>() {
+                        @Override
+                        public void onResponse(Call<List<Apply>> call, Response<List<Apply>> response) {
+                            Log.d("GetExecutor code", String.valueOf(response.code()));
+                            if (response.code() == 200){
+                                List<Apply> executorList = (List<Apply>) response.body();
+                                if (executorList != null && executorList.size() > 0){
+                                        // change btn cancel participation
+                                    final Button btnPostulate = findViewById(R.id.buttonPostuler);
+                                    btnPostulate.setVisibility(View.INVISIBLE);
+                                }else{
+                                    final Button btnPostulate = findViewById(R.id.buttonPostuler);
+                                    btnPostulate.setText("Annuler ma partivcipation");
+                                    btnPostulate.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+                                            Apply updatedApplyUserConnected = new Apply(userConnected.getId(), service.getId(), 0);
+                                            ApplyAPI applyAPI = retrofit.create(ApplyAPI.class);
+                                            Call callApply = applyAPI.updateApply(updatedApplyUserConnected);
+
+                                            callApply.enqueue(
+                                                    new Callback() {
+                                                        @Override
+                                                        public void onResponse(Call call, Response response) {
+                                                            Log.d("update apply code ", String.valueOf(response.code()));
+                                                            if (response.code() == 200){
+                                                                Intent intent = new Intent(ServiceEffectedInforsActivity.this, MesServicesActivity.class);
+                                                                intent.putExtra("userConnected", userConnected);
+                                                                startActivity(intent);
+                                                                finish();
+                                                            }
+                                                        }
+
+                                                        @Override
+                                                        public void onFailure(Call call, Throwable t) {
+                                                            Log.d("Failure code ", String.valueOf(t));
+                                                        }
+                                                    }
+                                            );
+
+                                        }
+                                    });
+                                }
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<List<Apply>> call, Throwable t) {
+                            Log.d("Failure code ", String.valueOf(t));
+                        }
+                    }
+            );
+
         }
     }
 

@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.imane.linkserviceapp.Classes.Service;
 import com.imane.linkserviceapp.Classes.User;
 import com.imane.linkserviceapp.R;
+import com.imane.linkserviceapp.ServiceInfos.ServiceEffectedInforsActivity;
 import com.imane.linkserviceapp.ServiceInfos.ServiceInfosActivity;
 
 import java.util.List;
@@ -53,7 +54,7 @@ public class EffectuerAdapter extends RecyclerView.Adapter<EffectuerAdapter.MyVi
             @Override
             public void onClick(View v) {
 
-                Intent intent = new Intent(context, ServiceInfosActivity.class);
+                Intent intent = new Intent(context, ServiceEffectedInforsActivity.class);
                 intent.putExtra("Service",data.get(position));
                 intent.putExtra("userConnected", userConnected);
                 intent.putExtra("from","MesServicesActivity");
