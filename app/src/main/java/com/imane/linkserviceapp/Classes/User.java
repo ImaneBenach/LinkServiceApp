@@ -24,6 +24,7 @@ public class User implements Serializable {
     private String adress;
     private String city;
     private String type;
+    private String password;
 
     public User(int idUser){
         id = idUser;
@@ -33,7 +34,7 @@ public class User implements Serializable {
 
     }
 
-    public User(int idUser, String e, String n, String s, String b, int p, String a, String c, String t){
+    public User(int idUser, String e, String n, String s, String b, int p, String a, String c, String t, String pass){
         id = idUser;
         email = e;
         name = n;
@@ -43,6 +44,7 @@ public class User implements Serializable {
         adress = a;
         city = c;
         type = t;
+        password = pass;
     }
 
     public void setId(int id) {
@@ -123,26 +125,23 @@ public class User implements Serializable {
         return false;
     }
 
-    /*
 
-    public void updateUser(String newName, String newSurname, String newBirthdate, String newAdress, String newCity) throws IOException, InterruptedException {
+
+    public HashMap updateUser(String newName, String newSurname, String password, int id, String email) throws IOException, InterruptedException {
         name = newName;
         surname = newSurname;
-        birthdate = newBirthdate.substring(0,10);
-        adress = newAdress;
-        city = newCity;
+
 
         HashMap<String, String> inputValues = new HashMap<>();
         inputValues.put("name",name);
         inputValues.put("surname",surname);
-        inputValues.put("birthdate",birthdate);
-        inputValues.put("adress",adress);
-        inputValues.put("city",city);
-        inputValues.put("id", Integer.toString(id));
+        inputValues.put("password",password);
+        inputValues.put("id",Integer.toString(id));
+        inputValues.put("email",email);
 
-        updateInDatabase(inputValues, "update");
+        return inputValues;
     }
-
+/*
     public static void createUser(String email, String password, String name, String surname, String birthdate, String type) throws NoSuchAlgorithmException, IOException, InterruptedException {
         HashMap<String, String> inputValues = new HashMap<>();
         inputValues.put("email",email);

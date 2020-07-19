@@ -20,9 +20,9 @@ import java.io.IOException;
 
 public class ProfilActivity extends AppCompatActivity {
 
-    Button  btnDeco , btnPoints, btnNewsletter, btnNotif ;
+    Button  btnDeco, btnNewsletter, btnNotif ;
     ImageView imageProfil ;
-    TextView modifProfil, addJustif ;
+    TextView modifProfil, addJustif,tvNom, tvPoints ;
     User userConnected;
 
     private static final int PICK_IMAGE = 1 ;
@@ -34,19 +34,21 @@ public class ProfilActivity extends AppCompatActivity {
         setContentView(R.layout.activity_profil);
 
         btnDeco = findViewById(R.id.btn_deco) ;
-        btnPoints = findViewById(R.id.btn_points);
+        tvPoints = findViewById(R.id.tv_points);
         btnNewsletter= findViewById(R.id.btn_newsletter);
         btnNotif = findViewById(R.id.btn_notif);
         imageProfil = findViewById(R.id.imageProfil);
         modifProfil = findViewById(R.id.tv_profil);
         addJustif = findViewById(R.id.tv_justif);
+        tvNom = findViewById(R.id.tv_nom) ;
 
 
         assert getSupportActionBar() != null;   //null check
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         userConnected = (User) getIntent().getSerializableExtra("userConnected");
 
-
+        tvNom.setText(userConnected.getSurname());
+        tvPoints.setText("Votre nombre de points : " + userConnected.getPoints());
         imageProfil.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -67,14 +69,6 @@ public class ProfilActivity extends AppCompatActivity {
                 Intent intent = new Intent(ProfilActivity.this,LoginActivity.class);
                 startActivity(intent);
                 finish();
-
-            }
-        });
-
-        btnPoints.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                openDialogPoints();
 
             }
         });
@@ -115,9 +109,10 @@ public class ProfilActivity extends AppCompatActivity {
     }
 
     public void openDialogPoints() {
-
+        userConnected = (User) getIntent().getSerializableExtra("userConnected");
         PopUpPoints popUpPoints = new PopUpPoints();
         popUpPoints.show(getSupportFragmentManager(), "Vos points");
+        System.out.println("point:"+ userConnected.getPoints());
 
     }
 
@@ -139,6 +134,7 @@ public class ProfilActivity extends AppCompatActivity {
 
         PopUpModifProfil popUpModifProfil = new PopUpModifProfil();
         popUpModifProfil.show(getSupportFragmentManager(), "Modification");
+
 
     }
 
