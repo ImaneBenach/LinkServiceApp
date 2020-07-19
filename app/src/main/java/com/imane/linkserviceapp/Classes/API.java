@@ -23,8 +23,7 @@ import java.util.concurrent.CountDownLatch;
 
 public class API {
 
-    String urlAPI = "http://10.0.2.2:4000";
-
+    private static String urlAPI = "https://linkserviceapi.herokuapp.com/";
 
     public static String sendRequest(final String jsonData, final String action) throws IOException, InterruptedException {
         final String[] data = {null};
@@ -34,7 +33,7 @@ public class API {
             @Override
             public void run() {
             try {
-                URL url = new URL("http://10.0.2.2:4000/" + action);
+                URL url = new URL(urlAPI + action);
                 HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                 conn.setRequestMethod("POST");
                 conn.setRequestProperty("Content-Type", "application/json;charset=UTF-8");

@@ -107,33 +107,5 @@ public class LoginActivity extends AppCompatActivity {
 
 
     }
-/*
-    private User getUserConnectedInfos(User userId){
-        JSONObject jsonParam = new JSONObject();
-        JSONObject jsonParamValues = new JSONObject();
-        String UserData = "";
-
-        try {
-            jsonParamValues.put("where"," WHERE id="+userId.getId());
-
-            jsonParam.put("table", "user");
-            jsonParam.put("values",jsonParamValues);
-
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        try {
-            UserData = API.sendRequest(jsonParam.toString(), "readWithFilter");
-        } catch (IOException | InterruptedException e) {
-            e.printStackTrace();
-        }
-
-        if (!UserData.equals("")) {
-            return gson.fromJson(UserData, User.class);
-        } else {
-            return null;
-        }
-
-    }*/
 }
 

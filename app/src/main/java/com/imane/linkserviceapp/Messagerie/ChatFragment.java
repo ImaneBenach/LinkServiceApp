@@ -19,7 +19,6 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
-import com.github.nkzawa.emitter.Emitter;
 import com.google.gson.Gson;
 import com.imane.linkserviceapp.Classes.API;
 import com.imane.linkserviceapp.Classes.User;

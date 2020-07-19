@@ -4,7 +4,7 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ConfigAPI {
-    public static final String URL_API = "http://10.0.2.2:4000/";
+    public static final String URL_API = "https://linkserviceapi.herokuapp.com/";
     public static Retrofit retrofit;
 
     public static Retrofit getRetrofitClient() {

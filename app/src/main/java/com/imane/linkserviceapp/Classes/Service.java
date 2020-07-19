@@ -188,7 +188,7 @@ public class Service implements Serializable {
         final Gson gson = new Gson();
 
         try {
-            jsonParamValues.put("where", " inner JOIN USER WHERE id_user=id AND id_service="+id);
+            jsonParamValues.put("where", " inner JOIN user WHERE id_user=id AND id_service="+id);
 
             volunteers = sendToAPI(jsonParamValues, "apply", "readWithFilter");
         } catch (JSONException e) {
