@@ -25,7 +25,6 @@ public class User implements Serializable {
     private String city;
     private String postcode;
     private String type;
-    private String password;
 
     public User(int idUser){
         id = idUser;
@@ -88,6 +87,14 @@ public class User implements Serializable {
     }
 
     public String getName() { return name; }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setSurname(String surname) {
+        this.surname = surname;
+    }
 
     public String getSurname() { return surname; }
 

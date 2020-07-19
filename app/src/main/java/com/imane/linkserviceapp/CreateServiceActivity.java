@@ -27,6 +27,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.gson.Gson;
 import com.imane.linkserviceapp.API.ServiceAPI;
 import com.imane.linkserviceapp.Classes.API;
+import com.imane.linkserviceapp.Classes.Service;
 import com.imane.linkserviceapp.Classes.TypeService;
 import com.imane.linkserviceapp.Classes.User;
 import com.imane.linkserviceapp.ServiceInfos.ServiceInfosActivityCreator;

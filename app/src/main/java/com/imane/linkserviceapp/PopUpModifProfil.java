@@ -8,23 +8,34 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.imane.linkserviceapp.API.ConfigAPI;
+import com.imane.linkserviceapp.API.UserAPI;
 import com.imane.linkserviceapp.Classes.API;
 import com.imane.linkserviceapp.Classes.User;
 
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
+import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatDialogFragment;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+
 public class PopUpModifProfil extends AppCompatDialogFragment {
 
     private EditText editNom, editPrenom, editEmail, editMdp ;
     User userConnected;
+
+    Retrofit retrofit = ConfigAPI.getRetrofitClient();
 
     @NonNull
     @Override
@@ -44,48 +55,41 @@ public class PopUpModifProfil extends AppCompatDialogFragment {
 
             }
         })
-                .setPositiveButton("Appliquer", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        User user = new User();
-                        final String mdp = editMdp.getText().toString();
-                        final String nom = editNom.getText().toString();
-                        final String prenom = editPrenom.getText().toString();
+            .setPositiveButton("Appliquer", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    User user = new User();
+                    //final String mdp = editMdp.getText().toString();
+                    final String nom = editNom.getText().toString();
+                    final String prenom = editPrenom.getText().toString();
 
-                        Intent intent = getActivity().getIntent();
-                        userConnected = (User) intent.getSerializableExtra("userConnected");
+                    Intent intent = getActivity().getIntent();
+                    userConnected = (User) intent.getSerializableExtra("userConnected");
 
+                    userConnected.setName(nom);
+                    userConnected.setSurname(prenom);
+                    userConnected.setBirthdate(userConnected.getBirthdate().substring(0,10));
 
-                        try {
-                            String table =  "user";
+                    UserAPI userAPI = retrofit.create(UserAPI.class);
+                    Call callUser = userAPI.updateUser(userConnected.getId(), userConnected);
 
-                            HashMap<String,String> update = user.updateUser(nom, prenom,mdp,userConnected.getId());
-                            HashMap<String, Object> userValue = new HashMap<>();
+                    callUser.enqueue(
+                            new Callback<List<User>>() {
+                                @Override
+                                public void onResponse(Call<List<User>> call, Response<List<User>> response) {
+                                    if(response.code()==200){
 
-                            userValue.put("table", "user");
-                            userValue.put("values", update);
-                            Gson gson = new Gson();
-                            String json = gson.toJson(userValue);
-                            System.out.println(json);
+                                    }
+                                }
 
-                            API api = new API();
-                            api.sendRequest(json, "update");
+                                @Override
+                                public void onFailure(Call call, Throwable t) {
 
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        } catch (NoSuchAlgorithmException e) {
-                            e.printStackTrace();
-                        }
-
-                    }
-                });
-
-
-
-
-
+                                }
+                            }
+                    );
+                }
+            });
         return builder.create();
 
     }
