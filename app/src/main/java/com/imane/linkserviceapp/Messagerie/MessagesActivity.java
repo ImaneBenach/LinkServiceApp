@@ -1,4 +1,4 @@
-package com.imane.linkserviceapp;
+package com.imane.linkserviceapp.Messagerie;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -17,6 +17,9 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.imane.linkserviceapp.HomeActivity;
+import com.imane.linkserviceapp.R;
 
 public class MessagesActivity extends AppCompatActivity {
 

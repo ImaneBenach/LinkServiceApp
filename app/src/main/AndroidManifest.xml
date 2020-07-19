@@ -11,7 +11,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".MesServices.MesServicesActivity"></activity>
+        <activity android:name=".Messagerie.ChatActivity"></activity>
+        <activity android:name=".MesServices.MesServicesActivity" />
         <activity android:name=".JustificatifsActivity" />
         <activity android:name=".TypesService.TypeServicesActivity" />
         <activity android:name=".ServicesList.ServicesListActivity" />
@@ -19,10 +20,10 @@
         <activity android:name=".ServiceInfos.ServiceInfosActivityCreator" />
         <activity android:name=".ServiceInfos.ServiceEvaluationActivity" />
         <activity android:name=".ServiceInfos.ServiceEffectedInforsActivity" />
-        <activity android:name="serviceMenuActivity"/>
+        <activity android:name=".serviceMenuActivity"/>
         <activity android:name=".VolunteersList.VolunteersListActivity"/>
-        <activity android:name="CreateServiceActivity"/>
-        <activity android:name=".MessagesActivity" />
+        <activity android:name=".CreateServiceActivity"/>
+        <activity android:name=".Messagerie.MessagesActivity" />
         <activity android:name=".ProfilActivity" />
         <activity
             android:name=".HomeActivity"
@@ -47,6 +48,9 @@
         </activity>
         <activity android:name=".VolunteerInfos.DetailsExecutorActivity"/>
     </application>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <uses-permission android:name="android.permission.INTERNET" />
 

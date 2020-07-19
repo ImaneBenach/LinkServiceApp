@@ -27,7 +27,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.gson.Gson;
 import com.imane.linkserviceapp.API.ServiceAPI;
 import com.imane.linkserviceapp.Classes.API;
-import com.imane.linkserviceapp.Classes.Service;
 import com.imane.linkserviceapp.Classes.TypeService;
 import com.imane.linkserviceapp.Classes.User;
 import com.imane.linkserviceapp.ServiceInfos.ServiceInfosActivityCreator;
@@ -156,8 +155,8 @@ public class CreateServiceActivity extends AppCompatActivity {
 
         newServiceTypeService = findViewById(R.id.newServiceTypeService);
 
-        getAllTypesService();
-        ArrayList<String> arrayList = getStringListTypeSerice();
+//        getAllTypesService();
+        ArrayList<String> arrayList = getStringListTypeService();
 
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, arrayList);
         arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -187,7 +186,7 @@ public class CreateServiceActivity extends AppCompatActivity {
 
     }
 
-    private ArrayList<String> getStringListTypeSerice() {
+    private ArrayList<String> getStringListTypeService() {
         int counter = 0;
         ArrayList<String> typesServicesString = new ArrayList<>();
         for (counter = 0; counter < typeServices.size(); counter++) {
@@ -305,6 +304,8 @@ public class CreateServiceActivity extends AppCompatActivity {
             } else {
                 typeData = API.decodeResponseMultipleAsTypeService(typeServicesListAsString);
             }
+
+
             for (counter = 0; counter < typeData.size(); counter++) {
                 TypeService type = typeData.get(Integer.toString(counter));
                 typeServices.add(type);

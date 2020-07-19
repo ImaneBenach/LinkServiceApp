@@ -11,7 +11,10 @@ import android.widget.Button;
 import com.google.gson.Gson;
 import com.imane.linkserviceapp.Classes.User;
 import com.imane.linkserviceapp.MesServices.MesServicesActivity;
+import com.imane.linkserviceapp.Messagerie.ChatActivity;
+import com.imane.linkserviceapp.Messagerie.MessagesActivity;
 
+import org.json.JSONObject;
 
 public class HomeActivity extends AppCompatActivity {
 
@@ -58,7 +61,7 @@ public class HomeActivity extends AppCompatActivity {
         btnMessages.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(HomeActivity.this,MessagesActivity.class);
+                Intent intent = new Intent(HomeActivity.this, ChatActivity.class);
                 intent.putExtra("userConnected", userConnected);
                 startActivity(intent);
                 finish();

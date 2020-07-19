@@ -25,6 +25,7 @@ public class User implements Serializable {
     private String city;
     private String postcode;
     private String type;
+    private String password;
 
     public User(int idUser){
         id = idUser;
@@ -61,7 +62,7 @@ public class User implements Serializable {
         this.type = type;
     }
 
-    public User(int idUser, String e, String n, String s, String b, int p, String a, String c, String t){
+    public User(int idUser, String e, String n, String s, String b, int p, String a, String c, String t, String pass){
         id = idUser;
         email = e;
         name = n;
@@ -71,6 +72,7 @@ public class User implements Serializable {
         adress = a;
         city = c;
         type = t;
+        password = pass;
     }
 
     public void setId(int id) {
@@ -143,4 +145,57 @@ public class User implements Serializable {
         }
         return false;
     }
+
+
+
+    public HashMap updateUser(String newName, String newSurname, String password, int id, String email) throws IOException, InterruptedException {
+        name = newName;
+        surname = newSurname;
+
+
+        HashMap<String, String> inputValues = new HashMap<>();
+        inputValues.put("name",name);
+        inputValues.put("surname",surname);
+        inputValues.put("password",password);
+        inputValues.put("id",Integer.toString(id));
+        inputValues.put("email",email);
+
+        return inputValues;
+    }
+/*
+    public static void createUser(String email, String password, String name, String surname, String birthdate, String type) throws NoSuchAlgorithmException, IOException, InterruptedException {
+        HashMap<String, String> inputValues = new HashMap<>();
+        inputValues.put("email",email);
+        inputValues.put("password", API.passwordHash(password));
+        inputValues.put("name",name);
+        inputValues.put("surname",surname);
+        inputValues.put("birthdate",birthdate);
+        inputValues.put("type",type);
+        updateInDatabase(inputValues, "create");
+
+    }
+
+    public void modifyPassword(String pwd) throws NoSuchAlgorithmException, IOException, InterruptedException {
+        HashMap<String, String> inputValues = new HashMap<>();
+        inputValues.put("password",API.passwordHash(pwd));
+        inputValues.put("id", Integer.toString(id));
+        updateInDatabase(inputValues, "update");
+    }
+
+
+    private static void updateInDatabase(HashMap<String, String> inputValues, String action) throws IOException, InterruptedException {
+        //Gson gson = new Gson ();
+
+        HashMap<String, Object> inputData = new HashMap<>();
+        inputData.put("table","user");
+        inputData.put("values", inputValues);
+        //String inputJson = gson.toJson(inputData);
+
+        //var response = API.sendRequest(inputJson, action);
+
+        //TODO: if API is disconnected
+    }
+
+     */
+
 }
