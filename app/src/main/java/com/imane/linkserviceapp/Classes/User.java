@@ -127,7 +127,7 @@ public class User implements Serializable {
 
 
 
-    public HashMap updateUser(String newName, String newSurname, String password, int id, String email) throws IOException, InterruptedException {
+    public HashMap updateUser(String newName, String newSurname, String password, int id) throws IOException, InterruptedException, NoSuchAlgorithmException {
         name = newName;
         surname = newSurname;
 
@@ -135,9 +135,8 @@ public class User implements Serializable {
         HashMap<String, String> inputValues = new HashMap<>();
         inputValues.put("name",name);
         inputValues.put("surname",surname);
-        inputValues.put("password",password);
+        inputValues.put("password",API.passwordHash(password));
         inputValues.put("id",Integer.toString(id));
-        inputValues.put("email",email);
 
         return inputValues;
     }
