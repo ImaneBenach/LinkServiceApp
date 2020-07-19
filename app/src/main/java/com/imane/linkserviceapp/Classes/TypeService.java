@@ -51,7 +51,24 @@ public class TypeService {
         return description;
     }
 
-    public int getImage() { return R.drawable.services_logo; }
+    public int getImage() {
+        switch (picture){
+            case "cuisine.png":
+                return R.drawable.cuisine;
+            case "menage.png":
+                return R.drawable.menage;
+            case "babysitting.jpg":
+                return R.drawable.babysitting;
+            case "travaux.png":
+                return R.drawable.travaux;
+            case "course.png":
+                return R.drawable.course;
+            case "aide.png":
+                return R.drawable.aide;
+            default:
+                return R.drawable.services_logo;
+        }
+    }
 
     public int getActive() { return active; }
 

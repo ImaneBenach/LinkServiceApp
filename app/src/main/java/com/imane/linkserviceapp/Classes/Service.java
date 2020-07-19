@@ -1,5 +1,8 @@
 package com.imane.linkserviceapp.Classes;
 
+import android.annotation.SuppressLint;
+import android.util.Log;
+
 import com.google.gson.Gson;
 import com.imane.linkserviceapp.API.ApplyAPI;
 import com.imane.linkserviceapp.API.ConfigAPI;
@@ -57,6 +60,35 @@ public class Service implements Serializable {
 
     public void normalizeBirthdate(){
         executorUser.setBirthdate(executorUser.getBirthdate().substring(0,10));
+    }
+
+    public int getStatut() {
+        return Statut;
+    }
+
+    public void setStatut(int statut) {
+        Statut = statut;
+    }
+
+    public void saveFinishService(){
+        Retrofit retrofit = ConfigAPI.getRetrofitClient();
+        ServiceAPI serviceAPI = retrofit.create(ServiceAPI.class);
+
+        Call<Void> callService = serviceAPI.updateStatut(this.getId(), this);
+        callService.enqueue(
+                new Callback<Void>() {
+                    @SuppressLint("LongLogTag")
+                    @Override
+                    public void onResponse(Call<Void> call, Response<Void> response) {
+                        Log.d("Responde code update statut ", String.valueOf(response.code()));
+                    }
+
+                    @Override
+                    public void onFailure(Call<Void> call, Throwable t) {
+
+                    }
+                }
+        );
     }
 
     public int getId() { return id; }

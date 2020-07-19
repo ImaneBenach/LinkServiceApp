@@ -134,8 +134,11 @@ public class ServiceEvaluationActivity extends AppCompatActivity implements Seri
                 service.normalizeBirthdate();
                 service.setEvaluation(note, comment);
 
+                service.setStatut(2);
+                service.saveFinishService();
+
                 ServiceID = service.getId_type();
-                Log.d("Service ID", String.valueOf(ServiceID));
+//                Log.d("Service ID", String.valueOf(ServiceID));
                 UserID = service.getExecutorUser().getId();
                 getPointsUserByService();
 
@@ -164,7 +167,6 @@ public class ServiceEvaluationActivity extends AppCompatActivity implements Seri
                     public void onResponse(Call<Void> call, Response<Void> response) {
                         if (response.code() == 200){
                             service.givePointToExecutor();
-
                         }
                     }
 

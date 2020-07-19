@@ -100,14 +100,18 @@ public class ServiceInfosActivityCreator extends AppCompatActivity implements Se
                 }
             });
 
+            if (service.getStatut() == 2){
+                buttonEndService.setVisibility(View.INVISIBLE);
+            }else{
+                buttonEndService.setVisibility(View.VISIBLE);
+                buttonEndService.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        displayEndPopup(view);
+                    }
+                });
+            }
 
-            buttonEndService.setVisibility(View.VISIBLE);
-            buttonEndService.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    displayEndPopup(view);
-                }
-            });
         }
 
         assert getSupportActionBar() != null;   //null check

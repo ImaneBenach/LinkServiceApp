@@ -31,4 +31,9 @@ public interface ServiceAPI {
     @GET("/services/actif/{id_type}&{statut}")
     Call<List<Service>> getServiceActif(@Path("id_type") int id_type, @Path("statut") int statut);
 
+    @PATCH("/service/statut/{id}")
+    Call<Void> updateStatut(
+            @Path("id") int id,
+            @Body Service service
+        );
 }
