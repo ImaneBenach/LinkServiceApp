@@ -121,7 +121,7 @@ public class Service implements Serializable {
         String executor = "";
 
         try {
-            jsonParamValues.put("where"," INNER JOIN USER WHERE execute=2 AND id_user=id AND id_service="+id);
+            jsonParamValues.put("where"," INNER JOIN user WHERE execute=2 AND id_user=id AND id_service="+id);
 
             executor = sendToAPI(jsonParamValues, "apply", "readWithFilter");
         } catch (JSONException e) {
