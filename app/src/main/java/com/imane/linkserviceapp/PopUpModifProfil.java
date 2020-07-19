@@ -35,7 +35,6 @@ public class PopUpModifProfil extends AppCompatDialogFragment {
 
         editNom = view.findViewById(R.id.edit_nom) ;
         editPrenom = view.findViewById(R.id.edit_prenom) ;
-        editEmail = view.findViewById(R.id.edit_email);
         editMdp = view.findViewById(R.id.edit_mdp);
 
 
@@ -49,7 +48,6 @@ public class PopUpModifProfil extends AppCompatDialogFragment {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         User user = new User();
-                        final String email = editEmail.getText().toString();
                         final String mdp = editMdp.getText().toString();
                         final String nom = editNom.getText().toString();
                         final String prenom = editPrenom.getText().toString();
@@ -61,7 +59,7 @@ public class PopUpModifProfil extends AppCompatDialogFragment {
                         try {
                             String table =  "user";
 
-                            HashMap<String,String> update = user.updateUser(nom, prenom,mdp,userConnected.getId(), email);
+                            HashMap<String,String> update = user.updateUser(nom, prenom,mdp,userConnected.getId());
                             HashMap<String, Object> userValue = new HashMap<>();
 
                             userValue.put("table", "user");
@@ -76,6 +74,8 @@ public class PopUpModifProfil extends AppCompatDialogFragment {
                         } catch (IOException e) {
                             e.printStackTrace();
                         } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        } catch (NoSuchAlgorithmException e) {
                             e.printStackTrace();
                         }
 

@@ -20,18 +20,10 @@
         android:hint="Changer mon prénom"></EditText>
 
     <EditText
-        android:id="@+id/edit_email"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/edit_prenom"
-        android:inputType="textEmailAddress"
-        android:hint="Changer mon email"></EditText>
-
-    <EditText
         android:id="@+id/edit_mdp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/edit_email"
+        android:layout_below="@id/edit_prenom"
         android:inputType="textPassword"
         android:hint="Changer mon mot de passe"></EditText>
 
