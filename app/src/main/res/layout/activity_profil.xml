@@ -135,6 +135,9 @@
         android:textAllCaps="false"
         android:textColor="@color/colorTab"
         tools:layout_editor_absoluteX="19dp"
-        tools:layout_editor_absoluteY="449dp" />
+        tools:layout_editor_absoluteY="449dp"
+        app:layout_constraintStart_toStartOf="@+id/view"
+        app:layout_constraintEnd_toEndOf="@+id/view"
+        app:layout_constraintTop_toBottomOf="@id/tv_points"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

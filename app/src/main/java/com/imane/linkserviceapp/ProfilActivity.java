@@ -71,22 +71,6 @@ public class ProfilActivity extends AppCompatActivity {
             }
         });
 
-        btnNewsletter.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                openDialogNewsletter();
-
-            }
-        });
-
-        btnNotif.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                openDialogNotif();
-
-            }
-        });
-
         modifProfil.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
