@@ -61,7 +61,7 @@ public class HomeActivity extends AppCompatActivity {
         btnMessages.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(HomeActivity.this, ChatActivity.class);
+                Intent intent = new Intent(HomeActivity.this, MessagesActivity.class);
                 intent.putExtra("userConnected", userConnected);
                 startActivity(intent);
                 finish();

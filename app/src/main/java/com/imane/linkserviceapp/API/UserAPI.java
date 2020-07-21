@@ -21,6 +21,9 @@ public interface UserAPI {
     @PATCH("/user/{id_user}")
     Call<Void> updateUser(@Path ("id_user") int id, @Body User user);
 
+    @PATCH("/user/delete/{id_user}")
+    Call<Void> deleteUser(@Path ("id_user") int id, @Body User user);
+
     @POST("/user")
     Call<Void> create(@Body User user);
 

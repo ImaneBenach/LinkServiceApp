@@ -28,6 +28,7 @@ import com.imane.linkserviceapp.Classes.Service;
 import com.imane.linkserviceapp.Classes.TypeService;
 import com.imane.linkserviceapp.Classes.User;
 import com.imane.linkserviceapp.MesServices.MesServicesActivity;
+import com.imane.linkserviceapp.Messagerie.ChatFragment;
 import com.imane.linkserviceapp.R;
 
 import org.json.JSONException;
@@ -67,6 +68,7 @@ public class ServiceEffectedInforsActivity extends AppCompatActivity implements 
         setServiceInfo();
 
         final Button btnPostulate = findViewById(R.id.buttonPostuler);
+        final Button btnContact = findViewById(R.id.buttonContacter);
 
         ApplyAPI applyAPI = retrofit.create(ApplyAPI.class);
         Call callType = applyAPI.existApply(service.getId(), userConnected.getId());
@@ -80,13 +82,17 @@ public class ServiceEffectedInforsActivity extends AppCompatActivity implements 
                                 @Override
                                 public void onClick(View view) {
                                     service.apply(userConnected.getId());
-
-                                    // redirection to myServiceEffected
-
                                 }
                             });
+                            btnContact.setVisibility(View.INVISIBLE);
                         }else if (applies.get(0).getExecute() == 0){
                             btnPostulate.setVisibility(View.INVISIBLE);
+                            btnContact.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    redirectionMessages();
+                                }
+                            });
                         }
                     }
 
@@ -115,6 +121,14 @@ public class ServiceEffectedInforsActivity extends AppCompatActivity implements 
             }
         });
         return true;
+    }
+
+    public void redirectionMessages(){
+        Intent intent = new Intent(this, ChatFragment.class);
+        intent.putExtra("userConnected", userConnected);
+        intent.putExtra("idUserCreator", service.getId_creator());
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
     }
 
     @Override

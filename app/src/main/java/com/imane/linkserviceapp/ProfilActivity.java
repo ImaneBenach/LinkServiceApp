@@ -2,6 +2,10 @@ package com.imane.linkserviceapp;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -13,17 +17,28 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.imane.linkserviceapp.API.ConfigAPI;
+import com.imane.linkserviceapp.API.UserAPI;
 import com.imane.linkserviceapp.Classes.User;
 
 import java.io.IOException;
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
 
 public class ProfilActivity extends AppCompatActivity {
 
-    Button  btnDeco, btnNewsletter, btnNotif ;
+    Button  btnDeco, btnSupp, btnNotif ;
     ImageView imageProfil ;
     TextView modifProfil, addJustif,tvNom, tvPoints ;
     User userConnected;
+
+    Retrofit retrofit = ConfigAPI.getRetrofitClient();
 
     private static final int PICK_IMAGE = 1 ;
     Uri imageUri ;
@@ -34,6 +49,7 @@ public class ProfilActivity extends AppCompatActivity {
         setContentView(R.layout.activity_profil);
 
         btnDeco = findViewById(R.id.btn_deco) ;
+        btnSupp = findViewById(R.id.btn_supp) ;
         tvPoints = findViewById(R.id.tv_points);
         imageProfil = findViewById(R.id.imageProfil);
         modifProfil = findViewById(R.id.tv_profil);
@@ -67,6 +83,33 @@ public class ProfilActivity extends AppCompatActivity {
                 Intent intent = new Intent(ProfilActivity.this,LoginActivity.class);
                 startActivity(intent);
                 finish();
+
+            }
+        });
+
+        btnSupp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                UserAPI userAPI = retrofit.create(UserAPI.class);
+                Call callUser = userAPI.deleteUser(userConnected.getId(), userConnected);
+
+                callUser.enqueue(
+                        new Callback<Void>() {
+                            @Override
+                            public void onResponse(Call<Void> call, Response<Void> response) {
+                                if(response.code()==200){
+
+                                    Intent intent = new Intent(ProfilActivity.this, LoginActivity.class);
+                                    startActivity(intent);
+                                    finish();
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(Call call, Throwable t) {
+                            }
+                        }
+                );
 
             }
         });

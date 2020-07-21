@@ -107,6 +107,19 @@
             >
         </Button>
 
+        <Button
+            android:id="@+id/buttonContacter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/ButtonPostuler"
+            android:text="Contacter"
+            android:background="@drawable/field_border_error"
+            android:textColor="@color/colorWhite"
+            android:layout_marginTop="10dp"
+            android:padding="5dp"
+            >
+        </Button>
+
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
