@@ -60,7 +60,6 @@ public class ProposerAdapter extends RecyclerView.Adapter<ProposerAdapter.MyView
                 intent.putExtra("from","MesServicesActivity");
                 context.startActivity(intent);
 
-                Toast.makeText(context,"click on " + data.get(position).getName(), Toast.LENGTH_LONG).show();
             }
         });
 

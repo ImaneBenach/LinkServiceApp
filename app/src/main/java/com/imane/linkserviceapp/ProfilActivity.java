@@ -35,8 +35,6 @@ public class ProfilActivity extends AppCompatActivity {
 
         btnDeco = findViewById(R.id.btn_deco) ;
         tvPoints = findViewById(R.id.tv_points);
-        btnNewsletter= findViewById(R.id.btn_newsletter);
-        btnNotif = findViewById(R.id.btn_notif);
         imageProfil = findViewById(R.id.imageProfil);
         modifProfil = findViewById(R.id.tv_profil);
         addJustif = findViewById(R.id.tv_justif);

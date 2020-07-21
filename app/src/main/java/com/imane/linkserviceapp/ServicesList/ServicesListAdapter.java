@@ -56,7 +56,6 @@ public class ServicesListAdapter extends RecyclerView.Adapter<ServicesListAdapte
                 intent.putExtra("from","ServiceList");
                 context.startActivity(intent);
 
-                Toast.makeText(context,"click on " + Services.get(position).getName(), Toast.LENGTH_LONG).show();
             }
         });
 
