@@ -138,8 +138,8 @@ public class ServiceEvaluationActivity extends AppCompatActivity implements Seri
                 service.saveFinishService();
 
                 ServiceID = service.getId_type();
-//                Log.d("Service ID", String.valueOf(ServiceID));
                 UserID = service.getExecutorUser().getId();
+
                 getPointsUserByService();
 
 
@@ -186,10 +186,8 @@ public class ServiceEvaluationActivity extends AppCompatActivity implements Seri
                 new Callback<List<Note>>() {
                     @Override
                     public void onResponse(Call<List<Note>> call, Response<List<Note>> response) {
-                        Log.d("Reponse code ", String.valueOf(response.code()));
                         if (response.code() == 200){
                             List<Note> points = response.body();
-                            Log.d( "Points ", String.valueOf(points.get(0).getNote()));
                             getBadgeUser(points.get(0).getNote());
                         }
                     }
@@ -204,7 +202,6 @@ public class ServiceEvaluationActivity extends AppCompatActivity implements Seri
 
     public void getBadgeUser(int points){
         this.UserPoints = points;
-        Log.d("getBadgeUser ", String.valueOf(points));
         Call<List<Badge>> callBadgeUser = badgeAPI.getBagdeByUserAndService(this.UserID, this.ServiceID);
 
         callBadgeUser.enqueue(
@@ -212,9 +209,9 @@ public class ServiceEvaluationActivity extends AppCompatActivity implements Seri
                     @Override
                     public void onResponse(Call<List<Badge>> call, Response<List<Badge>> response) {
                         List<Badge> listUserBadges = response.body();
-                        Log.d("Reponse code ", String.valueOf(response.code()));
+
                         if (response.code() == 200 && listUserBadges != null){
-                            Log.d("Badge user ", String.valueOf(listUserBadges));
+
                             getAllBadgeToAttribute(listUserBadges);
                         }
                     }
@@ -229,17 +226,17 @@ public class ServiceEvaluationActivity extends AppCompatActivity implements Seri
 
     public void getAllBadgeToAttribute(List<Badge> list){
         this.listUserBadges = list;
-        Log.d("getAllBadgeToAttribute ", String.valueOf(10000));
+
         Call<List<Badge>> callBadgeService = badgeAPI.getAllBadgeByService(this.ServiceID);
 
         callBadgeService.enqueue(
                 new Callback<List<Badge>>() {
                     @Override
                     public void onResponse(Call<List<Badge>> call, Response<List<Badge>> response) {
-                        Log.d("Reponse code ", String.valueOf(response.code()));
+
                         List<Badge> listServiceBadge = response.body();
                         if (response.code() == 200 && listServiceBadge != null){
-                            Log.d("Badge service ", String.valueOf(listServiceBadge));
+
                             compareBadge(listServiceBadge);
                         }
                     }
@@ -253,7 +250,6 @@ public class ServiceEvaluationActivity extends AppCompatActivity implements Seri
     }
 
     public void compareBadge(List<Badge> list){
-        Log.d("compareBadge ", String.valueOf(999));
 
         this.listServiceBadge = list;
         boolean had_badge = false;
@@ -270,7 +266,7 @@ public class ServiceEvaluationActivity extends AppCompatActivity implements Seri
                 }
             }
             if (this.listServiceBadge.get(i).getPointsLimit() <= this.UserPoints && !had_badge){
-                Log.d("egal", "false");
+
                 giveBadge(this.listServiceBadge.get(i));
             }
         }
@@ -294,7 +290,7 @@ public class ServiceEvaluationActivity extends AppCompatActivity implements Seri
                 new Callback() {
                     @Override
                     public void onResponse(Call call, Response response) {
-                        Log.d("Win insert code", String.valueOf(response.code()));
+
                     }
 
                     @Override

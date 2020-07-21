@@ -60,7 +60,6 @@ public class EffectuerFragment extends Fragment {
                         if(response.code() == 200){
                             List<Service> listService = response.body();
                             if(listService != null){
-                                Log.d("ici", listService.toString());
                                 services = listService;
 
                                 recyclerView = v.findViewById(R.id.recyclerView);

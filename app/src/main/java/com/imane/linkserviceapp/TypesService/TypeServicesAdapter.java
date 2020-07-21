@@ -53,8 +53,6 @@ public class TypeServicesAdapter extends RecyclerView.Adapter<TypeServicesAdapte
                 intent.putExtra("userConnected", userConnected);
                 intent.putExtra("typeService",typeServices.get(position).getId());
                 context.startActivity(intent);
-
-                Toast.makeText(context,"click on " + typeServices.get(position).getName(), Toast.LENGTH_LONG).show();
             }
         });
 

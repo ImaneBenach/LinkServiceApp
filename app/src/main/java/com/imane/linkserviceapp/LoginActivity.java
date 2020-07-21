@@ -11,7 +11,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.google.gson.Gson;
 import com.imane.linkserviceapp.API.ConfigAPI;
 import com.imane.linkserviceapp.API.UserAPI;
 import com.imane.linkserviceapp.Classes.User;
@@ -87,7 +86,6 @@ public class LoginActivity extends AppCompatActivity {
 
                             @Override
                             public void onFailure(Call call, Throwable t) {
-
                             }
                         }
                     );

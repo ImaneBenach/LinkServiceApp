@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name"></string>
+    <string name="app_name">LinkService</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="tab_text_1">Services effectués</string>

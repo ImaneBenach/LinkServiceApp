@@ -38,8 +38,6 @@ public class MesServicesActivity extends AppCompatActivity implements Serializab
         adapter.AddFragment(new EffectuerFragment(userConnected), "Effectué(s)");
         adapter.AddFragment(new ProposerFragment(userConnected), "Proposé(s)");
 
-        Log.d("erreur", "j'arrive ici");
-
 
         viewPager.setAdapter(adapter);
         tabLayout.setupWithViewPager(viewPager);

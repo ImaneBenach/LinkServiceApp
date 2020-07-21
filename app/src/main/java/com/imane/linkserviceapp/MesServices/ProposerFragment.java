@@ -15,15 +15,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.gson.Gson;
 import com.imane.linkserviceapp.API.ConfigAPI;
 import com.imane.linkserviceapp.API.ServiceAPI;
-import com.imane.linkserviceapp.Classes.API;
 import com.imane.linkserviceapp.Classes.Service;
 import com.imane.linkserviceapp.Classes.User;
 import com.imane.linkserviceapp.R;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -59,9 +54,7 @@ public class ProposerFragment extends Fragment {
                         if(response.code() == 200){
                             List<Service> listService = response.body();
                             if(listService != null){
-                                Log.d("ici", listService.toString());
                                 services = listService;
-
 
                                 recyclerView = v.findViewById(R.id.recyclerView) ;
                                 ProposerAdapter recyclerViewAdapter;

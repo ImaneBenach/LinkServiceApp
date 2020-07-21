@@ -14,12 +14,14 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.imane.linkserviceapp.API.ApplyAPI;
 import com.imane.linkserviceapp.API.ConfigAPI;
 import com.imane.linkserviceapp.API.ServiceAPI;
 import com.imane.linkserviceapp.API.TypeAPI;
+import com.imane.linkserviceapp.API.UserAPI;
 import com.imane.linkserviceapp.Classes.API;
 import com.imane.linkserviceapp.Classes.Apply;
 import com.imane.linkserviceapp.Classes.Service;
@@ -137,37 +139,42 @@ public class ServiceEffectedInforsActivity extends AppCompatActivity implements 
         TextView dateService = (TextView) findViewById(R.id.dateService);
         TextView typeService = (TextView) findViewById(R.id.typeService);
 
+        setCreatorName();
+
         nameService.setText(service.getName());
-        creatorService.setText(getCreatorName());
         profitService.setText(Integer.toString(service.getProfit()));
         descriptionService.setText(service.getDescription());
         dateService.setText(service.getDate());
         displayNameTypeService(typeService, service.getId_type());
     }
 
-    private String getCreatorName(){
-        JSONObject jsonParam = new JSONObject();
-        JSONObject jsonParamValues = new JSONObject();
-        User userCreator;
-        String where = " WHERE id="+service.getId_creator();
+    private void setCreatorName(){
+        UserAPI userAPI = retrofit.create(UserAPI.class);
+        Call callUser = userAPI.getOne(service.getId_creator());
 
-        try {
-            jsonParamValues.put("where", where);
-            jsonParam.put("table", "user");
-            jsonParam.put("values",jsonParamValues);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        try {
-            userCreator = gson.fromJson(API.sendRequest(jsonParam.toString(), "readWithFilter"),User.class);
+        callUser.enqueue(
+                new Callback<List<User>>() {
+                    @Override
+                    public void onResponse(Call<List<User>> call, Response<List<User>> response) {
+                        if(response.code()==200){
+                            List<User> users = response.body();
+                            if(users != null && users.size() > 0){
+                                User userCreator = users.get(0);
 
-            checkButton(userCreator);
+                                TextView creatorService = (TextView) findViewById(R.id.creatorService);
+                                creatorService.setText(userCreator.getName() + " " + userCreator.getSurname());
+                            } else {
+                                Toast.makeText(getApplicationContext(), "Cette combinaison est inconnue", Toast.LENGTH_LONG).show();
+                            }
+                        }
+                    }
 
-            return userCreator.getName() + " " + userCreator.getSurname();
-        } catch (IOException | InterruptedException e) {
-            e.printStackTrace();
-        }
-        return null;
+                    @Override
+                    public void onFailure(Call call, Throwable t) {
+                    }
+                }
+        );
+
     }
 
     private void displayNameTypeService(TextView typeService, int idType){
@@ -244,7 +251,7 @@ public class ServiceEffectedInforsActivity extends AppCompatActivity implements 
                     new Callback<List<Apply>>() {
                         @Override
                         public void onResponse(Call<List<Apply>> call, Response<List<Apply>> response) {
-                            Log.d("GetExecutor code", String.valueOf(response.code()));
+
                             if (response.code() == 200){
                                 List<Apply> executorList = (List<Apply>) response.body();
                                 if (executorList != null && executorList.size() > 0){
@@ -253,7 +260,7 @@ public class ServiceEffectedInforsActivity extends AppCompatActivity implements 
                                     btnPostulate.setVisibility(View.INVISIBLE);
                                 }else{
                                     final Button btnPostulate = findViewById(R.id.buttonPostuler);
-                                    btnPostulate.setText("Annuler ma partivcipation");
+                                    btnPostulate.setText("Annuler ma participation");
                                     btnPostulate.setOnClickListener(new View.OnClickListener() {
                                         @Override
                                         public void onClick(View v) {
@@ -265,7 +272,7 @@ public class ServiceEffectedInforsActivity extends AppCompatActivity implements 
                                                     new Callback() {
                                                         @Override
                                                         public void onResponse(Call call, Response response) {
-                                                            Log.d("update apply code ", String.valueOf(response.code()));
+
                                                             if (response.code() == 200){
                                                                 Intent intent = new Intent(ServiceEffectedInforsActivity.this, MesServicesActivity.class);
                                                                 intent.putExtra("userConnected", userConnected);

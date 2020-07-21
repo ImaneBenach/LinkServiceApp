@@ -96,7 +96,6 @@ public class RegisterActivity extends AppCompatActivity {
             @Override
             public void onDateSet(DatePicker datePicker, int year, int month, int day) {
                 month = month + 1;
-                Log.d(TAG, "onDateSet: yyyy-mm-dd: " + year + "-" + month + "-" + day);
 
                 SimpleDateFormat formater = null;
                 Date date = null;
@@ -174,7 +173,6 @@ public class RegisterActivity extends AppCompatActivity {
                                     @SuppressLint("LongLogTag")
                                     @Override
                                     public void onResponse(Call<List<User>> call, Response<List<User>> response) {
-                                        Log.d("Reponse getusermail code", String.valueOf(response.code()));
                                         if (response.code() == 200){
                                             List<User> usersEmail = (List<User>) response.body();
                                             if (usersEmail.size() == 0){
@@ -188,7 +186,6 @@ public class RegisterActivity extends AppCompatActivity {
 
                                     @Override
                                     public void onFailure(Call<List<User>> call, Throwable t) {
-                                        Log.d("Failure, code", t.toString());
                                     }
                                 }
                         );
@@ -227,7 +224,6 @@ public class RegisterActivity extends AppCompatActivity {
                 new Callback<Void>() {
                     @Override
                     public void onResponse(Call<Void> call, Response<Void> response) {
-                        Log.d("Reponse code", String.valueOf(response.code()));
                         if (response.code() == 200){
                             Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
                             startActivity(intent);
@@ -239,7 +235,6 @@ public class RegisterActivity extends AppCompatActivity {
 
                     @Override
                     public void onFailure(Call<Void> call, Throwable t) {
-                        Log.d("Failure, code", t.toString());
                     }
                 }
         );

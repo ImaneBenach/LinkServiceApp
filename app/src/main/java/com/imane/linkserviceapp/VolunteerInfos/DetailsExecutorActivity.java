@@ -56,8 +56,7 @@ public class DetailsExecutorActivity extends AppCompatActivity {
         iv_photo_profil.setImageResource(R.drawable.photo_profil);
         iv_bagde.setImageResource(R.drawable.photo_badge);
         getBadge(VolunteerID, service.getId_type());
-//        Log.d("service", service.getName());
-//        Log.d("service id", String.valueOf(service.getId()));
+
 
     }
 
@@ -80,7 +79,7 @@ public class DetailsExecutorActivity extends AppCompatActivity {
                 new Callback<List<Badge>>() {
                     @Override
                     public void onResponse(Call<List<Badge>> call, Response<List<Badge>> response) {
-                        Log.d("Response code", String.valueOf(response.code()));
+
                         if (response.code() == 200){
                             List<Badge> badges = (List<Badge>) response.body();
 
@@ -118,13 +117,12 @@ public class DetailsExecutorActivity extends AppCompatActivity {
 
                     @Override
                     public void onResponse(Call<List<User>> call, Response<List<User>> response) {
-                        Log.d("Response getvolunteer", String.valueOf(response.code()));
+
                         if (response.code() == 200){
                             List<User> volunteer = (List<User>) response.body();
-                            Log.d("Volunter", volunteer.get(0).getName());
 
                             if (volunteer != null){
-                                Log.d("Volunteer ID", String.valueOf(volunteer.get(0).getId()));
+
                                 displayVolunteerInfos(volunteer.get(0));
                             }
                         }

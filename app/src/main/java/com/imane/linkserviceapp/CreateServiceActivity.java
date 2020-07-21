@@ -245,10 +245,9 @@ public class CreateServiceActivity extends AppCompatActivity {
                     String date = formater.format(selectedDate);
                     String deadline = formater.format(selectedDeadline);
 
-                    Log.d("DATE", date);
 
                     Service newService = new Service(0, name, description, date, deadline, 1, 1, userConnected.getAdress(), userConnected.getCity(), 0, "", idTypeService, userConnected.getId(), 1);
-                    Log.d("DATE", newService.getDate());
+
 
                     ServiceAPI serviceAPI = retrofit.create(ServiceAPI.class);
                     Call callService = serviceAPI.setService(newService);

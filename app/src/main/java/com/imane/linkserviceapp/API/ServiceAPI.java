@@ -2,6 +2,7 @@ package com.imane.linkserviceapp.API;
 
 import com.imane.linkserviceapp.Classes.Apply;
 import com.imane.linkserviceapp.Classes.Service;
+import com.imane.linkserviceapp.Classes.User;
 
 import java.util.List;
 
@@ -30,6 +31,9 @@ public interface ServiceAPI {
 
     @GET("/service/executor/{id_service}")
     Call<List<Apply>> getExecutor(@Path("id_service") int id_service);
+
+    @GET("/service/executor/{id_service}")
+    Call<List<User>> getUserExecutor(@Path("id_service") int id_service);
 
     @GET("/services/actif/{id_type}&{statut}")
     Call<List<Service>> getServiceActif(@Path("id_type") int id_type, @Path("statut") int statut);

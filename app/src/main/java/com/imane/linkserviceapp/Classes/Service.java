@@ -80,7 +80,6 @@ public class Service implements Serializable {
                     @SuppressLint("LongLogTag")
                     @Override
                     public void onResponse(Call<Void> call, Response<Void> response) {
-                        Log.d("Responde code update statut ", String.valueOf(response.code()));
                     }
 
                     @Override

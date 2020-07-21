@@ -1,18 +1,14 @@
 package com.imane.linkserviceapp.Classes;
 
-import android.util.Log;
-
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import java.io.ByteArrayOutputStream;
-import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigInteger;
 import java.net.HttpURLConnection;
-import java.net.URI;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
@@ -64,20 +60,6 @@ public class API {
         latch.await();
 
         return data[0];
-    }
-
-    public static HashMap<String, TypeService> decodeResponseMultipleAsTypeService (String typesService){
-        HashMap<String, TypeService> retMap = new Gson().fromJson(
-                typesService, new TypeToken<HashMap<String, TypeService>>() {}.getType()
-        );
-        return retMap;
-    }
-
-    public static HashMap<String, Service> decodeResponseMultipleAsService (String services){
-        HashMap<String, Service> retMap = new Gson().fromJson(
-                services, new TypeToken<HashMap<String, Service>>() {}.getType()
-        );
-        return retMap;
     }
 
     public static HashMap<String, User> decodeResponseMultipleAsUser (String users){

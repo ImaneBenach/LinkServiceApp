@@ -18,6 +18,7 @@ import com.google.gson.Gson;
 import com.imane.linkserviceapp.API.ConfigAPI;
 import com.imane.linkserviceapp.API.ServiceAPI;
 import com.imane.linkserviceapp.API.TypeAPI;
+import com.imane.linkserviceapp.Classes.Apply;
 import com.imane.linkserviceapp.Classes.Service;
 import com.imane.linkserviceapp.Classes.TypeService;
 import com.imane.linkserviceapp.Classes.User;
@@ -57,7 +58,7 @@ public class ServiceInfosActivityCreator extends AppCompatActivity implements Se
 
         Retrofit retrofit = ConfigAPI.getRetrofitClient();
         ServiceAPI serviceAPI = retrofit.create(ServiceAPI.class);
-        Call callType = serviceAPI.getExecutor(service.getId());
+        Call callType = serviceAPI.getUserExecutor(service.getId());
 
         callType.enqueue(
                 new Callback<List<User>>() {
