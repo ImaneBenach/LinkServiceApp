@@ -13,6 +13,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.gson.Gson;
+import com.imane.linkserviceapp.API.ApplyAPI;
+import com.imane.linkserviceapp.API.ConfigAPI;
+import com.imane.linkserviceapp.API.ServiceAPI;
 import com.imane.linkserviceapp.Classes.API;
 import com.imane.linkserviceapp.Classes.Service;
 import com.imane.linkserviceapp.Classes.User;
@@ -25,6 +28,11 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
 
 public class EffectuerFragment extends Fragment {
 
@@ -41,56 +49,46 @@ public class EffectuerFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        v = inflater.inflate(R.layout.effectuer_fragment,container,false);
-        recyclerView = v.findViewById(R.id.recyclerView);
-        EffectuerAdapter recyclerViewAdapter;
-        if(!services.isEmpty()){
-            recyclerViewAdapter = new EffectuerAdapter(getContext(), services, userConnected);
-            recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-            recyclerView.setAdapter(recyclerViewAdapter);
-        }
+        Retrofit retrofit = ConfigAPI.getRetrofitClient();
+        ApplyAPI applyAPI = retrofit.create(ApplyAPI.class);
+        Call callType = applyAPI.getUserAppliedServices(userConnected.getId());
 
+        callType.enqueue(
+                new Callback<List<Service>>() {
+                    @Override
+                    public void onResponse(Call<List<Service>> call, Response<List<Service>> response) {
+                        if(response.code() == 200){
+                            List<Service> listService = response.body();
+                            if(listService != null){
+                                Log.d("ici", listService.toString());
+                                services = listService;
+
+                                recyclerView = v.findViewById(R.id.recyclerView);
+                                EffectuerAdapter recyclerViewAdapter;
+                                if(!services.isEmpty()){
+                                    recyclerViewAdapter = new EffectuerAdapter(getContext(), services, userConnected);
+                                    recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+                                    recyclerView.setAdapter(recyclerViewAdapter);
+                                }
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call call, Throwable t) {
+
+                    }
+                }
+        );
+
+        v = inflater.inflate(R.layout.effectuer_fragment,container,false);
         return v;
     }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        HashMap<String, Service> ServicesData = new HashMap<>();
-        JSONObject jsonParam = new JSONObject();
-        JSONObject jsonParamValues = new JSONObject();
-        String ServicesList = "";
-        int counter;
 
-        try {
-            jsonParamValues.put("where"," INNER JOIN service WHERE id_service = id AND Statut>0 AND id_user="+userConnected.getId());
 
-            jsonParam.put("table", "apply");
-            jsonParam.put("values",jsonParamValues);
-
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        try {
-            ServicesList = API.sendRequest(jsonParam.toString(), "readWithFilter");
-        } catch (IOException | InterruptedException e) {
-            e.printStackTrace();
-        }
-
-        Log.i("SERVICE LIST",ServicesList);
-
-        if (!ServicesList.equals("") && !ServicesList.equals("null")) {
-            Log.i("SERVICES", ServicesList);
-            if (ServicesList.startsWith("i", 2)) {
-                ServicesData.put("0", gson.fromJson(ServicesList, Service.class));
-            } else {
-                ServicesData = API.decodeResponseMultipleAsService(ServicesList);
-            }
-
-            for (counter = 0; counter < ServicesData.size(); counter++){
-                Service type = ServicesData.get(Integer.toString(counter));
-                services.add(type);
-            }
-        }
     }
 }

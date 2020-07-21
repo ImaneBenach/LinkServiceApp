@@ -16,6 +16,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.gson.Gson;
 import com.imane.linkserviceapp.API.ConfigAPI;
+import com.imane.linkserviceapp.API.ServiceAPI;
 import com.imane.linkserviceapp.API.TypeAPI;
 import com.imane.linkserviceapp.Classes.Service;
 import com.imane.linkserviceapp.Classes.TypeService;
@@ -36,7 +37,6 @@ import retrofit2.Retrofit;
 public class ServiceInfosActivityCreator extends AppCompatActivity implements Serializable {
     Service service;
     User userConnected;
-    private final Gson gson = new Gson();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,64 +55,84 @@ public class ServiceInfosActivityCreator extends AppCompatActivity implements Se
         final Button btn_details_executor = findViewById(R.id.btn_details_executor);
         final LinearLayout VolunteerInfos = findViewById(R.id.volunteer_infos);
 
-        service.setExecutorIfExist();
+        Retrofit retrofit = ConfigAPI.getRetrofitClient();
+        ServiceAPI serviceAPI = retrofit.create(ServiceAPI.class);
+        Call callType = serviceAPI.getExecutor(service.getId());
 
-        if(service.getExecutorUser() == null){
-            btn_details_executor.setVisibility(View.INVISIBLE);
-            VolunteerInfos.setVisibility(View.INVISIBLE);
-            buttonDeleteService.setVisibility(View.VISIBLE);
-            buttonDeleteService.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    displayDeletePopup(view);
-                }
-            });
-
-            btnVolunteers.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Intent intent = new Intent(ServiceInfosActivityCreator.this, VolunteersListActivity.class);
-                    intent.putExtra("userConnected", userConnected);
-                    intent.putExtra("service",service);
-                    startActivity(intent);
-                    finish();
-                }
-            });
-
-        } else {
-            buttonDeleteService.setVisibility(View.INVISIBLE);
-            btnVolunteers.setVisibility(View.INVISIBLE);
-
-            btn_details_executor.setVisibility(View.VISIBLE);
-            VolunteerInfos.setVisibility(View.VISIBLE);
-
-            final TextView volunteer_name = findViewById(R.id.volunteer_name);
-            volunteer_name.setText(service.getExecutorUser().getName());
-
-            btn_details_executor.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(ServiceInfosActivityCreator.this, DetailsExecutorActivity.class);
-                    intent.putExtra("volunteerID", service.getExecutorUser().getId());
-                    intent.putExtra("userConnected", userConnected);
-                    intent.putExtra("service", service);
-                    startActivity(intent);
-                }
-            });
-
-            if (service.getStatut() == 2){
-                buttonEndService.setVisibility(View.INVISIBLE);
-            }else{
-                buttonEndService.setVisibility(View.VISIBLE);
-                buttonEndService.setOnClickListener(new View.OnClickListener() {
+        callType.enqueue(
+                new Callback<List<User>>() {
                     @Override
-                    public void onClick(View view) {
-                        displayEndPopup(view);
-                    }
-                });
-            }
+                    public void onResponse(Call<List<User>> call, Response<List<User>> response) {
+                        if(response.code() == 200){
+                            List<User> users = response.body();
+                            if(users != null && users.size() > 0){
+                                service.setExecutorUser(users.get(0));
+                            }
+                        }
 
-        }
+                        if(service.getExecutorUser() == null){
+                            btn_details_executor.setVisibility(View.INVISIBLE);
+                            VolunteerInfos.setVisibility(View.INVISIBLE);
+                            buttonDeleteService.setVisibility(View.VISIBLE);
+                            buttonDeleteService.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    displayDeletePopup(view);
+                                }
+                            });
+
+                            btnVolunteers.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    Intent intent = new Intent(ServiceInfosActivityCreator.this, VolunteersListActivity.class);
+                                    intent.putExtra("userConnected", userConnected);
+                                    intent.putExtra("service",service);
+                                    startActivity(intent);
+                                    finish();
+                                }
+                            });
+
+                        } else {
+                            buttonDeleteService.setVisibility(View.INVISIBLE);
+                            btnVolunteers.setVisibility(View.INVISIBLE);
+
+                            btn_details_executor.setVisibility(View.VISIBLE);
+                            VolunteerInfos.setVisibility(View.VISIBLE);
+
+                            final TextView volunteer_name = findViewById(R.id.volunteer_name);
+                            volunteer_name.setText(service.getExecutorUser().getName());
+
+                            btn_details_executor.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    Intent intent = new Intent(ServiceInfosActivityCreator.this, DetailsExecutorActivity.class);
+                                    intent.putExtra("volunteerID", service.getExecutorUser().getId());
+                                    intent.putExtra("userConnected", userConnected);
+                                    intent.putExtra("service", service);
+                                    startActivity(intent);
+                                }
+                            });
+
+                            if (service.getStatut() == 2){
+                                buttonEndService.setVisibility(View.INVISIBLE);
+                            }else{
+                                buttonEndService.setVisibility(View.VISIBLE);
+                                buttonEndService.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+                                        displayEndPopup(view);
+                                    }
+                                });
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call call, Throwable t) {
+
+                    }
+                }
+        );
 
         assert getSupportActionBar() != null;   //null check
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);

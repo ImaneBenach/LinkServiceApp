@@ -25,6 +25,9 @@ public interface ServiceAPI {
     @GET("/services/typeService/{statutService}")
     Call<List<Service>> getServicesByType(@Path("statutService") int statut);
 
+    @GET("/services/creator/{id_creator}")
+    Call<List<Service>> getServicesByCreator(@Path("id_creator") int id_creator);
+
     @GET("/service/executor/{id_service}")
     Call<List<Apply>> getExecutor(@Path("id_service") int id_service);
 

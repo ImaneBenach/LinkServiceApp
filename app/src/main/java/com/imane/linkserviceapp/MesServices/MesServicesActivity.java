@@ -6,6 +6,7 @@ import androidx.viewpager.widget.ViewPager;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 
 import com.google.android.material.tabs.TabLayout;
@@ -37,7 +38,7 @@ public class MesServicesActivity extends AppCompatActivity implements Serializab
         adapter.AddFragment(new EffectuerFragment(userConnected), "Effectué(s)");
         adapter.AddFragment(new ProposerFragment(userConnected), "Proposé(s)");
 
-
+        Log.d("erreur", "j'arrive ici");
 
 
         viewPager.setAdapter(adapter);
@@ -52,8 +53,6 @@ public class MesServicesActivity extends AppCompatActivity implements Serializab
 
         assert getSupportActionBar() != null;   //null check
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-
     }
 
     @Override

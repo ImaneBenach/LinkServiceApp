@@ -115,10 +115,31 @@ public class Service implements Serializable {
 
     public User getExecutorUser() { return executorUser; }
 
+    public void setExecutorUser(User executorUser) {
+        this.executorUser = executorUser;
+    }
+
     public void setExecutorIfExist(){
         JSONObject jsonParamValues = new JSONObject();
         final Gson gson = new Gson();
         String executor = "";
+
+        Retrofit retrofit = ConfigAPI.getRetrofitClient();
+        ServiceAPI serviceAPI = retrofit.create(ServiceAPI.class);
+        Call callType = serviceAPI.getExecutor(id);
+
+        callType.enqueue(
+                new Callback<Void>() {
+                    @Override
+                    public void onResponse(Call<Void> call, Response<Void> response) {
+                    }
+
+                    @Override
+                    public void onFailure(Call call, Throwable t) {
+
+                    }
+                }
+        );
 
         try {
             jsonParamValues.put("where"," INNER JOIN user WHERE execute=2 AND id_user=id AND id_service="+id);

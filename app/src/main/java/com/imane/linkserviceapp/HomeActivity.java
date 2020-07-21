@@ -49,6 +49,7 @@ public class HomeActivity extends AppCompatActivity {
         btnMesServices.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Log.d("Error", "ici");
 
                 Intent intent = new Intent(HomeActivity.this, MesServicesActivity.class);
                 intent.putExtra("userConnected", userConnected);
