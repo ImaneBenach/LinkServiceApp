@@ -1,22 +1,16 @@
 package com.imane.linkserviceapp.Classes;
 
 
-import android.content.Intent;
-import android.util.Log;
-import android.widget.Toast;
-
 import com.google.gson.Gson;
 import com.imane.linkserviceapp.API.ConfigAPI;
 import com.imane.linkserviceapp.API.TypeAPI;
-import com.imane.linkserviceapp.API.UserAPI;
-import com.imane.linkserviceapp.HomeActivity;
-import com.imane.linkserviceapp.LoginActivity;
 import com.imane.linkserviceapp.R;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.List;
 
 import retrofit2.Call;
@@ -24,7 +18,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 
-public class TypeService {
+public class TypeService implements Serializable {
     private final int id;
     private String name;
     private String description;

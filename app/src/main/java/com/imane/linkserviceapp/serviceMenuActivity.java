@@ -8,10 +8,20 @@ import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.imane.linkserviceapp.API.TypeAPI;
+import com.imane.linkserviceapp.Classes.TypeService;
 import com.imane.linkserviceapp.Classes.User;
 import com.imane.linkserviceapp.TypesService.TypeServicesActivity;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
+import static com.imane.linkserviceapp.API.ConfigAPI.retrofit;
 
 public class serviceMenuActivity extends AppCompatActivity implements Serializable {
 
@@ -41,11 +51,41 @@ public class serviceMenuActivity extends AppCompatActivity implements Serializab
         btnPropose.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                TypeAPI typeAPI = retrofit.create(TypeAPI.class);
+                Call callType = typeAPI.getTypesActives();
 
-                Intent intent = new Intent(serviceMenuActivity.this, CreateServiceActivity.class);
-                intent.putExtra("userConnected", userConnected);
-                startActivity(intent);
-                finish();
+
+
+                callType.enqueue(
+                        new Callback<List<TypeService>>() {
+                            @Override
+                            public void onResponse(Call<List<TypeService>> call, Response<List<TypeService>> response) {
+                                if(response.code()==200){
+                                    List<TypeService> types = response.body();
+                                    if(types != null && types.size() > 0){
+                                        List<TypeService> typeServices;
+                                        typeServices = types;
+
+                                        TypeService undefinedType = new TypeService(-1, "--TypeService--", "", "", 1);
+                                        typeServices.add(0, undefinedType);
+
+                                        ArrayList<TypeService> typesServicesList = ((ArrayList<TypeService>) typeServices);
+
+                                        Intent intent = new Intent(serviceMenuActivity.this, CreateServiceActivity.class);
+                                        intent.putExtra("userConnected", userConnected);
+                                        intent.putExtra("typeServices", typesServicesList);
+                                        startActivity(intent);
+                                        finish();
+                                    }
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(Call call, Throwable t) {
+
+                            }
+                        }
+                );
 
             }
         });

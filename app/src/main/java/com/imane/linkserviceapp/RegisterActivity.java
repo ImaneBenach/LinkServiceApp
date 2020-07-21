@@ -143,16 +143,16 @@ public class RegisterActivity extends AppCompatActivity {
 
                     Date inputDate = null;
 
-                    SimpleDateFormat input = new SimpleDateFormat("dd/MM/yyyy");
+                    SimpleDateFormat formatDateDisplayed = new SimpleDateFormat("dd/MM/yyyy");
                     try {
-                        inputDate = input.parse(etBirth.getText().toString());
+                        inputDate = formatDateDisplayed.parse(etBirth.getText().toString());
                     } catch (ParseException e) {
                         e.printStackTrace();
                     }
-
+                    
                     if (inputDate != null){
-                        SimpleDateFormat output = new SimpleDateFormat("yyyy-MM-dd");
-                        birthdate = output.format(inputDate);
+                        SimpleDateFormat formatDateStocked = new SimpleDateFormat("yyyy-MM-dd");
+                        birthdate = formatDateStocked.format(inputDate);
                     }
 
                     if (birthdate.length() == 0){

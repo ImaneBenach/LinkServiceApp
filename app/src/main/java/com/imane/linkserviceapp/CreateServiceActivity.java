@@ -26,11 +26,14 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.gson.Gson;
 import com.imane.linkserviceapp.API.ServiceAPI;
+import com.imane.linkserviceapp.API.TypeAPI;
 import com.imane.linkserviceapp.Classes.API;
 import com.imane.linkserviceapp.Classes.Service;
 import com.imane.linkserviceapp.Classes.TypeService;
 import com.imane.linkserviceapp.Classes.User;
 import com.imane.linkserviceapp.ServiceInfos.ServiceInfosActivityCreator;
+import com.imane.linkserviceapp.TypesService.TypeServicesActivity;
+import com.imane.linkserviceapp.TypesService.TypeServicesAdapter;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -43,6 +46,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -60,7 +64,8 @@ public class CreateServiceActivity extends AppCompatActivity {
     Button btn_create_service;
 
     User userConnected;
-    ArrayList<TypeService> typeServices;
+    List<TypeService> typeServices;
+    ArrayList<String> arrayList;
 
     Date selectedDate;
     Date selectedDeadline;
@@ -72,9 +77,11 @@ public class CreateServiceActivity extends AppCompatActivity {
         setContentView(R.layout.activity_create_service);
 
         userConnected = (User) getIntent().getSerializableExtra("userConnected");
+        typeServices = (List<TypeService>) getIntent().getSerializableExtra("typeServices");
+
+        arrayList = getStringListTypeService(typeServices);
 
         etDate = findViewById(R.id.etDate);
-
         etDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -156,12 +163,11 @@ public class CreateServiceActivity extends AppCompatActivity {
 
         newServiceTypeService = findViewById(R.id.newServiceTypeService);
 
-//        getAllTypesService();
-        ArrayList<String> arrayList = getStringListTypeService();
-
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, arrayList);
         arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         newServiceTypeService.setAdapter(arrayAdapter);
+
+
         newServiceTypeService.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -187,7 +193,7 @@ public class CreateServiceActivity extends AppCompatActivity {
 
     }
 
-    private ArrayList<String> getStringListTypeService() {
+    private ArrayList<String> getStringListTypeService(List<TypeService> typeServices) {
         int counter = 0;
         ArrayList<String> typesServicesString = new ArrayList<>();
         for (counter = 0; counter < typeServices.size(); counter++) {
@@ -243,6 +249,7 @@ public class CreateServiceActivity extends AppCompatActivity {
 
                     Service newService = new Service(0, name, description, date, deadline, 1, 1, userConnected.getAdress(), userConnected.getCity(), 0, "", idTypeService, userConnected.getId(), 1);
                     Log.d("DATE", newService.getDate());
+
                     ServiceAPI serviceAPI = retrofit.create(ServiceAPI.class);
                     Call callService = serviceAPI.setService(newService);
 
@@ -272,44 +279,6 @@ public class CreateServiceActivity extends AppCompatActivity {
                 etDate.setBackgroundResource(R.drawable.field_border_error);
                 etDeadLine.setBackgroundResource(R.drawable.field_border_error);
                 Toast.makeText(getApplicationContext(),"La date limite doit se situer avant la date du service !", Toast.LENGTH_LONG).show();
-            }
-        }
-    }
-
-    private void getAllTypesService() {
-        typeServices = new ArrayList<>();
-        HashMap<String, TypeService> typeData = new HashMap<>();
-        JSONObject jsonParam = new JSONObject();
-        String typeServicesListAsString = "";
-
-        int counter;
-
-        TypeService undefinedType = new TypeService(-1, "--TypeService--", "", "", 1);
-        typeServices.add(undefinedType);
-
-        try {
-            jsonParam.put("table", "type_service");
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        try {
-            typeServicesListAsString = API.sendRequest(jsonParam.toString(), "readAll");
-        } catch (IOException | InterruptedException e) {
-            e.printStackTrace();
-        }
-
-
-        if (!typeServicesListAsString.equals("")) {
-            if (typeServicesListAsString.startsWith("i", 2)) {
-                typeData.put("0", gson.fromJson(typeServicesListAsString, TypeService.class));
-            } else {
-                typeData = API.decodeResponseMultipleAsTypeService(typeServicesListAsString);
-            }
-
-
-            for (counter = 0; counter < typeData.size(); counter++) {
-                TypeService type = typeData.get(Integer.toString(counter));
-                typeServices.add(type);
             }
         }
     }
