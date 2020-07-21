@@ -85,7 +85,10 @@ public class ServiceEffectedInforsActivity extends AppCompatActivity implements 
                                 }
                             });
                             btnContact.setVisibility(View.INVISIBLE);
-                        }else if (applies.get(0).getExecute() == 0){
+                        }else if (applies.get(0).getExecute() != 2){
+                            btnPostulate.setVisibility(View.INVISIBLE);
+                            btnContact.setVisibility(View.INVISIBLE);
+                        } else if (applies.get(0).getExecute() == 2){
                             btnPostulate.setVisibility(View.INVISIBLE);
                             btnContact.setOnClickListener(new View.OnClickListener() {
                                 @Override
